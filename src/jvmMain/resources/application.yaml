@@ -1,0 +1,14 @@
+micronaut:
+  server:
+    port: 8082
+  io:
+    watch:
+      paths: "src/jvmMain"
+      restart: true
+      enabled: true
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/static/**"
+        paths: "classpath:data"
