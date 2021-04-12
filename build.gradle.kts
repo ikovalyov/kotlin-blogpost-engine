@@ -72,7 +72,7 @@ kotlin {
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
                 implementation("software.amazon.awssdk:dynamodb")
                 implementation("io.micronaut.views:micronaut-views-freemarker")
-                implementation("org.freemarker:freemarker:2.3.30")
+                implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.add(
                     project.dependencies.create("io.micronaut:micronaut-inject-java:2.3.3")
                 )
