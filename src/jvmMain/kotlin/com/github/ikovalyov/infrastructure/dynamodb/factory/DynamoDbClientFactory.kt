@@ -1,4 +1,4 @@
-package com.github.ikovalyov.infrastructure
+package com.github.ikovalyov.infrastructure.dynamodb.factory
 
 import io.micronaut.context.annotation.Factory
 import java.net.URI

@@ -12,3 +12,6 @@ micronaut:
         enabled: true
         mapping: "/static/**"
         paths: "classpath:data"
+jackson:
+  serialization:
+    writeDatesAsTimestamps: false
