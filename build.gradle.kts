@@ -65,14 +65,15 @@ kotlin {
             dependencies {
                 api(kotlin("stdlib-jdk8"))
                 api(kotlin("reflect"))
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
                 implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.3.3"))
                 implementation(project.dependencies.enforcedPlatform("software.amazon.awssdk:bom:2.16.12"))
                 implementation("io.micronaut:micronaut-http-server-netty")
+                implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
                 implementation("software.amazon.awssdk:dynamodb")
                 implementation("io.micronaut.views:micronaut-views-freemarker")
-                //implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
-                //implementation("software.amazon.awssdk:dynamodb")
+                implementation("org.freemarker:freemarker:2.3.30")
                 configurations["kapt"].dependencies.add(
                     project.dependencies.create("io.micronaut:micronaut-inject-java:2.3.3")
                 )
