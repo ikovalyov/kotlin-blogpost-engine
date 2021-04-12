@@ -69,7 +69,7 @@ kotlin {
                 implementation(project.dependencies.enforcedPlatform("software.amazon.awssdk:bom:2.16.12"))
                 implementation("io.micronaut:micronaut-http-server-netty")
                 implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
+                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
                 implementation("software.amazon.awssdk:dynamodb")
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("org.freemarker:freemarker:2.3.30")
