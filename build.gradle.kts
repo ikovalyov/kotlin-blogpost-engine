@@ -24,7 +24,6 @@ kotlin {
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
     jvm {
-        withJava()
         attributes {
             attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)
         }
