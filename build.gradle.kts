@@ -65,7 +65,7 @@ kotlin {
                 api(kotlin("stdlib-jdk8"))
                 api(kotlin("reflect"))
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.3.3"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.4.2"))
                 implementation(project.dependencies.enforcedPlatform("software.amazon.awssdk:bom:2.16.12"))
                 implementation("io.micronaut:micronaut-http-server-netty")
                 implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
