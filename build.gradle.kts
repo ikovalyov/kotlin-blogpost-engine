@@ -74,7 +74,7 @@ kotlin {
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.add(
-                    project.dependencies.create("io.micronaut:micronaut-inject-java:2.3.3")
+                    project.dependencies.create("io.micronaut:micronaut-inject-java:2.4.2")
                 )
                 if (System.getProperty("os.name").toLowerCase().contains("mac")) {
                     implementation("io.micronaut:micronaut-runtime-osx")
