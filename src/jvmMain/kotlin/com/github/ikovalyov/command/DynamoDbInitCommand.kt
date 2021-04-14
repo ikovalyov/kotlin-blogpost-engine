@@ -84,7 +84,9 @@ open class DynamoDbInitCommand: Runnable {
     }
 
     private fun createRecordsTable(): CompletableFuture<CreateTableResponse> {
-        logger.info { "creating $recordTableName table" }
+        logger.info {
+            "creating $recordTableName table"
+        }
         return dynamoDbClient.createTable {
             it.tableName(recordTableName)
             it.attributeDefinitions(
