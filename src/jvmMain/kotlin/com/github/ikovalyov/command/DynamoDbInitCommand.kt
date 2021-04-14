@@ -41,7 +41,7 @@ open class DynamoDbInitCommand: Runnable {
 
     override fun run() {
         runBlocking {
-            val requests = try {
+            try {
                 listOf(
                     createRecordsTable().asDeferred(),
                     createTemplateTable().asDeferred()
@@ -54,7 +54,7 @@ open class DynamoDbInitCommand: Runnable {
         }
     }
 
-    private suspend fun createTemplateTable(): CompletableFuture<CreateTableResponse> {
+    private fun createTemplateTable(): CompletableFuture<CreateTableResponse> {
         logger.info { "creating $templateTableName table" }
         return dynamoDbClient.createTable {
             it.tableName(templateTableName)
@@ -83,7 +83,7 @@ open class DynamoDbInitCommand: Runnable {
         }
     }
 
-    private suspend fun createRecordsTable(): CompletableFuture<CreateTableResponse> {
+    private fun createRecordsTable(): CompletableFuture<CreateTableResponse> {
         logger.info { "creating $recordTableName table" }
         return dynamoDbClient.createTable {
             it.tableName(recordTableName)
