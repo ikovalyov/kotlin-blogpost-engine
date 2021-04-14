@@ -15,3 +15,10 @@ micronaut:
 jackson:
   serialization:
     writeDatesAsTimestamps: false
+blog:
+  aws:
+    localstack: "true"
+    endpoint: "http://localhost:4566"
+    credentials:
+      username: "test"
+      secretAccessKey: "test"
