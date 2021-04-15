@@ -1,10 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     java
-    kotlin("multiplatform") version "1.4.31"
-    kotlin("kapt") version "1.4.31"
-    kotlin("plugin.allopen") version "1.4.31"
+    kotlin("multiplatform") version "1.5.0-RC"
+    kotlin("kapt") version "1.5.0-RC"
+    kotlin("plugin.allopen") version "1.5.0-RC"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "com.github.ikovalyov"
@@ -24,6 +26,7 @@ kotlin {
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
     jvm {
+        withJava()
         attributes {
             attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)
         }
@@ -51,7 +54,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:2.0.6")
+                implementation("io.github.microutils:kotlin-logging:2.0.4")
             }
         }
         val commonTest by getting {
@@ -67,14 +70,28 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
                 implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.4.2"))
                 implementation(project.dependencies.enforcedPlatform("software.amazon.awssdk:bom:2.16.42"))
+
+                implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
                 implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
                 implementation("software.amazon.awssdk:dynamodb")
                 implementation("io.micronaut.views:micronaut-views-freemarker")
+                implementation("io.micronaut.picocli:micronaut-picocli")
+                implementation("io.micronaut:micronaut-inject-java")
+
+                implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
+                implementation("org.apache.logging.log4j:log4j-core:2.14.1")
+                implementation("software.amazon.awssdk:dynamodb")
+                implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("org.freemarker:freemarker:2.3.31")
-                configurations["kapt"].dependencies.add(
-                    project.dependencies.create("io.micronaut:micronaut-inject-java:2.4.2")
+                configurations["kapt"].dependencies.addAll (
+                    listOf(
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:2.4.2"),
+                        project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
+                    )
                 )
                 if (System.getProperty("os.name").toLowerCase().contains("mac")) {
                     implementation("io.micronaut:micronaut-runtime-osx")
@@ -94,6 +111,26 @@ kotlin {
 }
 
 tasks {
+    val shadowCreate by creating(ShadowJar::class) {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
+        mergeServiceFiles()
+        manifest {
+            attributes["Main-Class"] = "com.github.ikovalyov.MyApp"
+        }
+        archiveClassifier.set("all")
+        from(kotlin.jvm().compilations.getByName("main").output)
+        configurations =
+            mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles as Configuration)
+    }
+
+    val build by existing {
+        dependsOn(shadowCreate)
+    }
+
+    val jvmProcessResources by existing(Copy::class) {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
+    }
+
     create("jvmRun", JavaExec::class.java) {
         group = "Execution"
         description = "Run the main class with JavaExecTask"
@@ -101,5 +138,34 @@ tasks {
         main = "com.github.ikovalyov.MyApp"
 
         jvmArgs("-XX:TieredStopAtLevel=1", "-Dcom.sun.management.jmxremote")
+    }
+
+    create("copyJvmToLib", Copy::class.java) {
+        dependsOn(shadowCreate)
+        from(layout.buildDirectory.dir("$buildDir/libs"))
+        into(layout.buildDirectory.dir("$buildDir/lib"))
+    }
+
+    create("initMongoDbScript", CreateStartScripts::class.java) {
+        group = "Execution"
+        description = "This command generates tables in the dynamo db required for app to operate"
+        applicationName = "dynamo-db-init-command"
+        mainClassName = "com.github.ikovalyov.command.DynamoDbInitCommand"
+        classpath = files("$buildDir/libs/blog-0.0.1-all.jar")
+        outputDir = file("$buildDir/scripts")
+        defaultJvmOpts = listOf()
+        this.dependsOn("copyJvmToLib")
+    }
+
+    create("execMongoDbScript", Exec::class.java) {
+        group = "Execution"
+        this.executable = "$buildDir/scripts/dynamo-db-init-command"
+        dependsOn("initMongoDbScript")
+    }
+}
+
+kapt {
+    arguments {
+        arg("project", "${project.group}/${project.name}")
     }
 }
