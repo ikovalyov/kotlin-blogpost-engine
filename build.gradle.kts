@@ -3,9 +3,9 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     java
-    kotlin("multiplatform") version "1.4.31"
-    kotlin("kapt") version "1.4.31"
-    kotlin("plugin.allopen") version "1.4.31"
+    kotlin("multiplatform") version "1.5.0-RC"
+    kotlin("kapt") version "1.5.0-RC"
+    kotlin("plugin.allopen") version "1.5.0-RC"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
@@ -26,6 +26,7 @@ kotlin {
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
     jvm {
+        withJava()
         attributes {
             attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)
         }
@@ -111,6 +112,7 @@ kotlin {
 
 tasks {
     val shadowCreate by creating(ShadowJar::class) {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
         mergeServiceFiles()
         manifest {
             attributes["Main-Class"] = "com.github.ikovalyov.MyApp"
@@ -120,8 +122,13 @@ tasks {
         configurations =
             mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles as Configuration)
     }
+
     val build by existing {
         dependsOn(shadowCreate)
+    }
+
+    val jvmProcessResources by existing(Copy::class) {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     }
 
     create("jvmRun", JavaExec::class.java) {
