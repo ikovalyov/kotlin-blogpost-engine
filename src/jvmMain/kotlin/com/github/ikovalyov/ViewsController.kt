@@ -1,10 +1,11 @@
 package com.github.ikovalyov
 
-import com.github.ikovalyov.infrastructure.dynamodb.TemplatesRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplatesRepository
 import com.github.ikovalyov.model.Person
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.TemplateListItem
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -28,6 +29,8 @@ class ViewsController(
 
     @Post("/add")
     suspend fun insertView(@Body template: Template): HttpResponse<*> {
-        return HttpResponse.status<Any>(templatesRepository.insertView(template))
+        return HttpResponse.status<Any>(
+            HttpStatus.valueOf(templatesRepository.insertTemplate(template).sdkHttpResponse().statusCode())
+        )
     }
 }

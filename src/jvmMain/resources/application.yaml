@@ -22,3 +22,5 @@ blog:
     credentials:
       username: "test"
       secretAccessKey: "test"
+  template:
+    default-template: "home.ftl"
