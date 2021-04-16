@@ -1,41 +1,22 @@
 package com.github.ikovalyov.template
 
+import com.github.ikovalyov.infrastructure.dynamodb.repository.ConfigurationRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplatesRepository
 import com.github.ikovalyov.model.Template
 import freemarker.cache.TemplateLoader
 import java.io.Reader
 import java.io.StringReader
 import javax.inject.Singleton
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
+import kotlinx.coroutines.runBlocking
 
 @Singleton
-class DynamoDbTemplateLoader(private val client: DynamoDbAsyncClient): TemplateLoader {
-    companion object{
-        const val tableName = "template"
-    }
-    /**
-     * awslocal dynamodb create-table --table-name template --attribute-definitions \
-     * AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH \
-     * --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
-     * --tags Key=Owner,Value=ik
-     */
-    override fun findTemplateSource(name: String): Template? {
-        val keyToGet = mapOf(
-            "id" to AttributeValue.builder().s(name).build()
-        )
-
-        val request = GetItemRequest.builder()
-            .key(keyToGet)
-            .tableName(tableName)
-            .build()
-        val response = client.getItem(request).get()
-        return if (response.hasItem()) {
-            val item = response.item()
-            Template.fromDynamoDbMap(item)
-        } else {
-            null
-        }
+class DynamoDbTemplateLoader(
+    private val configurationRepository: ConfigurationRepository,
+    private val templatesRepository: TemplatesRepository
+): TemplateLoader {
+    override fun findTemplateSource(name: String): Template? = runBlocking {
+        val templateName = configurationRepository.getActiveTemplateName()!!
+        templatesRepository.getTemplate(templateName)
     }
 
     override fun getLastModified(templateSource: Any?): Long {
