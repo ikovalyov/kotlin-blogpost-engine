@@ -65,16 +65,15 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                api(kotlin("stdlib-jdk8"))
-                api(kotlin("reflect"))
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
+                implementation(kotlin("stdlib-jdk8"))
+                implementation(kotlin("reflect"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
                 implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.4.2"))
                 implementation(project.dependencies.enforcedPlatform("software.amazon.awssdk:bom:2.16.43"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
                 implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
                 implementation("software.amazon.awssdk:dynamodb")
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("io.micronaut.picocli:micronaut-picocli")
@@ -102,9 +101,19 @@ kotlin {
         }
         val jvmTest by getting {
             dependencies {
-                api(kotlin("test-junit5"))
+                configurations["kaptTest"].dependencies.addAll (
+                    listOf(
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:2.4.2"),
+                        project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
+                    )
+                )
+                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.15.2"))
+
+                implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+
+                implementation("org.testcontainers:junit-jupiter")
             }
         }
     }
