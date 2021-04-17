@@ -1,4 +1,3 @@
 package com.github.ikovalyov
 
-class Application {
-}
+class Application {}

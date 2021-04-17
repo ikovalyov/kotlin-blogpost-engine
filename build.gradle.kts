@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
@@ -7,6 +7,7 @@ plugins {
     kotlin("kapt") version "1.5.0-RC"
     kotlin("plugin.allopen") version "1.5.0-RC"
     id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.diffplug.spotless") version "5.12.1"
 }
 
 group = "com.github.ikovalyov"
@@ -86,7 +87,7 @@ kotlin {
                 implementation("software.amazon.awssdk:dynamodb")
                 implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("org.freemarker:freemarker:2.3.31")
-                configurations["kapt"].dependencies.addAll (
+                configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:2.4.2"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
@@ -101,7 +102,7 @@ kotlin {
         }
         val jvmTest by getting {
             dependencies {
-                configurations["kaptTest"].dependencies.addAll (
+                configurations["kaptTest"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:2.4.2"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
@@ -176,5 +177,23 @@ tasks {
 kapt {
     arguments {
         arg("project", "${project.group}/${project.name}")
+    }
+}
+
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+    kotlin {
+        val files = project.fileTree(rootDir)
+        files.include("**/*.kt")
+
+        toggleOffOn()
+        target(files)
+        ktfmt("0.18").dropboxStyle()
+    }
+    kotlinGradle {
+        val files = project.fileTree(rootDir)
+        files.include("**/*.gradle.kts")
+
+        target(files)
+        ktlint()
     }
 }

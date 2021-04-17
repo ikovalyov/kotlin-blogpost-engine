@@ -13,11 +13,12 @@ import kotlinx.coroutines.runBlocking
 class DynamoDbTemplateLoader(
     private val configurationRepository: ConfigurationRepository,
     private val templatesRepository: TemplatesRepository
-): TemplateLoader {
-    override fun findTemplateSource(name: String): Template? = runBlocking {
-        val templateName = configurationRepository.getActiveTemplateName()!!
-        templatesRepository.getTemplate(templateName)
-    }
+) : TemplateLoader {
+    override fun findTemplateSource(name: String): Template? =
+        runBlocking {
+            val templateName = configurationRepository.getActiveTemplateName()!!
+            templatesRepository.getTemplate(templateName)
+        }
 
     override fun getLastModified(templateSource: Any?): Long {
         require(templateSource is Template)
@@ -29,5 +30,5 @@ class DynamoDbTemplateLoader(
         return StringReader(templateSource.template)
     }
 
-    override fun closeTemplateSource(templateSource: Any?) { }
+    override fun closeTemplateSource(templateSource: Any?) {}
 }

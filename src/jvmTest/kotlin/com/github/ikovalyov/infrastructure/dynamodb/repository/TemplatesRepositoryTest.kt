@@ -14,11 +14,13 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 @MicronautTest
 @TestInstance(Lifecycle.PER_CLASS)
 internal class TemplatesRepositoryTest : TestPropertyProvider {
-    class MyGenericContainer(dockerImageName: String): GenericContainer<MyGenericContainer>(dockerImageName)
+    class MyGenericContainer(dockerImageName: String) :
+        GenericContainer<MyGenericContainer>(dockerImageName)
 
-    private val dynamodbContainer = MyGenericContainer("amazon/dynamodb-local:1.13.2")
-        .withCommand("-jar DynamoDBLocal.jar -inMemory -sharedDb")
-        .withExposedPorts(8000)
+    private val dynamodbContainer =
+        MyGenericContainer("amazon/dynamodb-local:1.13.2")
+            .withCommand("-jar DynamoDBLocal.jar -inMemory -sharedDb")
+            .withExposedPorts(8000)
     @Inject lateinit var client: DynamoDbAsyncClient
     @Inject lateinit var templatesRepository: TemplatesRepository
 
@@ -27,19 +29,17 @@ internal class TemplatesRepositoryTest : TestPropertyProvider {
     }
 
     @Test
-    fun testTableWasCreated() = runBlocking {
-        templatesRepository.init()
-        val response = client.describeTable {
-            it.tableName(templatesRepository.tableName)
-        }.await()
-        assert(response.sdkHttpResponse().statusCode() == 200)
-        assert(response.table().tableName() == templatesRepository.tableName)
-    }
+    fun testTableWasCreated() =
+        runBlocking {
+            templatesRepository.init()
+            val response =
+                client.describeTable { it.tableName(templatesRepository.tableName) }.await()
+            assert(response.sdkHttpResponse().statusCode() == 200)
+            assert(response.table().tableName() == templatesRepository.tableName)
+        }
 
     override fun getProperties(): MutableMap<String, String> {
-        val endpointUrl = String.format("http://localhost:%d", dynamodbContainer.firstMappedPort);
-        return mutableMapOf(
-            "blog.aws.endpoint" to endpointUrl
-        )
+        val endpointUrl = String.format("http://localhost:%d", dynamodbContainer.firstMappedPort)
+        return mutableMapOf("blog.aws.endpoint" to endpointUrl)
     }
 }
