@@ -9,11 +9,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.testcontainers.containers.GenericContainer
-import org.testcontainers.junit.jupiter.Testcontainers
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @MicronautTest
-@Testcontainers
 @TestInstance(Lifecycle.PER_CLASS)
 internal class TemplatesRepositoryTest : TestPropertyProvider {
     class MyGenericContainer(dockerImageName: String): GenericContainer<MyGenericContainer>(dockerImageName)
