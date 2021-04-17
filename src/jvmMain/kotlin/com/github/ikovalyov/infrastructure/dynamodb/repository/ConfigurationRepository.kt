@@ -12,9 +12,10 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemResponse
 @Singleton
 class ConfigurationRepository(
     dynamoDbClient: DynamoDbAsyncClient,
-    @Property(name="blog.template.default-template") private val defaultTemplate: String
-): AbstractKeyValueRepository(dynamoDbClient) {
-    companion object{
+    @Property(name = "blog.template.default-template")
+    private val defaultTemplate: String
+) : AbstractKeyValueRepository(dynamoDbClient) {
+    companion object {
         const val tableName = "configuration"
         const val activeTemplateKeyId = "active-template"
         const val configurationValueFieldName = "value"
@@ -31,20 +32,24 @@ class ConfigurationRepository(
     }
 
     private suspend fun insertConfiguration(key: String, value: String): PutItemResponse {
-        return dynamoDbClient.putItem {
-            it.tableName(tableName).item(
-                mapOf(
-                    primaryKey to AttributeValue.builder().s(key).build(),
-                    configurationValueFieldName to AttributeValue.builder().s(value).build()
-                )
-            )
-        }.await()
+        return dynamoDbClient
+            .putItem {
+                it.tableName(tableName)
+                    .item(
+                        mapOf(
+                            primaryKey to AttributeValue.builder().s(key).build(),
+                            configurationValueFieldName to
+                                AttributeValue.builder().s(value).build()))
+            }
+            .await()
     }
 
     private suspend fun getConfigProperty(key: String): GetItemResponse {
-        return dynamoDbClient.getItem {
-            it.tableName(tableName)
-            it.key(mapOf(primaryKey to AttributeValue.builder().s(key).build()))
-        }.await()
+        return dynamoDbClient
+            .getItem {
+                it.tableName(tableName)
+                it.key(mapOf(primaryKey to AttributeValue.builder().s(key).build()))
+            }
+            .await()
     }
 }

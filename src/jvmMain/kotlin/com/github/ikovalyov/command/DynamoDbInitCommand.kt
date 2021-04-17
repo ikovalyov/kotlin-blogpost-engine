@@ -14,11 +14,10 @@ import picocli.CommandLine
     name = "Init dynamo db",
     description = ["This command generates tables in the dynamo db required for app to operate"],
     mixinStandardHelpOptions = true,
-    helpCommand = true
-)
-open class DynamoDbInitCommand: Runnable {
+    helpCommand = true)
+open class DynamoDbInitCommand : Runnable {
     @Inject lateinit var initializers: List<InitDynamoDbDatabaseInterface>
-    private val logger = KotlinLogging.logger { }
+    private val logger = KotlinLogging.logger {}
 
     companion object {
         @Throws(Exception::class)
@@ -31,20 +30,20 @@ open class DynamoDbInitCommand: Runnable {
 
     override fun run() {
         runBlocking {
-            initializers.map {
-                logger.info { "Processing ${it.javaClass.simpleName}" }
-                async {
-                    it.init()
+            initializers
+                .map {
+                    logger.info { "Processing ${it.javaClass.simpleName}" }
+                    async { it.init() }
                 }
-            }.awaitAll()
+                .awaitAll()
                 .filterNotNull()
                 .map {
-                if (it.sdkHttpResponse().statusCode() != HttpResponseStatus.OK.code()) {
-                    logger.warn { it }
-                } else {
-                    logger.info { it }
+                    if (it.sdkHttpResponse().statusCode() != HttpResponseStatus.OK.code()) {
+                        logger.warn { it }
+                    } else {
+                        logger.info { it }
+                    }
                 }
-            }
             logger.info("done")
         }
     }

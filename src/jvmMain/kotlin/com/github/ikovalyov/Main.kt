@@ -6,16 +6,19 @@ import io.micronaut.views.freemarker.FreemarkerViewsRendererConfigurationPropert
 
 class MyApp {
     companion object {
-        @JvmStatic fun main(args: Array<String>) {
+        @JvmStatic
+        fun main(args: Array<String>) {
             // Fuel ignores the `Host` header if you don't set this property
             System.setProperty("sun.net.http.allowRestrictedHeaders", "true")
 
-            val ac = Micronaut.build()
-                .packages("com.showpad.micronaut")
-                .mainClass(MyApp::class.java)
-                .start()
+            val ac =
+                Micronaut.build()
+                    .packages("com.showpad.micronaut")
+                    .mainClass(MyApp::class.java)
+                    .start()
 
-            val freeMarkerProperties = ac.getBean(FreemarkerViewsRendererConfigurationProperties::class.java)
+            val freeMarkerProperties =
+                ac.getBean(FreemarkerViewsRendererConfigurationProperties::class.java)
             val templateLoader = ac.getBean(DynamoDbTemplateLoader::class.java)
             freeMarkerProperties.templateLoader = templateLoader
         }

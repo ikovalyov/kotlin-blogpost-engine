@@ -13,9 +13,7 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.views.View
 
 @Controller("/views")
-class ViewsController(
-    private val templatesRepository: TemplatesRepository
-) {
+class ViewsController(private val templatesRepository: TemplatesRepository) {
     @View("home")
     @Get("/pogo")
     fun pogo(): HttpResponse<Person> {
@@ -30,7 +28,7 @@ class ViewsController(
     @Post("/add")
     suspend fun insertView(@Body template: Template): HttpResponse<*> {
         return HttpResponse.status<Any>(
-            HttpStatus.valueOf(templatesRepository.insertTemplate(template).sdkHttpResponse().statusCode())
-        )
+            HttpStatus.valueOf(
+                templatesRepository.insertTemplate(template).sdkHttpResponse().statusCode()))
     }
 }

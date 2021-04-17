@@ -13,15 +13,14 @@ import software.amazon.awssdk.services.dynamodb.model.ResourceInUseException
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType
 import software.amazon.awssdk.services.dynamodb.model.Tag
 
-abstract class AbstractKeyValueRepository(
-    protected val dynamoDbClient: DynamoDbAsyncClient
-): InitDynamoDbDatabaseInterface {
-    companion object{
+abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDbAsyncClient) :
+    InitDynamoDbDatabaseInterface {
+    companion object {
         const val primaryKey = "id"
     }
 
     abstract val tableName: String
-    private val logger = KotlinLogging.logger {  }
+    private val logger = KotlinLogging.logger {}
 
     private val tableBuilder: CreateTableRequest.Builder by lazy {
         CreateTableRequest.builder().also {
@@ -30,24 +29,13 @@ abstract class AbstractKeyValueRepository(
                 AttributeDefinition.builder()
                     .attributeName(primaryKey)
                     .attributeType(ScalarAttributeType.S)
-                    .build()
-            )
+                    .build())
             it.keySchema(
-                KeySchemaElement.builder()
-                    .attributeName("id")
-                    .keyType(KeyType.HASH)
-                    .build()
-            )
+                KeySchemaElement.builder().attributeName("id").keyType(KeyType.HASH).build())
             it.provisionedThroughput { builder ->
-                builder.readCapacityUnits(5)
-                    .writeCapacityUnits(5)
-                    .build()
+                builder.readCapacityUnits(5).writeCapacityUnits(5).build()
             }
-            it.tags(
-                listOf(
-                    Tag.builder().key("Owner").value("Ik").build()
-                )
-            )
+            it.tags(listOf(Tag.builder().key("Owner").value("Ik").build()))
         }
     }
 
