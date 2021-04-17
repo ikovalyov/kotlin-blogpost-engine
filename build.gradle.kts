@@ -113,7 +113,6 @@ kotlin {
                 implementation("io.micronaut.test:micronaut-test-junit5")
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
 
-                api("org.testcontainers:dynalite")
                 implementation("org.testcontainers:junit-jupiter")
             }
         }
