@@ -16,12 +16,7 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
 
 @Controller("/")
 class RecordsController(private val client: DynamoDbAsyncClient) {
-    /**
-     * awslocal dynamodb create-table \ --table-name record \ --attribute-definitions
-     * AttributeName=id,AttributeType=S \ --key-schema AttributeName=id,KeyType=HASH \
-     * --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \ --tags Key=Owner,Value=ik
-     */
-    @Get()
+    @Get
     fun get(): String {
         return "success"
     }
