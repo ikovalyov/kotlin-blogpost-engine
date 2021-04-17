@@ -19,6 +19,7 @@ blog:
   aws:
     localstack: "true"
     endpoint: "http://localhost:4566"
+    region: "eu-central-1"
     credentials:
       username: "test"
       secretAccessKey: "test"
