@@ -70,22 +70,24 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
                 implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.4.2"))
-                implementation(project.dependencies.enforcedPlatform("software.amazon.awssdk:bom:2.16.43"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
                 implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-                implementation("software.amazon.awssdk:dynamodb")
+                implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("io.micronaut.picocli:micronaut-picocli")
                 implementation("io.micronaut:micronaut-inject-java")
-
+                implementation("software.amazon.awssdk:s3") {
+                    exclude(group = "software.amazon.awssdk", module = "apache-client")
+                    exclude(group = "software.amazon.awssdk", module = "netty-nio-client")
+                }
+                implementation("software.amazon.awssdk:url-connection-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
                 implementation("org.apache.logging.log4j:log4j-core:2.14.1")
                 implementation("software.amazon.awssdk:dynamodb")
-                implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
