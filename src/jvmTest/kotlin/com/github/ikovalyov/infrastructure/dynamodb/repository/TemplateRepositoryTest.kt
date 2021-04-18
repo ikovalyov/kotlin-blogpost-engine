@@ -13,7 +13,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @MicronautTest
 @TestInstance(Lifecycle.PER_CLASS)
-internal class TemplatesRepositoryTest : TestPropertyProvider {
+internal class TemplateRepositoryTest : TestPropertyProvider {
     class MyGenericContainer(dockerImageName: String) :
         GenericContainer<MyGenericContainer>(dockerImageName)
 
@@ -22,7 +22,7 @@ internal class TemplatesRepositoryTest : TestPropertyProvider {
             .withCommand("-jar DynamoDBLocal.jar -inMemory -sharedDb")
             .withExposedPorts(8000)
     @Inject lateinit var client: DynamoDbAsyncClient
-    @Inject lateinit var templatesRepository: TemplatesRepository
+    @Inject lateinit var templateRepository: TemplateRepository
 
     init {
         dynamodbContainer.start()
@@ -31,11 +31,11 @@ internal class TemplatesRepositoryTest : TestPropertyProvider {
     @Test
     fun testTableWasCreated() =
         runBlocking {
-            templatesRepository.init()
+            templateRepository.init()
             val response =
-                client.describeTable { it.tableName(templatesRepository.tableName) }.await()
+                client.describeTable { it.tableName(templateRepository.tableName) }.await()
             assert(response.sdkHttpResponse().statusCode() == 200)
-            assert(response.table().tableName() == templatesRepository.tableName)
+            assert(response.table().tableName() == templateRepository.tableName)
         }
 
     override fun getProperties(): MutableMap<String, String> {

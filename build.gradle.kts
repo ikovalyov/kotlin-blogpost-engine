@@ -78,16 +78,15 @@ kotlin {
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("io.micronaut.picocli:micronaut-picocli")
                 implementation("io.micronaut:micronaut-inject-java")
-                implementation("software.amazon.awssdk:s3") {
+                implementation("software.amazon.awssdk:dynamodb") {
                     exclude(group = "software.amazon.awssdk", module = "apache-client")
-                    exclude(group = "software.amazon.awssdk", module = "netty-nio-client")
+                    exclude(group = "software.amazon.awssdk", module = "url-connection-client")
                 }
-                implementation("software.amazon.awssdk:url-connection-client")
+                implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
                 implementation("org.apache.logging.log4j:log4j-core:2.14.1")
-                implementation("software.amazon.awssdk:dynamodb")
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(

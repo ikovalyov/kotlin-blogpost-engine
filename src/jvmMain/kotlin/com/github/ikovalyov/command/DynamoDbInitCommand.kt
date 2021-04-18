@@ -2,7 +2,6 @@ package com.github.ikovalyov.command
 
 import com.github.ikovalyov.infrastructure.dynamodb.InitDynamoDbDatabaseInterface
 import io.micronaut.configuration.picocli.PicocliRunner
-import io.netty.handler.codec.http.HttpResponseStatus
 import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -37,13 +36,6 @@ open class DynamoDbInitCommand : Runnable {
                 }
                 .awaitAll()
                 .filterNotNull()
-                .map {
-                    if (it.sdkHttpResponse().statusCode() != HttpResponseStatus.OK.code()) {
-                        logger.warn { it }
-                    } else {
-                        logger.info { it }
-                    }
-                }
             logger.info("done")
         }
     }
