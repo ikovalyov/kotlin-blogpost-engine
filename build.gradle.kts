@@ -7,7 +7,7 @@ plugins {
     kotlin("kapt") version "1.5.0-RC"
     kotlin("plugin.allopen") version "1.5.0-RC"
     id("com.github.johnrengelman.shadow") version "6.1.0"
-    id("com.diffplug.spotless") version "5.12.1"
+    id("com.diffplug.spotless") version "5.12.4"
 }
 
 group = "com.github.ikovalyov"
