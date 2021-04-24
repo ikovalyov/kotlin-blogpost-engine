@@ -19,9 +19,12 @@ blog:
   aws:
     localstack: "true"
     endpoint: "http://localhost:4566"
-    region: "eu-central-1"
     credentials:
       username: "test"
       secretAccessKey: "test"
   template:
     default-template: "home.ftl"
+
+
+aws:
+  region: "eu-central-1"
