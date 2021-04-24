@@ -24,8 +24,10 @@ jobs:
         distribution: 'adopt'
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Init dynamodb with test data
+      run: ./gradlew execDynamoDbScript
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew jvmTest
   spotless:
 
     runs-on: ubuntu-latest

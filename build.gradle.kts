@@ -174,7 +174,7 @@ tasks {
         this.dependsOn("copyJvmToLib")
     }
 
-    create("execMongoDbScript", Exec::class.java) {
+    create("execDynamoDbScript", Exec::class.java) {
         group = "Execution"
         this.executable = "$buildDir/scripts/dynamo-db-init-command"
         dependsOn("initMongoDbScript")
