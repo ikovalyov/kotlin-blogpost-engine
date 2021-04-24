@@ -11,9 +11,7 @@ import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
 
 @Controller("/api/controller/template")
-class TemplateController(
-    private val templateRepository: TemplateRepository
-) {
+class TemplateController(private val templateRepository: TemplateRepository) {
     @Get
     suspend fun list(): List<Template> {
         return templateRepository.list()
@@ -21,9 +19,8 @@ class TemplateController(
 
     @Get("/{itemId}")
     suspend fun get(itemId: String): HttpResponse<Template> {
-        return templateRepository.get(itemId)?.let {
-            HttpResponse.ok(it)
-        } ?: HttpResponse.notFound()
+        return templateRepository.get(itemId)?.let { HttpResponse.ok(it) }
+            ?: HttpResponse.notFound()
     }
 
     @Delete("/{itemId}")

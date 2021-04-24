@@ -18,7 +18,7 @@ class TemplateRepository(
         const val tableName = "template"
     }
 
-    private val logger = KotlinLogging.logger {  }
+    private val logger = KotlinLogging.logger {}
 
     override val tableName = TemplateRepository.tableName
 
@@ -36,7 +36,9 @@ class TemplateRepository(
                                 template, object : TypeReference<Map<String, String>>() {})
                             .mapValues { entry -> AttributeValue.builder().s(entry.value).build() })
             }
-            .await().sdkHttpResponse().statusCode() == HttpStatus.ACCEPTED.code
+            .await()
+            .sdkHttpResponse()
+            .statusCode() == HttpStatus.ACCEPTED.code
     }
 
     suspend fun update(template: Template) {
@@ -44,9 +46,7 @@ class TemplateRepository(
             delete(template.id)
             insert(template)
         } catch (t: Throwable) {
-            logger.error(t) {
-                t.message
-            }
+            logger.error(t) { t.message }
             insert(template)
         }
     }
@@ -64,10 +64,13 @@ class TemplateRepository(
     }
 
     suspend fun delete(templateName: String): Boolean {
-        val response = dynamoDbClient.deleteItem {
-            it.tableName(tableName)
-                .key(mapOf(primaryKey to AttributeValue.builder().s(templateName).build()))
-        }.await()
+        val response =
+            dynamoDbClient
+                .deleteItem {
+                    it.tableName(tableName)
+                        .key(mapOf(primaryKey to AttributeValue.builder().s(templateName).build()))
+                }
+                .await()
         return response.sdkHttpResponse().isSuccessful
     }
 
