@@ -10,7 +10,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
 
-@Controller("/api/controller")
+@Controller("/api/controller/template")
 class TemplateController(
     private val templateRepository: TemplateRepository
 ) {
