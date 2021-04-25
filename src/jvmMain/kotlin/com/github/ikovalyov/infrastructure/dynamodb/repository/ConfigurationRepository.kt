@@ -5,9 +5,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.future.await
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
-import software.amazon.awssdk.services.dynamodb.model.DynamoDbResponse
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse
-import software.amazon.awssdk.services.dynamodb.model.PutItemResponse
 
 @Singleton
 class ConfigurationRepository(
@@ -22,7 +20,7 @@ class ConfigurationRepository(
     }
     override val tableName = ConfigurationRepository.tableName
 
-    override suspend fun init(): DynamoDbResponse {
+    override suspend fun init(): Boolean {
         super.init()
         return insertConfiguration(activeTemplateKeyId, defaultTemplate)
     }
@@ -31,7 +29,7 @@ class ConfigurationRepository(
         return getConfigProperty(activeTemplateKeyId).item()[configurationValueFieldName]?.s()
     }
 
-    private suspend fun insertConfiguration(key: String, value: String): PutItemResponse {
+    private suspend fun insertConfiguration(key: String, value: String): Boolean {
         return dynamoDbClient
             .putItem {
                 it.tableName(tableName)
@@ -42,6 +40,8 @@ class ConfigurationRepository(
                                 AttributeValue.builder().s(value).build()))
             }
             .await()
+            .sdkHttpResponse()
+            .isSuccessful
     }
 
     private suspend fun getConfigProperty(key: String): GetItemResponse {

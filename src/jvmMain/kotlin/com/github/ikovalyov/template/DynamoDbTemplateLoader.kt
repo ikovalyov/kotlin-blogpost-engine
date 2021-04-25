@@ -1,7 +1,7 @@
 package com.github.ikovalyov.template
 
 import com.github.ikovalyov.infrastructure.dynamodb.repository.ConfigurationRepository
-import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplatesRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
 import com.github.ikovalyov.model.Template
 import freemarker.cache.TemplateLoader
 import java.io.Reader
@@ -12,12 +12,12 @@ import kotlinx.coroutines.runBlocking
 @Singleton
 class DynamoDbTemplateLoader(
     private val configurationRepository: ConfigurationRepository,
-    private val templatesRepository: TemplatesRepository
+    private val templateRepository: TemplateRepository
 ) : TemplateLoader {
     override fun findTemplateSource(name: String): Template? =
         runBlocking {
             val templateName = configurationRepository.getActiveTemplateName()!!
-            templatesRepository.getTemplate(templateName)
+            templateRepository.get(templateName)
         }
 
     override fun getLastModified(templateSource: Any?): Long {

@@ -6,7 +6,6 @@ import mu.KotlinLogging
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeDefinition
 import software.amazon.awssdk.services.dynamodb.model.CreateTableRequest
-import software.amazon.awssdk.services.dynamodb.model.DynamoDbResponse
 import software.amazon.awssdk.services.dynamodb.model.KeySchemaElement
 import software.amazon.awssdk.services.dynamodb.model.KeyType
 import software.amazon.awssdk.services.dynamodb.model.ResourceInUseException
@@ -39,10 +38,10 @@ abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDb
         }
     }
 
-    override suspend fun init(): DynamoDbResponse? {
+    override suspend fun init(): Boolean? {
         logger.info { "creating $tableName table" }
         return try {
-            dynamoDbClient.createTable(tableBuilder.build()).await()
+            dynamoDbClient.createTable(tableBuilder.build()).await().sdkHttpResponse().isSuccessful
         } catch (t: ResourceInUseException) {
             logger.warn(t) { "Table already exists" }
             null

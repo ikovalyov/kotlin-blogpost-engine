@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -40,6 +41,11 @@ kotlin {
             }
             tasks.named<Test>("${target.name}Test") {
                 useJUnitPlatform()
+                testLogging {
+                    events("passed", "skipped", "failed")
+                    showStackTraces = true
+                    exceptionFormat = TestExceptionFormat.FULL
+                }
             }
             tasks.named<Jar>("jvmJar") {
                 manifest {
@@ -78,16 +84,15 @@ kotlin {
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("io.micronaut.picocli:micronaut-picocli")
                 implementation("io.micronaut:micronaut-inject-java")
-                implementation("software.amazon.awssdk:s3") {
+                implementation("software.amazon.awssdk:dynamodb") {
                     exclude(group = "software.amazon.awssdk", module = "apache-client")
-                    exclude(group = "software.amazon.awssdk", module = "netty-nio-client")
+                    exclude(group = "software.amazon.awssdk", module = "url-connection-client")
                 }
-                implementation("software.amazon.awssdk:url-connection-client")
+                implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
                 implementation("org.apache.logging.log4j:log4j-core:2.14.1")
-                implementation("software.amazon.awssdk:dynamodb")
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
@@ -117,6 +122,8 @@ kotlin {
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
 
                 implementation("org.testcontainers:junit-jupiter")
+                implementation("org.testcontainers:localstack")
+                implementation("com.amazonaws:aws-java-sdk-core:1.11.1004") // testcontainers need it
             }
         }
     }
@@ -169,7 +176,7 @@ tasks {
         this.dependsOn("copyJvmToLib")
     }
 
-    create("execMongoDbScript", Exec::class.java) {
+    create("execDynamoDbScript", Exec::class.java) {
         group = "Execution"
         this.executable = "$buildDir/scripts/dynamo-db-init-command"
         dependsOn("initMongoDbScript")
