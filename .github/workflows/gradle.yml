@@ -11,11 +11,6 @@ on:
 
 jobs:
   build:
-    services:
-      localstack:
-        image: localstack/localstack
-        ports:
-          - 4566:4566
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,8 +21,6 @@ jobs:
         distribution: 'adopt'
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Init dynamodb with test data
-      run: ./gradlew execDynamoDbScript
     - name: Build with Gradle
       run: ./gradlew jvmTest
   spotless:
