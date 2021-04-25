@@ -37,7 +37,6 @@ open class DynamoDbInitCommand : Runnable {
                     async { it.init() }
                 }
                 .awaitAll()
-                .filterNotNull()
             logger.info("done")
         }
     }
