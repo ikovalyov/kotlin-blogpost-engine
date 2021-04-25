@@ -24,7 +24,5 @@ blog:
       secretAccessKey: "test"
   template:
     default-template: "home.ftl"
-
-
 aws:
   region: "eu-central-1"
