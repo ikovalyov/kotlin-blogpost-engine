@@ -3,6 +3,7 @@ package com.github.ikovalyov.command
 import com.github.ikovalyov.infrastructure.dynamodb.InitDynamoDbDatabaseInterface
 import io.micronaut.configuration.picocli.PicocliRunner
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -14,6 +15,7 @@ import picocli.CommandLine
     description = ["This command generates tables in the dynamo db required for app to operate"],
     mixinStandardHelpOptions = true,
     helpCommand = true)
+@Singleton
 open class DynamoDbInitCommand : Runnable {
     @Inject lateinit var initializers: List<InitDynamoDbDatabaseInterface>
     private val logger = KotlinLogging.logger {}

@@ -1,6 +1,5 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.ikovalyov.model.Template
 import io.micronaut.http.HttpStatus
@@ -29,20 +28,14 @@ class TemplateRepository(
 
     suspend fun insert(template: Template): Boolean {
         return dynamoDbClient
-            .putItem {
-                it.tableName(tableName)
-                    .item(
-                        objectMapper.convertValue(
-                                template, object : TypeReference<Map<String, String>>() {})
-                            .mapValues { entry -> AttributeValue.builder().s(entry.value).build() })
-            }
+            .putItem { it.tableName(tableName).item(template.toDynamoDbMap()) }
             .await()
             .sdkHttpResponse()
             .statusCode() == HttpStatus.ACCEPTED.code
     }
 
-    suspend fun update(template: Template) {
-        try {
+    suspend fun update(template: Template): Boolean {
+        return try {
             delete(template.id)
             insert(template)
         } catch (t: Throwable) {

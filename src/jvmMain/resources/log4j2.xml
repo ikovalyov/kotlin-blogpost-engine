@@ -9,5 +9,6 @@
         <Root level="${env:LOG4J_LEVEL:-INFO}">
             <AppenderRef ref="Console"/>
         </Root>
+        <logger name="org.testcontainers" level="INFO"/>
     </Loggers>
 </Configuration>

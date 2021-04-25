@@ -34,12 +34,22 @@ class TemplateController(private val templateRepository: TemplateRepository) {
     }
 
     @Post
-    suspend fun insert(@Body item: Template) {
-        templateRepository.insert(item)
+    suspend fun insert(@Body item: Template): HttpResponse<Nothing> {
+        val result = templateRepository.insert(item)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
     }
 
     @Patch
-    suspend fun update(@Body item: Template) {
-        templateRepository.update(item)
+    suspend fun update(@Body item: Template): HttpResponse<Nothing> {
+        val result = templateRepository.update(item)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
     }
 }

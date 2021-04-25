@@ -122,6 +122,8 @@ kotlin {
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
 
                 implementation("org.testcontainers:junit-jupiter")
+                implementation("org.testcontainers:localstack")
+                implementation("com.amazonaws:aws-java-sdk-core:1.11.1004") // testcontainers need it
             }
         }
     }
