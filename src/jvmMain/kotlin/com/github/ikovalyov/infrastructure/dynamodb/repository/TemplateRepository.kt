@@ -1,7 +1,8 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.model.extension.fromDynamoDbMap
+import com.github.ikovalyov.model.extension.toDynamoDbMap
 import io.micronaut.http.HttpStatus
 import javax.inject.Singleton
 import kotlinx.coroutines.future.await
@@ -10,9 +11,8 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 @Singleton
-class TemplateRepository(
-    dynamoDbClient: DynamoDbAsyncClient, private val objectMapper: ObjectMapper
-) : AbstractKeyValueRepository(dynamoDbClient) {
+class TemplateRepository(dynamoDbClient: DynamoDbAsyncClient) :
+    AbstractKeyValueRepository(dynamoDbClient) {
     companion object {
         const val tableName = "template"
     }
