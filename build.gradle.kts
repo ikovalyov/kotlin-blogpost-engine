@@ -1,5 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -55,19 +58,29 @@ kotlin {
         }
     }
     js {
-        browser()
+        browser {
+            commonWebpackConfig {
+                this.devServer = this.devServer?.copy(open = false)
+            }
+        }
     }
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:2.0.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+            }
+        }
+        val jsMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib-js"))
             }
         }
         val jvmMain by getting {
@@ -205,4 +218,14 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         target(files)
         ktlint()
     }
+}
+
+tasks.named<KotlinJsCompile>("compileKotlinJs").configure {
+    kotlinOptions.moduleKind = "amd"
+    kotlinOptions.sourceMap = true
+    kotlinOptions.sourceMapEmbedSources = "always"
+}
+
+rootProject.plugins.withType<NodeJsRootPlugin> {
+    rootProject.the<NodeJsRootExtension>().versions.webpackDevServer.version = "4.0.0-beta.2"
 }
