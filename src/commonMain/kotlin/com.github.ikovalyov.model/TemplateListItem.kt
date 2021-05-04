@@ -1,6 +1,6 @@
 package com.github.ikovalyov.model
 
-import java.time.Instant
+import kotlinx.datetime.Instant
 
 data class TemplateListItem(val id: String, val lastModified: Instant) {
     companion object {

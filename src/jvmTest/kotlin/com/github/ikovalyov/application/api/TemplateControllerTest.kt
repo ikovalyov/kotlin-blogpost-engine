@@ -3,9 +3,9 @@ package com.github.ikovalyov.application.api
 import com.github.ikovalyov.command.DynamoDbInitCommand
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
-import java.time.Instant
 import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -63,7 +63,7 @@ class TemplateControllerTest : TestPropertyProvider {
 
     private suspend fun testInsert() {
         val template = controller.get("home.ftl").body()!!
-        val newTemplate = template.copy(id = "home2.ftl", lastModified = Instant.now())
+        val newTemplate = template.copy(id = "home2.ftl", lastModified = Clock.System.now())
         controller.insert(newTemplate)
         val newTemplateResponseBody = controller.get("home2.ftl").body()
         assert(newTemplateResponseBody?.id == "home2.ftl")
