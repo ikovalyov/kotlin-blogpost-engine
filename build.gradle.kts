@@ -10,8 +10,8 @@ plugins {
     kotlin("multiplatform") version "1.5.0-RC"
     kotlin("kapt") version "1.5.0-RC"
     kotlin("plugin.allopen") version "1.5.0-RC"
-    id("com.github.johnrengelman.shadow") version "6.1.0"
-    id("com.diffplug.spotless") version "5.12.1"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.diffplug.spotless") version "5.12.4"
 }
 
 group = "com.github.ikovalyov"
@@ -68,7 +68,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:2.0.4")
+                implementation("io.github.microutils:kotlin-logging:2.0.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.1.1")
             }
         }
@@ -88,7 +88,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.4.2"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.0"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -136,7 +136,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.11.1004") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.11.1010") // testcontainers need it
             }
         }
     }
