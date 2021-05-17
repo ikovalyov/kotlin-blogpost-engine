@@ -132,7 +132,7 @@ kotlin {
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
