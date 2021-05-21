@@ -6,12 +6,13 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
-    kotlin("multiplatform") version "1.5.0-RC"
-    kotlin("kapt") version "1.5.0-RC"
-    kotlin("plugin.allopen") version "1.5.0-RC"
+    kotlin("multiplatform") version "1.5.0"
+    kotlin("kapt") version "1.5.0"
+    kotlin("plugin.allopen") version "1.5.0"
+    kotlin("plugin.serialization") version "1.5.0"
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("com.diffplug.spotless") version "5.12.4"
+    id("idea")
 }
 
 group = "com.github.ikovalyov"
@@ -19,10 +20,13 @@ version = "0.0.1"
 
 repositories {
     mavenCentral()
-}
 
-dependencies {
-    testImplementation("junit", "junit", "4.12")
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
+    }
+    maven {
+        url = uri("https://kotlin.bintray.com/kotlinx")
+    }
 }
 
 kotlin {
@@ -57,12 +61,13 @@ kotlin {
             }
         }
     }
-    js {
+    js(IR) {
         browser {
             commonWebpackConfig {
-                this.devServer = this.devServer?.copy(open = false)
+                cssSupport.enabled = true
             }
         }
+        binaries.executable()
     }
     sourceSets {
         val commonMain by getting {
@@ -70,6 +75,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:2.0.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
             }
         }
         val commonTest by getting {
@@ -81,6 +87,17 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
+                implementation("org.jetbrains:kotlin-react:17.0.2-pre.154-kotlin-1.5.0")
+                implementation("org.jetbrains:kotlin-react-dom:17.0.2-pre.154-kotlin-1.5.0")
+                implementation("org.jetbrains:kotlin-react-table:7.7.0-pre.156-kotlin-1.5.0")
+                implementation(npm("react", "17.0.2"))
+                implementation(npm("react-dom", "17.0.2"))
+                implementation(npm("react-is", "17.0.2"))
+
+                implementation("org.jetbrains:kotlin-styled:5.2.3-pre.154-kotlin-1.5.0")
+                implementation(npm("styled-components", "5.2.3"))
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
             }
         }
         val jvmMain by getting {
@@ -227,5 +244,5 @@ tasks.named<KotlinJsCompile>("compileKotlinJs").configure {
 }
 
 rootProject.plugins.withType<NodeJsRootPlugin> {
-    rootProject.the<NodeJsRootExtension>().versions.webpackDevServer.version = "4.0.0-beta.2"
+    rootProject.the<NodeJsRootExtension>().versions.webpackDevServer.version = "4.0.0-beta.3"
 }

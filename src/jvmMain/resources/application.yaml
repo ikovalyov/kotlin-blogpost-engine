@@ -1,6 +1,14 @@
 micronaut:
   server:
     port: 8082
+    cors:
+      enabled: true
+      configurations:
+        web:
+          exposedHeaders:
+            - Content-Type
+            - Authorization
+            - '*'
   io:
     watch:
       paths: "src/jvmMain"
