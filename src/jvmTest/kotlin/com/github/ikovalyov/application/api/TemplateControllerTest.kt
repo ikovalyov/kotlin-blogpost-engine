@@ -1,11 +1,14 @@
 package com.github.ikovalyov.application.api
 
 import com.github.ikovalyov.command.DynamoDbInitCommand
+import com.github.ikovalyov.model.Template
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
 import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -47,35 +50,46 @@ class TemplateControllerTest : TestPropertyProvider {
         }
 
     private suspend fun testDelete() {
-        val result = controller.list()
+        val resultString = controller.list()
+        val result = Json.decodeFromString(ListSerializer(Template.serializer()), resultString)
         assert(result.count() == 2)
         controller.delete(result[0].id)
-        assert(controller.list().count() == 1)
+        val newResultString = controller.list()
+        val newResult =
+            Json.decodeFromString(ListSerializer(Template.serializer()), newResultString)
+        assert(newResult.count() == 1)
     }
 
     private suspend fun testUpdate() {
-        val template = controller.get("home.ftl").body()!!
+        val templateString = controller.get("home.ftl")
+        val template = Json.decodeFromString(Template.serializer(), templateString)
         val newTemplate = template.copy(template = template.template + "TEST")
         controller.update(newTemplate)
-        val updatedTemplate = controller.get("home.ftl").body()!!
+        val updatedTemplateString = controller.get("home.ftl")
+        val updatedTemplate = Json.decodeFromString(Template.serializer(), updatedTemplateString)
         assert(updatedTemplate.template.endsWith("TEST"))
     }
 
     private suspend fun testInsert() {
-        val template = controller.get("home.ftl").body()!!
+        val templateString = controller.get("home.ftl")
+        val template = Json.decodeFromString(Template.serializer(), templateString)
         val newTemplate = template.copy(id = "home2.ftl", lastModified = Clock.System.now())
         controller.insert(newTemplate)
-        val newTemplateResponseBody = controller.get("home2.ftl").body()
-        assert(newTemplateResponseBody?.id == "home2.ftl")
+        val newTemplateString = controller.get("home2.ftl")
+        val newTemplateResponseBody =
+            Json.decodeFromString(Template.serializer(), newTemplateString)
+        assert(newTemplateResponseBody.id == "home2.ftl")
     }
 
     private suspend fun testGet() {
-        val templateResponse = controller.get("home.ftl")
-        assert(templateResponse.body()!!.id == "home.ftl")
+        val templateResponseString = controller.get("home.ftl")
+        val templateResponse = Json.decodeFromString(Template.serializer(), templateResponseString)
+        assert(templateResponse.id == "home.ftl")
     }
 
     private suspend fun testList() {
-        val result = controller.list()
+        val resultString = controller.list()
+        val result = Json.decodeFromString(ListSerializer(Template.serializer()), resultString)
         assert(result.count() == 1)
     }
 }
