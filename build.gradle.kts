@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.allopen") version "1.5.0"
     kotlin("plugin.serialization") version "1.5.0"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.12.4"
+    id("com.diffplug.spotless") version "5.12.5"
     id("idea")
 }
 
@@ -104,8 +104,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.0"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.0")
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.4"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -149,11 +149,11 @@ kotlin {
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.11.1010") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.11.1024") // testcontainers need it
             }
         }
     }
