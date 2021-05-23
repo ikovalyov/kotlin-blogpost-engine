@@ -43,7 +43,6 @@ class TemplateList : RComponent<TemplateListProps, TemplateListState>() {
     }
 
     override fun RBuilder.render() {
-        console.info(props)
         child(
             component = Table,
             props =

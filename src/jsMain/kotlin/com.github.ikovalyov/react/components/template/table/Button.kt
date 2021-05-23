@@ -22,10 +22,7 @@ class Button : RComponent<ButtonProps, RState>() {
                 text(properties.text)
                 value = properties.template.id
                 name = "edit"
-                onClickFunction =
-                    {
-                        properties.onClick(properties.template)
-                    }
+                onClickFunction = { properties.onClick(properties.template) }
             }
         }
     }

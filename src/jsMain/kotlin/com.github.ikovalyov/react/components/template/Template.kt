@@ -51,7 +51,6 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
 
     val switchToListViewStateFuncVar =
         {
-            console.info("switch back to list view")
             setState {
                 currentState = State.LIST
                 currentTemplate = null
@@ -69,7 +68,6 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
     }
 
     override fun RBuilder.render() {
-        console.info("rerendering the Template component")
         when (state.currentState) {
             State.LIST ->
                 child(TemplateList::class) {
