@@ -1,5 +1,6 @@
 package com.github.ikovalyov.application.api
 
+import com.github.ikovalyov.Api
 import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
 import com.github.ikovalyov.model.Template
 import io.micronaut.http.HttpResponse
@@ -9,18 +10,22 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
+import mu.KotlinLogging
 
-@Controller("/api/controller/template")
+@Controller(Api.templateUrl)
 class TemplateController(private val templateRepository: TemplateRepository) {
+    private val logger = KotlinLogging.logger {}
+
     @Get
-    suspend fun list(): List<Template> {
-        return templateRepository.list()
+    suspend fun list(): String {
+        return Json.encodeToString(ListSerializer(Template.serializer()), templateRepository.list())
     }
 
     @Get("/{itemId}")
-    suspend fun get(itemId: String): HttpResponse<Template> {
-        return templateRepository.get(itemId)?.let { HttpResponse.ok(it) }
-            ?: HttpResponse.notFound()
+    suspend fun get(itemId: String): String {
+        return Json.encodeToString(Template.serializer(), templateRepository.get(itemId)!!)
     }
 
     @Delete("/{itemId}")
