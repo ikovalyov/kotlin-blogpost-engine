@@ -10,8 +10,8 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 @Controller(Api.templateUrl)
@@ -24,9 +24,8 @@ class TemplateController(private val templateRepository: TemplateRepository) {
     }
 
     @Get("/{itemId}")
-    suspend fun get(itemId: String): HttpResponse<Template> {
-        return templateRepository.get(itemId)?.let { HttpResponse.ok(it) }
-            ?: HttpResponse.notFound()
+    suspend fun get(itemId: String): String {
+        return Json.encodeToString(Template.serializer(), templateRepository.get(itemId)!!)
     }
 
     @Delete("/{itemId}")

@@ -8,7 +8,7 @@ import react.RProps
 import react.RState
 import react.dom.button
 
-external interface ButtonProps: RProps {
+external interface ButtonProps : RProps {
     var template: Template
     var onClick: (Template) -> Unit
     var text: String
@@ -22,9 +22,10 @@ class Button : RComponent<ButtonProps, RState>() {
                 text(properties.text)
                 value = properties.template.id
                 name = "edit"
-                onClickFunction = {
-                    properties.onClick(properties.template)
-                }
+                onClickFunction =
+                    {
+                        properties.onClick(properties.template)
+                    }
             }
         }
     }
