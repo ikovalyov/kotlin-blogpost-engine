@@ -88,7 +88,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-js"))
                 implementation("org.jetbrains:kotlin-react:17.0.2-pre.156-kotlin-1.5.0")
-                implementation("org.jetbrains:kotlin-react-dom:17.0.2-pre.154-kotlin-1.5.0")
+                implementation("org.jetbrains:kotlin-react-dom:17.0.2-pre.156-kotlin-1.5.0")
                 implementation("org.jetbrains:kotlin-react-table:7.7.0-pre.156-kotlin-1.5.0")
                 implementation(npm("react", "17.0.2"))
                 implementation(npm("react-dom", "17.0.2"))
