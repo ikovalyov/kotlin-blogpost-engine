@@ -153,7 +153,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.11.1025") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.11.1026") // testcontainers need it
             }
         }
     }
