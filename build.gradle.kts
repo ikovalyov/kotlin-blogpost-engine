@@ -74,7 +74,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:2.0.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
             }
         }
