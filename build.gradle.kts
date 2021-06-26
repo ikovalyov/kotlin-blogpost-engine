@@ -195,7 +195,7 @@ tasks {
         into(layout.buildDirectory.dir("$buildDir/lib"))
     }
 
-    create("initMongoDbScript", CreateStartScripts::class.java) {
+    create("initDynamoDbScript", CreateStartScripts::class.java) {
         group = "Execution"
         description = "This command generates tables in the dynamo db required for app to operate"
         applicationName = "dynamo-db-init-command"
@@ -209,7 +209,7 @@ tasks {
     create("execDynamoDbScript", Exec::class.java) {
         group = "Execution"
         this.executable = "$buildDir/scripts/dynamo-db-init-command"
-        dependsOn("initMongoDbScript")
+        dependsOn("initDynamoDbScript")
     }
 }
 
