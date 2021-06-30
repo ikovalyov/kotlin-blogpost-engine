@@ -87,14 +87,14 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation("org.jetbrains:kotlin-react:17.0.2-pre.204-kotlin-1.5.10")
-                implementation("org.jetbrains:kotlin-react-dom:17.0.2-pre.204-kotlin-1.5.10")
-                implementation("org.jetbrains:kotlin-react-table:7.7.0-pre.204-kotlin-1.5.10")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.213-kotlin-1.5.20")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.213-kotlin-1.5.20")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table:7.7.0-pre.213-kotlin-1.5.20")
                 implementation(npm("react", "17.0.2"))
                 implementation(npm("react-dom", "17.0.2"))
                 implementation(npm("react-is", "17.0.2"))
 
-                implementation("org.jetbrains:kotlin-styled:5.3.0-pre.204-kotlin-1.5.10")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:5.3.0-pre.213-kotlin-1.5.20")
                 implementation(npm("styled-components", "5.2.3"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
