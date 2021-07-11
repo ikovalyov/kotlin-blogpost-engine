@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.allopen") version "1.5.10"
     kotlin("plugin.serialization") version "1.5.10"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.14.0"
+    id("com.diffplug.spotless") version "5.14.1"
     id("idea")
 }
 
@@ -75,7 +75,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:2.0.8")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
             }
         }
         val commonTest by getting {
@@ -97,7 +97,7 @@ kotlin {
                 implementation("org.jetbrains:kotlin-styled:5.3.0-pre.204-kotlin-1.5.10")
                 implementation(npm("styled-components", "5.2.3"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
             }
         }
         val jvmMain by getting {
@@ -105,7 +105,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.1")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.7"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.8"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -153,7 +153,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.15") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.21") // testcontainers need it
             }
         }
     }
