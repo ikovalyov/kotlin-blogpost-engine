@@ -97,7 +97,7 @@ kotlin {
                 implementation("org.jetbrains:kotlin-styled:5.3.0-pre.204-kotlin-1.5.10")
                 implementation(npm("styled-components", "5.2.3"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
             }
         }
         val jvmMain by getting {
