@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.allopen") version "1.5.20"
     kotlin("plugin.serialization") version "1.5.20"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.14.1"
+    id("com.diffplug.spotless") version "5.14.2"
     id("idea")
 }
 
@@ -73,7 +73,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:2.0.8")
+                implementation("io.github.microutils:kotlin-logging:2.0.10")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
             }
@@ -105,7 +105,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.1")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.8"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.11"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -145,7 +145,7 @@ kotlin {
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.15.3"))
+                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.16.0"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
@@ -153,7 +153,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.21") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.43") // testcontainers need it
             }
         }
     }
