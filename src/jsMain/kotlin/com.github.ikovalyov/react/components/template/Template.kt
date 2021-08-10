@@ -27,7 +27,8 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
     enum class State {
         LIST,
         VIEW,
-        EDIT
+        EDIT,
+        ADD
     }
 
     private fun switchToEditStateFuncVar(t: Template) {
@@ -40,7 +41,7 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
         }
     }
 
-    fun switchToViewStateFunc(t: Template) {
+    private fun switchToViewStateFunc(t: Template) {
         GlobalScope.launch {
             val template = loadTemplate(t.id)
             setState {
@@ -50,7 +51,16 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
         }
     }
 
-    suspend fun switchToListViewStateFunc() {
+    private fun switchToAddStateFunc() {
+        GlobalScope.launch {
+            setState {
+                currentState = State.ADD
+                currentTemplate = null
+            }
+        }
+    }
+
+    private suspend fun switchToListViewStateFunc() {
         val result = window.fetch("http://localhost:8082" + Api.templateUrl).await().text().await()
         val templatesList = Json.decodeFromString(ListSerializer(Template.serializer()), result)
 
@@ -58,6 +68,13 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
             currentState = State.LIST
             currentTemplate = null
             this.templatesList = templatesList
+        }
+    }
+
+    fun switchToInsertStateFunc() {
+        setState {
+            currentState = State.ADD
+            currentTemplate = null
         }
     }
 
@@ -76,6 +93,25 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
         console.info("inside submitEditTemplateForm")
         updateTemplate(t)
         switchToListViewStateFunc()
+    }
+
+    suspend fun submitInsertTemplateForm(t: Template) {
+        console.info("inside submitInsertTemplateForm")
+        insertTemplate(t)
+        switchToListViewStateFunc()
+    }
+
+    private suspend fun insertTemplate(template: Template) {
+        val body = Json.encodeToString(Template.serializer(), template)
+        val headers = Headers()
+        headers.append("Content-Type", "application/json")
+        val fetchResult =
+            window.fetch(
+                "http://localhost:8082" + Api.templateUrl,
+                RequestInit(method = "POST", headers = headers, body = body))
+        val response = fetchResult.await()
+        val result = response.text().await()
+        console.info(result)
     }
 
     private suspend fun updateTemplate(template: Template) {
@@ -111,6 +147,7 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
                     attrs {
                         this.switchToEditState = ::switchToEditStateFuncVar
                         this.switchToViewState = ::switchToViewStateFunc
+                        this.switchToInsertState = ::switchToInsertStateFunc
                         this.deleteItem = ::deleteItem
                         this.templates = state.templatesList
                     }
@@ -128,6 +165,13 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
                     attrs {
                         template = state.currentTemplate!!
                         switchToListState = ::switchToListViewStateFunc
+                    }
+                }
+            State.ADD ->
+                child(TemplateInsert::class) {
+                    attrs {
+                        switchToListState = ::switchToListViewStateFunc
+                        submitForm = ::submitInsertTemplateForm
                     }
                 }
         }

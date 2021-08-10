@@ -5,15 +5,20 @@ import com.github.ikovalyov.react.components.template.table.Table
 import kotlinext.js.jsObject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.html.ButtonType
+import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
 import react.child
+import react.dom.attrs
+import react.dom.button
 
 external interface TemplateListProps : RProps {
     var switchToViewState: (Template) -> Unit
     var switchToEditState: (Template) -> Unit
+    var switchToInsertState: () -> Unit
     var deleteItem: suspend (Template) -> Unit
     var templates: List<Template>
 }
@@ -37,5 +42,13 @@ class TemplateList : RComponent<TemplateListProps, RState>() {
                     onEditClick = { props.switchToEditState(it) }
                     onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
                 })
+        button {
+            attrs {
+                text("Add new")
+                name = "new"
+                type = ButtonType.button
+                onClickFunction = { props.switchToInsertState() }
+            }
+        }
     }
 }
