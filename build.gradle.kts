@@ -6,10 +6,10 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.5.10"
-    kotlin("kapt") version "1.5.10"
-    kotlin("plugin.allopen") version "1.5.10"
-    kotlin("plugin.serialization") version "1.5.10"
+    kotlin("multiplatform") version "1.5.20"
+    kotlin("kapt") version "1.5.20"
+    kotlin("plugin.allopen") version "1.5.20"
+    kotlin("plugin.serialization") version "1.5.20"
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("com.diffplug.spotless") version "5.14.2"
     id("idea")
@@ -87,14 +87,14 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation("org.jetbrains:kotlin-react:17.0.2-pre.204-kotlin-1.5.10")
-                implementation("org.jetbrains:kotlin-react-dom:17.0.2-pre.204-kotlin-1.5.10")
-                implementation("org.jetbrains:kotlin-react-table:7.7.0-pre.204-kotlin-1.5.10")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.213-kotlin-1.5.20")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.213-kotlin-1.5.20")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table:7.7.0-pre.213-kotlin-1.5.20")
                 implementation(npm("react", "17.0.2"))
                 implementation(npm("react-dom", "17.0.2"))
                 implementation(npm("react-is", "17.0.2"))
 
-                implementation("org.jetbrains:kotlin-styled:5.3.0-pre.204-kotlin-1.5.10")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:5.3.0-pre.213-kotlin-1.5.20")
                 implementation(npm("styled-components", "5.2.3"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
@@ -195,7 +195,7 @@ tasks {
         into(layout.buildDirectory.dir("$buildDir/lib"))
     }
 
-    create("initMongoDbScript", CreateStartScripts::class.java) {
+    create("initDynamoDbScript", CreateStartScripts::class.java) {
         group = "Execution"
         description = "This command generates tables in the dynamo db required for app to operate"
         applicationName = "dynamo-db-init-command"
@@ -209,7 +209,7 @@ tasks {
     create("execDynamoDbScript", Exec::class.java) {
         group = "Execution"
         this.executable = "$buildDir/scripts/dynamo-db-init-command"
-        dependsOn("initMongoDbScript")
+        dependsOn("initDynamoDbScript")
     }
 }
 

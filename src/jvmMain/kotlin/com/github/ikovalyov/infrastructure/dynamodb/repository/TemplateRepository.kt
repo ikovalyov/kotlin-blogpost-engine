@@ -31,7 +31,7 @@ class TemplateRepository(dynamoDbClient: DynamoDbAsyncClient) :
             .putItem { it.tableName(tableName).item(template.toDynamoDbMap()) }
             .await()
             .sdkHttpResponse()
-            .statusCode() == HttpStatus.ACCEPTED.code
+            .statusCode() == HttpStatus.OK.code
     }
 
     suspend fun update(template: Template): Boolean {

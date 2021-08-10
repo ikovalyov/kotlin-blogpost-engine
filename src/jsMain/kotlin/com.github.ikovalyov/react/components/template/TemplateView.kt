@@ -2,11 +2,14 @@ package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.react.components.template.table.Button
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.html.unsafe
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
+import react.dom.attrs
 import react.dom.div
 import react.dom.h1
 import react.dom.iframe
@@ -15,7 +18,7 @@ import react.dom.section
 
 external interface TemplateViewProps : RProps {
     var template: Template
-    var switchToListState: () -> Unit
+    var switchToListState: suspend () -> Unit
 }
 
 class TemplateView : RComponent<TemplateViewProps, RState>() {
@@ -36,7 +39,7 @@ class TemplateView : RComponent<TemplateViewProps, RState>() {
             }
             child(Button::class) {
                 attrs {
-                    onClick = { props.switchToListState() }
+                    onClick = { GlobalScope.async { props.switchToListState() } }
                     template = props.template
                     text = "Back to list"
                 }

@@ -1,7 +1,6 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.Template
-import com.github.ikovalyov.react.components.template.table.Button
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.css.Color
@@ -17,7 +16,10 @@ import kotlinx.css.float
 import kotlinx.css.fontWeight
 import kotlinx.css.height
 import kotlinx.css.width
-import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.html.ButtonType
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
@@ -27,6 +29,7 @@ import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.attrs
+import react.dom.button
 import react.dom.defaultValue
 import react.dom.fieldset
 import react.dom.form
@@ -37,25 +40,27 @@ import styled.styledLabel
 import styled.styledP
 import styled.styledTextarea
 
-external interface TemplateEditProps : RProps {
-    var template: Template
+external interface TemplateInsertProps : RProps {
     var switchToListState: suspend () -> Unit
     var submitForm: suspend (t: Template) -> Unit
 }
 
-external interface TemplateEditState : RState {
+external interface TemplateInsertState : RState {
     var currentTemplate: Template?
 }
 
-class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
+class TemplateInsert : RComponent<TemplateInsertProps, TemplateInsertState>() {
     override fun RBuilder.render() {
+        if (state.currentTemplate == null) {
+            state.currentTemplate = Template.create("", "")
+        }
         form {
             attrs {
                 onSubmitFunction =
                     {
                         it.preventDefault()
                         GlobalScope.async {
-                            console.info("submit form ${state.currentTemplate}")
+                            console.info("Inserting new template into database")
                             props.submitForm(state.currentTemplate!!)
                         }
                     }
@@ -77,8 +82,13 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
                     input {
                         attrs {
                             name = "id"
-                            value = props.template.id
-                            readonly = true
+                            defaultValue = ""
+                            onChangeFunction =
+                                {
+                                    val id = it.target.asDynamic().value.toString()
+                                    val newTemplate = state.currentTemplate?.copy(id = id)
+                                    setState { currentTemplate = newTemplate }
+                                }
                         }
                     }
                 }
@@ -98,19 +108,21 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
                     input {
                         attrs {
                             name = "lastModified"
-                            defaultValue = props.template.lastModified.epochSeconds.toString()
-                            type = InputType.number
+                            defaultValue =
+                                state
+                                    .currentTemplate
+                                    ?.lastModified
+                                    ?.toLocalDateTime(TimeZone.UTC)
+                                    .toString()
+                            type = InputType.dateTimeLocal
                             onChangeFunction =
                                 {
-                                    val value = it.target.asDynamic().value
-                                    setState {
-                                        val template = currentTemplate ?: props.template
-                                        currentTemplate =
-                                            template.copy(
-                                                lastModified =
-                                                    Instant.fromEpochSeconds(
-                                                        value.toLong() as Long))
-                                    }
+                                    val value = it.target.asDynamic().value.toString()
+                                    val ldt = LocalDateTime.parse(value)
+                                    val newTemplate =
+                                        state.currentTemplate?.copy(
+                                            lastModified = ldt.toInstant(TimeZone.UTC))
+                                    setState { currentTemplate = newTemplate }
                                 }
                         }
                     }
@@ -138,29 +150,21 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
                             onChangeFunction =
                                 {
                                     setState {
-                                        val template = currentTemplate ?: props.template
                                         currentTemplate =
-                                            template.copy(
+                                            currentTemplate?.copy(
                                                 template = it.target.asDynamic().value as String)
                                     }
                                 }
-                            defaultValue = props.template.template
+                            defaultValue = ""
                         }
                     }
                 }
             }
-            child(Button::class) {
+            button {
                 attrs {
-                    template = props.template
-                    text = "Update"
+                    text("Insert")
+                    name = "insert"
                     type = ButtonType.submit
-                }
-            }
-            child(Button::class) {
-                attrs {
-                    onClick = { GlobalScope.async { props.switchToListState() } }
-                    template = props.template
-                    text = "Cancel"
                 }
             }
         }
