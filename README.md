@@ -1,5 +1,5 @@
 # kotlin-blogpost-engine
-Blogpost engine using kotlin multiplatform and micronaut
+Blogpost engine using kotlin multiplatform and micronaut. Frontend is compiled into react from kotlin sources.
 
 ## How to start the app?
 
