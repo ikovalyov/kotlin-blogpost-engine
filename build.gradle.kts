@@ -87,7 +87,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.229-kotlin-1.5.21")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.231-kotlin-1.5.21")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.229-kotlin-1.5.21")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table:7.7.0-pre.229-kotlin-1.5.21")
                 implementation(npm("react", "17.0.2"))
