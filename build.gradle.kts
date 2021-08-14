@@ -94,7 +94,7 @@ kotlin {
                 implementation(npm("react-dom", "17.0.2"))
                 implementation(npm("react-is", "17.0.2"))
 
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:5.3.0-pre.229-kotlin-1.5.21")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:5.3.0-pre.231-kotlin-1.5.21")
                 implementation(npm("styled-components", "5.2.3"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
