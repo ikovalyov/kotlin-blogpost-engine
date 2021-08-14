@@ -1,9 +1,7 @@
 package com.github.ikovalyov.model.security
 
-import kotlin.jvm.JvmInline
-
 class Identifier(value: String) {
-    companion object{
+    companion object {
         const val identifierSize = 36
     }
     init {

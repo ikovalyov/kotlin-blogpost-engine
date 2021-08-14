@@ -1,7 +1,7 @@
 package com.github.ikovalyov.model.security
 
 class ShortString(value: String) {
-    companion object{
+    companion object {
         const val shortStringSize = 256
     }
     init {

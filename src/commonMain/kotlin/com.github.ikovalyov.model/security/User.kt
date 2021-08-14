@@ -6,5 +6,4 @@ data class User(
     val loggedIn: Boolean,
     val nickname: String,
     val roles: List<Role>,
-    val password: Password
-)
+    val password: Password)

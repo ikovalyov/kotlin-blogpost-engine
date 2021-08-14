@@ -8,7 +8,6 @@ import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
-import io.micronaut.views.View
 
 @Controller("/views")
 class ViewsController(private val templateRepository: TemplateRepository) {

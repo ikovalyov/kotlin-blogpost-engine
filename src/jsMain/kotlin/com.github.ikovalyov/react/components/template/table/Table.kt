@@ -31,14 +31,11 @@ import kotlinx.css.px
 import kotlinx.css.textAlign
 import kotlinx.css.whiteSpace
 import kotlinx.css.width
-import react.RBuilder
 import react.RProps
-import react.ReactNode
 import react.buildElement
 import react.dom.div
 import react.dom.tr
 import react.fc
-import react.functionalComponent
 import react.table.Cell
 import react.table.RenderType
 import react.table.columns
@@ -78,7 +75,6 @@ val Table =
                         accessor = "id"
                         cellFunction =
                             { props ->
-
                                 buildElement {
                                     div {
                                         child(Button::class) {
