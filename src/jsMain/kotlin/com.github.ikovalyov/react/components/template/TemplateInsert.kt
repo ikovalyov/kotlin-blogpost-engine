@@ -27,7 +27,7 @@ import kotlinx.html.js.onSubmitFunction
 import react.RBuilder
 import react.RComponent
 import react.RProps
-import react.RState
+import react.State
 import react.dom.attrs
 import react.dom.button
 import react.dom.defaultValue
@@ -45,7 +45,7 @@ external interface TemplateInsertProps : RProps {
     var submitForm: suspend (t: Template) -> Unit
 }
 
-external interface TemplateInsertState : RState {
+external interface TemplateInsertState : State {
     var currentTemplate: Template?
 }
 

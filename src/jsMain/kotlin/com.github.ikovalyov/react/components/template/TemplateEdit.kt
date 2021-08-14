@@ -25,7 +25,7 @@ import kotlinx.html.js.onSubmitFunction
 import react.RBuilder
 import react.RComponent
 import react.RProps
-import react.RState
+import react.State
 import react.dom.attrs
 import react.dom.defaultValue
 import react.dom.fieldset
@@ -43,7 +43,7 @@ external interface TemplateEditProps : RProps {
     var submitForm: suspend (t: Template) -> Unit
 }
 
-external interface TemplateEditState : RState {
+external interface TemplateEditState : State {
     var currentTemplate: Template?
 }
 

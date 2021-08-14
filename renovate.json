@@ -1,5 +1,22 @@
 {
   "extends": [
     "config:base"
+  ],
+  "gradle": {
+    "enabled": true,
+    "fileMatch": [
+      "(^|/)build.gradle.kts$",
+      "(^|/)gradle.properties$"
+    ]
+  },
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "^org\\.jetbrains\\.kotlin\\.",
+        "^org\\.jetbrains\\.kotlin:",
+        "^org\\.jetbrains\\.kotlin-wrappers"
+      ],
+      "groupName": "Kotlin"
+    }
   ]
 }

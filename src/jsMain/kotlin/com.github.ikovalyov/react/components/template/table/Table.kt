@@ -32,9 +32,11 @@ import kotlinx.css.textAlign
 import kotlinx.css.whiteSpace
 import kotlinx.css.width
 import react.RProps
+import react.buildElement
 import react.dom.div
 import react.dom.tr
-import react.functionalComponent
+import react.fc
+import react.table.Cell
 import react.table.RenderType
 import react.table.columns
 import react.table.useTable
@@ -56,7 +58,7 @@ external interface TemplateProps : RProps {
 }
 
 val Table =
-    functionalComponent<TemplateProps> { componentProps ->
+    fc<TemplateProps> { componentProps ->
         val tableColumns =
             useMemo {
                 columns<Template> {
@@ -73,26 +75,28 @@ val Table =
                         accessor = "id"
                         cellFunction =
                             { props ->
-                                div {
-                                    child(Button::class) {
-                                        attrs {
-                                            onClick = componentProps.onViewClick
-                                            template = props.row.original
-                                            text = "view"
+                                buildElement {
+                                    div {
+                                        child(Button::class) {
+                                            attrs {
+                                                onClick = componentProps.onViewClick
+                                                template = props.row.original
+                                                text = "view"
+                                            }
                                         }
-                                    }
-                                    child(Button::class) {
-                                        attrs {
-                                            onClick = componentProps.onEditClick
-                                            template = props.row.original
-                                            text = "update"
+                                        child(Button::class) {
+                                            attrs {
+                                                onClick = componentProps.onEditClick
+                                                template = props.row.original
+                                                text = "update"
+                                            }
                                         }
-                                    }
-                                    child(Button::class) {
-                                        attrs {
-                                            onClick = componentProps.onDeleteClick
-                                            template = props.row.original
-                                            text = "delete"
+                                        child(Button::class) {
+                                            attrs {
+                                                onClick = componentProps.onDeleteClick
+                                                template = props.row.original
+                                                text = "delete"
+                                            }
                                         }
                                     }
                                 }

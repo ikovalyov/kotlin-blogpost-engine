@@ -6,7 +6,7 @@ import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RComponent
 import react.RProps
-import react.RState
+import react.State
 import react.dom.attrs
 import react.dom.button
 
@@ -19,7 +19,7 @@ external interface ButtonProps : RProps {
     var type: ButtonType?
 }
 
-class Button : RComponent<ButtonProps, RState>() {
+class Button : RComponent<ButtonProps, State>() {
     override fun RBuilder.render() {
         val properties = props
         button {
