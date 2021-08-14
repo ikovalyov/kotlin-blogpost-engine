@@ -106,7 +106,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.1")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.11"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:2.5.12"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -154,7 +154,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.44") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.47") // testcontainers need it
             }
         }
     }
