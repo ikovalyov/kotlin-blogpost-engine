@@ -14,10 +14,10 @@ import org.w3c.fetch.RequestInit
 import react.RBuilder
 import react.RComponent
 import react.RProps
-import react.RState
+import react.State
 import react.setState
 
-external interface TemplateComponentState : RState {
+external interface TemplateComponentState : State {
     var currentState: TemplateComponent.State?
     var currentTemplate: Template?
     var templatesList: List<Template>
@@ -123,7 +123,7 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
                 "http://localhost:8082" + Api.templateUrl,
                 RequestInit(method = "PATCH", headers = headers, body = body))
         val response = fetchResult.await()
-        val result = response.text().await()
+        response.text().await()
     }
 
     private suspend fun loadTemplate(templateId: String): Template {
