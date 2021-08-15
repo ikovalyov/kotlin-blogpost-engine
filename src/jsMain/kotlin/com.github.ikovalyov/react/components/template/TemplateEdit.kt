@@ -38,131 +38,128 @@ import styled.styledP
 import styled.styledTextarea
 
 external interface TemplateEditProps : RProps {
-    var template: Template
-    var switchToListState: suspend () -> Unit
-    var submitForm: suspend (t: Template) -> Unit
+  var template: Template
+  var switchToListState: suspend () -> Unit
+  var submitForm: suspend (t: Template) -> Unit
 }
 
 external interface TemplateEditState : State {
-    var currentTemplate: Template?
+  var currentTemplate: Template?
 }
 
 class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
-    override fun RBuilder.render() {
-        form {
+  override fun RBuilder.render() {
+    form {
+      attrs {
+        onSubmitFunction =
+            {
+              it.preventDefault()
+              GlobalScope.async {
+                console.info("submit form ${state.currentTemplate}")
+                props.submitForm(state.currentTemplate!!)
+              }
+            }
+      }
+      fieldset {
+        styledP {
+          styledLabel {
+            +"Id"
+            css {
+              color = Color("B4886B")
+              fontWeight = FontWeight.bold
+              display = Display.block
+              width = LinearDimension("150px")
+              float = Float.left
+              after { content = QuotedString(":") }
+            }
+            attrs { this.attributes["htmlFor"] = "id" }
+          }
+          input {
             attrs {
-                onSubmitFunction =
-                    {
-                        it.preventDefault()
-                        GlobalScope.async {
-                            console.info("submit form ${state.currentTemplate}")
-                            props.submitForm(state.currentTemplate!!)
-                        }
-                    }
+              name = "id"
+              value = props.template.id
+              readonly = true
             }
-            fieldset {
-                styledP {
-                    styledLabel {
-                        +"Id"
-                        css {
-                            color = Color("B4886B")
-                            fontWeight = FontWeight.bold
-                            display = Display.block
-                            width = LinearDimension("150px")
-                            float = Float.left
-                            after { content = QuotedString(":") }
-                        }
-                        attrs { this.attributes["htmlFor"] = "id" }
-                    }
-                    input {
-                        attrs {
-                            name = "id"
-                            value = props.template.id
-                            readonly = true
-                        }
-                    }
-                }
-                styledP {
-                    styledLabel {
-                        css {
-                            color = Color("B4886B")
-                            fontWeight = FontWeight.bold
-                            display = Display.block
-                            width = LinearDimension("150px")
-                            float = Float.left
-                            after { content = QuotedString(":") }
-                        }
-                        attrs { this.attributes["htmlFor"] = "lastModified" }
-                        +"Updated at"
-                    }
-                    input {
-                        attrs {
-                            name = "lastModified"
-                            defaultValue = props.template.lastModified.epochSeconds.toString()
-                            type = InputType.number
-                            onChangeFunction =
-                                {
-                                    val value = it.target.asDynamic().value
-                                    setState {
-                                        val template = currentTemplate ?: props.template
-                                        currentTemplate =
-                                            template.copy(
-                                                lastModified =
-                                                    Instant.fromEpochSeconds(
-                                                        value.toLong() as Long))
-                                    }
-                                }
-                        }
-                    }
-                }
-                styledP {
-                    styledLabel {
-                        css {
-                            color = Color("B4886B")
-                            fontWeight = FontWeight.bold
-                            display = Display.block
-                            width = LinearDimension("150px")
-                            float = Float.left
-                            after { content = QuotedString(":") }
-                        }
-                        attrs { this.attributes["htmlFor"] = "template" }
-                        +"Template"
-                    }
-                    styledTextarea {
-                        css {
-                            height = LinearDimension("400px")
-                            width = LinearDimension("100%")
-                        }
-                        attrs {
-                            name = "template"
-                            onChangeFunction =
-                                {
-                                    setState {
-                                        val template = currentTemplate ?: props.template
-                                        currentTemplate =
-                                            template.copy(
-                                                template = it.target.asDynamic().value as String)
-                                    }
-                                }
-                            defaultValue = props.template.template
-                        }
-                    }
-                }
-            }
-            child(Button::class) {
-                attrs {
-                    template = props.template
-                    text = "Update"
-                    type = ButtonType.submit
-                }
-            }
-            child(Button::class) {
-                attrs {
-                    onClick = { GlobalScope.async { props.switchToListState() } }
-                    template = props.template
-                    text = "Cancel"
-                }
-            }
+          }
         }
+        styledP {
+          styledLabel {
+            css {
+              color = Color("B4886B")
+              fontWeight = FontWeight.bold
+              display = Display.block
+              width = LinearDimension("150px")
+              float = Float.left
+              after { content = QuotedString(":") }
+            }
+            attrs { this.attributes["htmlFor"] = "lastModified" }
+            +"Updated at"
+          }
+          input {
+            attrs {
+              name = "lastModified"
+              defaultValue = props.template.lastModified.epochSeconds.toString()
+              type = InputType.number
+              onChangeFunction =
+                  {
+                    val value = it.target.asDynamic().value
+                    setState {
+                      val template = currentTemplate ?: props.template
+                      currentTemplate =
+                          template.copy(
+                              lastModified = Instant.fromEpochSeconds(value.toLong() as Long))
+                    }
+                  }
+            }
+          }
+        }
+        styledP {
+          styledLabel {
+            css {
+              color = Color("B4886B")
+              fontWeight = FontWeight.bold
+              display = Display.block
+              width = LinearDimension("150px")
+              float = Float.left
+              after { content = QuotedString(":") }
+            }
+            attrs { this.attributes["htmlFor"] = "template" }
+            +"Template"
+          }
+          styledTextarea {
+            css {
+              height = LinearDimension("400px")
+              width = LinearDimension("100%")
+            }
+            attrs {
+              name = "template"
+              onChangeFunction =
+                  {
+                    setState {
+                      val template = currentTemplate ?: props.template
+                      currentTemplate =
+                          template.copy(template = it.target.asDynamic().value as String)
+                    }
+                  }
+              defaultValue = props.template.template
+            }
+          }
+        }
+      }
+      child(Button::class) {
+        attrs {
+          template = props.template
+          text = "Update"
+          type = ButtonType.submit
+        }
+      }
+      child(Button::class) {
+        attrs {
+          onClick = { GlobalScope.async { props.switchToListState() } }
+          template = props.template
+          text = "Cancel"
+        }
+      }
     }
+  }
 }

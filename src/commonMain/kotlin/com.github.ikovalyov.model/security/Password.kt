@@ -1,3 +1,5 @@
 package com.github.ikovalyov.model.security
 
-inline class Password(val value: ShortString)
+import kotlin.jvm.JvmInline
+
+@JvmInline value class Password(val value: ShortString)

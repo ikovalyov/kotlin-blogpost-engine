@@ -13,23 +13,23 @@ import react.dom.button
 typealias OnClickFunc = (Template) -> Unit
 
 external interface ButtonProps : RProps {
-    var template: Template
-    var onClick: OnClickFunc?
-    var text: String
-    var type: ButtonType?
+  var template: Template
+  var onClick: OnClickFunc?
+  var text: String
+  var type: ButtonType?
 }
 
 class Button : RComponent<ButtonProps, State>() {
-    override fun RBuilder.render() {
-        val properties = props
-        button {
-            attrs {
-                text(properties.text)
-                value = properties.template.id
-                name = "edit"
-                type = properties.type ?: ButtonType.button
-                onClickFunction = { properties.onClick?.let { it(properties.template) } }
-            }
-        }
+  override fun RBuilder.render() {
+    val properties = props
+    button {
+      attrs {
+        text(properties.text)
+        value = properties.template.id
+        name = "edit"
+        type = properties.type ?: ButtonType.button
+        onClickFunction = { properties.onClick?.let { it(properties.template) } }
+      }
     }
+  }
 }
