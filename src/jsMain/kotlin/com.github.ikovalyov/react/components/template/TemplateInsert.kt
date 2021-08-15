@@ -41,132 +41,126 @@ import styled.styledP
 import styled.styledTextarea
 
 external interface TemplateInsertProps : RProps {
-    var switchToListState: suspend () -> Unit
-    var submitForm: suspend (t: Template) -> Unit
+  var switchToListState: suspend () -> Unit
+  var submitForm: suspend (t: Template) -> Unit
 }
 
 external interface TemplateInsertState : State {
-    var currentTemplate: Template?
+  var currentTemplate: Template?
 }
 
 class TemplateInsert : RComponent<TemplateInsertProps, TemplateInsertState>() {
-    override fun RBuilder.render() {
-        if (state.currentTemplate == null) {
-            state.currentTemplate = Template.create("", "")
-        }
-        form {
-            attrs {
-                onSubmitFunction =
-                    {
-                        it.preventDefault()
-                        GlobalScope.async {
-                            console.info("Inserting new template into database")
-                            props.submitForm(state.currentTemplate!!)
-                        }
-                    }
-            }
-            fieldset {
-                styledP {
-                    styledLabel {
-                        +"Id"
-                        css {
-                            color = Color("B4886B")
-                            fontWeight = FontWeight.bold
-                            display = Display.block
-                            width = LinearDimension("150px")
-                            float = Float.left
-                            after { content = QuotedString(":") }
-                        }
-                        attrs { this.attributes["htmlFor"] = "id" }
-                    }
-                    input {
-                        attrs {
-                            name = "id"
-                            defaultValue = ""
-                            onChangeFunction =
-                                {
-                                    val id = it.target.asDynamic().value.toString()
-                                    val newTemplate = state.currentTemplate?.copy(id = id)
-                                    setState { currentTemplate = newTemplate }
-                                }
-                        }
-                    }
-                }
-                styledP {
-                    styledLabel {
-                        css {
-                            color = Color("B4886B")
-                            fontWeight = FontWeight.bold
-                            display = Display.block
-                            width = LinearDimension("150px")
-                            float = Float.left
-                            after { content = QuotedString(":") }
-                        }
-                        attrs { this.attributes["htmlFor"] = "lastModified" }
-                        +"Updated at"
-                    }
-                    input {
-                        attrs {
-                            name = "lastModified"
-                            defaultValue =
-                                state
-                                    .currentTemplate
-                                    ?.lastModified
-                                    ?.toLocalDateTime(TimeZone.UTC)
-                                    .toString()
-                            type = InputType.dateTimeLocal
-                            onChangeFunction =
-                                {
-                                    val value = it.target.asDynamic().value.toString()
-                                    val ldt = LocalDateTime.parse(value)
-                                    val newTemplate =
-                                        state.currentTemplate?.copy(
-                                            lastModified = ldt.toInstant(TimeZone.UTC))
-                                    setState { currentTemplate = newTemplate }
-                                }
-                        }
-                    }
-                }
-                styledP {
-                    styledLabel {
-                        css {
-                            color = Color("B4886B")
-                            fontWeight = FontWeight.bold
-                            display = Display.block
-                            width = LinearDimension("150px")
-                            float = Float.left
-                            after { content = QuotedString(":") }
-                        }
-                        attrs { this.attributes["htmlFor"] = "template" }
-                        +"Template"
-                    }
-                    styledTextarea {
-                        css {
-                            height = LinearDimension("400px")
-                            width = LinearDimension("100%")
-                        }
-                        attrs {
-                            name = "template"
-                            onChangeFunction =
-                                {
-                                    setState {
-                                        currentTemplate =
-                                            currentTemplate?.copy(
-                                                template = it.target.asDynamic().value as String)
-                                    }
-                                }
-                            defaultValue = ""
-                        }
-                    }
-                }
-            }
-            button {
-                attrs {
-                    text("Insert")
-                    name = "insert"
-                    type = ButtonType.submit
-                }
-            }
-        }
+  override fun RBuilder.render() {
+    if (state.currentTemplate == null) {
+      state.currentTemplate = Template.create("", "")
     }
+    form {
+      attrs {
+        onSubmitFunction =
+            {
+              it.preventDefault()
+              GlobalScope.async {
+                console.info("Inserting new template into database")
+                props.submitForm(state.currentTemplate!!)
+              }
+            }
+      }
+      fieldset {
+        styledP {
+          styledLabel {
+            +"Id"
+            css {
+              color = Color("B4886B")
+              fontWeight = FontWeight.bold
+              display = Display.block
+              width = LinearDimension("150px")
+              float = Float.left
+              after { content = QuotedString(":") }
+            }
+            attrs { this.attributes["htmlFor"] = "id" }
+          }
+          input {
+            attrs {
+              name = "id"
+              defaultValue = ""
+              onChangeFunction =
+                  {
+                    val id = it.target.asDynamic().value.toString()
+                    val newTemplate = state.currentTemplate?.copy(id = id)
+                    setState { currentTemplate = newTemplate }
+                  }
+            }
+          }
+        }
+        styledP {
+          styledLabel {
+            css {
+              color = Color("B4886B")
+              fontWeight = FontWeight.bold
+              display = Display.block
+              width = LinearDimension("150px")
+              float = Float.left
+              after { content = QuotedString(":") }
+            }
+            attrs { this.attributes["htmlFor"] = "lastModified" }
+            +"Updated at"
+          }
+          input {
+            attrs {
+              name = "lastModified"
+              defaultValue =
+                  state.currentTemplate?.lastModified?.toLocalDateTime(TimeZone.UTC).toString()
+              type = InputType.dateTimeLocal
+              onChangeFunction =
+                  {
+                    val value = it.target.asDynamic().value.toString()
+                    val ldt = LocalDateTime.parse(value)
+                    val newTemplate =
+                        state.currentTemplate?.copy(lastModified = ldt.toInstant(TimeZone.UTC))
+                    setState { currentTemplate = newTemplate }
+                  }
+            }
+          }
+        }
+        styledP {
+          styledLabel {
+            css {
+              color = Color("B4886B")
+              fontWeight = FontWeight.bold
+              display = Display.block
+              width = LinearDimension("150px")
+              float = Float.left
+              after { content = QuotedString(":") }
+            }
+            attrs { this.attributes["htmlFor"] = "template" }
+            +"Template"
+          }
+          styledTextarea {
+            css {
+              height = LinearDimension("400px")
+              width = LinearDimension("100%")
+            }
+            attrs {
+              name = "template"
+              onChangeFunction =
+                  {
+                    setState {
+                      currentTemplate =
+                          currentTemplate?.copy(template = it.target.asDynamic().value as String)
+                    }
+                  }
+              defaultValue = ""
+            }
+          }
+        }
+      }
+      button {
+        attrs {
+          text("Insert")
+          name = "insert"
+          type = ButtonType.submit
+        }
+      }
+    }
+  }
 }

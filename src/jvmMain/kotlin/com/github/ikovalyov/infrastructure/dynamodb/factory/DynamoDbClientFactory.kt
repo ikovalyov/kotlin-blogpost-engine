@@ -14,28 +14,24 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClientBuilder
 @Factory
 @Requires(property = "blog.aws.localstack", value = "true")
 class DynamoDbClientFactory(
-    @Property(name = "blog.aws.endpoint")
-    private val endpoint: String,
-    @Property(name = "blog.aws.credentials.username")
-    private val username: String,
-    @Property(name = "blog.aws.credentials.secretAccessKey")
-    private val accessKey: String,
-    @Property(name = "aws.region", defaultValue = "")
-    private val region: String?,
+    @Property(name = "blog.aws.endpoint") private val endpoint: String,
+    @Property(name = "blog.aws.credentials.username") private val username: String,
+    @Property(name = "blog.aws.credentials.secretAccessKey") private val accessKey: String,
+    @Property(name = "aws.region", defaultValue = "") private val region: String?,
     private val clientBuilder: DynamoDbAsyncClientBuilder
 ) {
-    @Singleton
-    @Requires(property = "blog.aws.localstack", value = "true")
-    @Replaces(DynamoDbAsyncClient::class)
-    fun createDynamoDbClient(): DynamoDbAsyncClient {
-        return clientBuilder
-            .endpointOverride(URI(endpoint))
-            .credentialsProvider { AwsBasicCredentials.create(username, accessKey) }
-            .also {
-                if (!region.isNullOrEmpty()) {
-                    it.region(Region.of(region))
-                }
-            }
-            .build()
-    }
+  @Singleton
+  @Requires(property = "blog.aws.localstack", value = "true")
+  @Replaces(DynamoDbAsyncClient::class)
+  fun createDynamoDbClient(): DynamoDbAsyncClient {
+    return clientBuilder
+        .endpointOverride(URI(endpoint))
+        .credentialsProvider { AwsBasicCredentials.create(username, accessKey) }
+        .also {
+          if (!region.isNullOrEmpty()) {
+            it.region(Region.of(region))
+          }
+        }
+        .build()
+  }
 }

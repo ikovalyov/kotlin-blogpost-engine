@@ -1,3 +1,5 @@
 package com.github.ikovalyov.model.security
 
-inline class Email(val value: ShortString)
+import kotlin.jvm.JvmInline
+
+@JvmInline value class Email(val value: ShortString)

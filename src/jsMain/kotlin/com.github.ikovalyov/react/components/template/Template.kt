@@ -18,162 +18,162 @@ import react.State
 import react.setState
 
 external interface TemplateComponentState : State {
-    var currentState: TemplateComponent.State?
-    var currentTemplate: Template?
-    var templatesList: List<Template>
+  var currentState: TemplateComponent.State?
+  var currentTemplate: Template?
+  var templatesList: List<Template>
 }
 
 class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
-    enum class State {
-        LIST,
-        VIEW,
-        EDIT,
-        ADD
-    }
+  enum class State {
+    LIST,
+    VIEW,
+    EDIT,
+    ADD
+  }
 
-    private fun switchToEditStateFuncVar(t: Template) {
-        GlobalScope.launch {
-            val template = loadTemplate(t.id)
-            setState {
-                currentState = State.EDIT
-                currentTemplate = template
+  private fun switchToEditStateFuncVar(t: Template) {
+    GlobalScope.launch {
+      val template = loadTemplate(t.id)
+      setState {
+        currentState = State.EDIT
+        currentTemplate = template
+      }
+    }
+  }
+
+  private fun switchToViewStateFunc(t: Template) {
+    GlobalScope.launch {
+      val template = loadTemplate(t.id)
+      setState {
+        currentState = State.VIEW
+        currentTemplate = template
+      }
+    }
+  }
+
+  private fun switchToAddStateFunc() {
+    GlobalScope.launch {
+      setState {
+        currentState = State.ADD
+        currentTemplate = null
+      }
+    }
+  }
+
+  private suspend fun switchToListViewStateFunc() {
+    val result = window.fetch("http://localhost:8082" + Api.templateUrl).await().text().await()
+    val templatesList = Json.decodeFromString(ListSerializer(Template.serializer()), result)
+
+    setState {
+      currentState = State.LIST
+      currentTemplate = null
+      this.templatesList = templatesList
+    }
+  }
+
+  fun switchToInsertStateFunc() {
+    setState {
+      currentState = State.ADD
+      currentTemplate = null
+    }
+  }
+
+  suspend fun deleteItem(t: Template) {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      window
+          .fetch(
+              "http://localhost:8082" + Api.templateUrl + "/${t.id}",
+              RequestInit(method = "DELETE"))
+          .await()
+      switchToListViewStateFunc()
+    }
+  }
+
+  suspend fun submitEditTemplateForm(t: Template) {
+    console.info("inside submitEditTemplateForm")
+    updateTemplate(t)
+    switchToListViewStateFunc()
+  }
+
+  suspend fun submitInsertTemplateForm(t: Template) {
+    console.info("inside submitInsertTemplateForm")
+    insertTemplate(t)
+    switchToListViewStateFunc()
+  }
+
+  private suspend fun insertTemplate(template: Template) {
+    val body = Json.encodeToString(Template.serializer(), template)
+    val headers = Headers()
+    headers.append("Content-Type", "application/json")
+    val fetchResult =
+        window.fetch(
+            "http://localhost:8082" + Api.templateUrl,
+            RequestInit(method = "POST", headers = headers, body = body))
+    val response = fetchResult.await()
+    val result = response.text().await()
+    console.info(result)
+  }
+
+  private suspend fun updateTemplate(template: Template) {
+    val body = Json.encodeToString(Template.serializer(), template)
+    val headers = Headers()
+    headers.append("Content-Type", "application/json")
+    val fetchResult =
+        window.fetch(
+            "http://localhost:8082" + Api.templateUrl,
+            RequestInit(method = "PATCH", headers = headers, body = body))
+    val response = fetchResult.await()
+    response.text().await()
+  }
+
+  private suspend fun loadTemplate(templateId: String): Template {
+    val result =
+        window
+            .fetch("http://localhost:8082" + Api.templateUrl + "/$templateId")
+            .await()
+            .text()
+            .await()
+    return Json.decodeFromString(Template.serializer(), result)
+  }
+
+  override fun RBuilder.render() {
+    if (state.currentState == null) {
+      state.currentState = State.LIST
+      GlobalScope.async { switchToListViewStateFunc() }
+    }
+    when (state.currentState) {
+      State.LIST ->
+          child(TemplateList::class) {
+            attrs {
+              this.switchToEditState = ::switchToEditStateFuncVar
+              this.switchToViewState = ::switchToViewStateFunc
+              this.switchToInsertState = ::switchToInsertStateFunc
+              this.deleteItem = ::deleteItem
+              this.templates = state.templatesList
             }
-        }
-    }
-
-    private fun switchToViewStateFunc(t: Template) {
-        GlobalScope.launch {
-            val template = loadTemplate(t.id)
-            setState {
-                currentState = State.VIEW
-                currentTemplate = template
+          }
+      State.EDIT ->
+          child(TemplateEdit::class) {
+            attrs {
+              template = state.currentTemplate!!
+              switchToListState = ::switchToListViewStateFunc
+              submitForm = ::submitEditTemplateForm
             }
-        }
-    }
-
-    private fun switchToAddStateFunc() {
-        GlobalScope.launch {
-            setState {
-                currentState = State.ADD
-                currentTemplate = null
+          }
+      State.VIEW ->
+          child(TemplateView::class) {
+            attrs {
+              template = state.currentTemplate!!
+              switchToListState = ::switchToListViewStateFunc
             }
-        }
+          }
+      State.ADD ->
+          child(TemplateInsert::class) {
+            attrs {
+              switchToListState = ::switchToListViewStateFunc
+              submitForm = ::submitInsertTemplateForm
+            }
+          }
     }
-
-    private suspend fun switchToListViewStateFunc() {
-        val result = window.fetch("http://localhost:8082" + Api.templateUrl).await().text().await()
-        val templatesList = Json.decodeFromString(ListSerializer(Template.serializer()), result)
-
-        setState {
-            currentState = State.LIST
-            currentTemplate = null
-            this.templatesList = templatesList
-        }
-    }
-
-    fun switchToInsertStateFunc() {
-        setState {
-            currentState = State.ADD
-            currentTemplate = null
-        }
-    }
-
-    suspend fun deleteItem(t: Template) {
-        if (window.confirm("Are you sure you want to delete this item?")) {
-            window
-                .fetch(
-                    "http://localhost:8082" + Api.templateUrl + "/${t.id}",
-                    RequestInit(method = "DELETE"))
-                .await()
-            switchToListViewStateFunc()
-        }
-    }
-
-    suspend fun submitEditTemplateForm(t: Template) {
-        console.info("inside submitEditTemplateForm")
-        updateTemplate(t)
-        switchToListViewStateFunc()
-    }
-
-    suspend fun submitInsertTemplateForm(t: Template) {
-        console.info("inside submitInsertTemplateForm")
-        insertTemplate(t)
-        switchToListViewStateFunc()
-    }
-
-    private suspend fun insertTemplate(template: Template) {
-        val body = Json.encodeToString(Template.serializer(), template)
-        val headers = Headers()
-        headers.append("Content-Type", "application/json")
-        val fetchResult =
-            window.fetch(
-                "http://localhost:8082" + Api.templateUrl,
-                RequestInit(method = "POST", headers = headers, body = body))
-        val response = fetchResult.await()
-        val result = response.text().await()
-        console.info(result)
-    }
-
-    private suspend fun updateTemplate(template: Template) {
-        val body = Json.encodeToString(Template.serializer(), template)
-        val headers = Headers()
-        headers.append("Content-Type", "application/json")
-        val fetchResult =
-            window.fetch(
-                "http://localhost:8082" + Api.templateUrl,
-                RequestInit(method = "PATCH", headers = headers, body = body))
-        val response = fetchResult.await()
-        response.text().await()
-    }
-
-    private suspend fun loadTemplate(templateId: String): Template {
-        val result =
-            window
-                .fetch("http://localhost:8082" + Api.templateUrl + "/$templateId")
-                .await()
-                .text()
-                .await()
-        return Json.decodeFromString(Template.serializer(), result)
-    }
-
-    override fun RBuilder.render() {
-        if (state.currentState == null) {
-            state.currentState = State.LIST
-            GlobalScope.async { switchToListViewStateFunc() }
-        }
-        when (state.currentState) {
-            State.LIST ->
-                child(TemplateList::class) {
-                    attrs {
-                        this.switchToEditState = ::switchToEditStateFuncVar
-                        this.switchToViewState = ::switchToViewStateFunc
-                        this.switchToInsertState = ::switchToInsertStateFunc
-                        this.deleteItem = ::deleteItem
-                        this.templates = state.templatesList
-                    }
-                }
-            State.EDIT ->
-                child(TemplateEdit::class) {
-                    attrs {
-                        template = state.currentTemplate!!
-                        switchToListState = ::switchToListViewStateFunc
-                        submitForm = ::submitEditTemplateForm
-                    }
-                }
-            State.VIEW ->
-                child(TemplateView::class) {
-                    attrs {
-                        template = state.currentTemplate!!
-                        switchToListState = ::switchToListViewStateFunc
-                    }
-                }
-            State.ADD ->
-                child(TemplateInsert::class) {
-                    attrs {
-                        switchToListState = ::switchToListViewStateFunc
-                        submitForm = ::submitInsertTemplateForm
-                    }
-                }
-        }
-    }
+  }
 }

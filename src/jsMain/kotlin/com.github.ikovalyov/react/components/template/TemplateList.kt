@@ -16,39 +16,39 @@ import react.dom.attrs
 import react.dom.button
 
 external interface TemplateListProps : RProps {
-    var switchToViewState: (Template) -> Unit
-    var switchToEditState: (Template) -> Unit
-    var switchToInsertState: () -> Unit
-    var deleteItem: suspend (Template) -> Unit
-    var templates: List<Template>
+  var switchToViewState: (Template) -> Unit
+  var switchToEditState: (Template) -> Unit
+  var switchToInsertState: () -> Unit
+  var deleteItem: suspend (Template) -> Unit
+  var templates: List<Template>
 }
 
 class TemplateList : RComponent<TemplateListProps, RState>() {
-    override fun RBuilder.render() {
-        child(
-            component = Table,
-            props =
-                jsObject {
-                    templates =
-                        props
-                            .templates
-                            ?.map {
-                                if (it.template.length > 255) {
-                                    it.copy(template = it.template.substring(0, 125) + "...")
-                                } else it
-                            }
-                            ?.toTypedArray()
-                    onViewClick = { props.switchToViewState(it) }
-                    onEditClick = { props.switchToEditState(it) }
-                    onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
-                })
-        button {
-            attrs {
-                text("Add new")
-                name = "new"
-                type = ButtonType.button
-                onClickFunction = { props.switchToInsertState() }
-            }
-        }
+  override fun RBuilder.render() {
+    child(
+        component = Table,
+        props =
+            jsObject {
+              templates =
+                  props
+                      .templates
+                      ?.map {
+                        if (it.template.length > 255) {
+                          it.copy(template = it.template.substring(0, 125) + "...")
+                        } else it
+                      }
+                      ?.toTypedArray()
+              onViewClick = { props.switchToViewState(it) }
+              onEditClick = { props.switchToEditState(it) }
+              onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
+            })
+    button {
+      attrs {
+        text("Add new")
+        name = "new"
+        type = ButtonType.button
+        onClickFunction = { props.switchToInsertState() }
+      }
     }
+  }
 }

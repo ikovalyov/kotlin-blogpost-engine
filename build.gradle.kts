@@ -227,7 +227,7 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
 
         toggleOffOn()
         target(files)
-        ktfmt("0.18").dropboxStyle()
+        ktfmt("0.25")
     }
     kotlinGradle {
         val files = project.fileTree(rootDir)

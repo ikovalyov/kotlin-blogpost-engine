@@ -6,8 +6,8 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 @Singleton
 class RecordsRepository(dynamoDbClient: DynamoDbAsyncClient) :
     AbstractKeyValueRepository(dynamoDbClient) {
-    companion object {
-        const val tableName = "record"
-    }
-    override val tableName = RecordsRepository.tableName
+  companion object {
+    const val tableName = "record"
+  }
+  override val tableName = RecordsRepository.tableName
 }
