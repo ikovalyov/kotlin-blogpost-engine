@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.allopen") version "1.5.20"
     kotlin("plugin.serialization") version "1.5.20"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.14.2"
+    id("com.diffplug.spotless") version "5.14.3"
     id("idea")
 }
 
