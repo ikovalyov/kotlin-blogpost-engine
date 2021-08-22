@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.allopen") version "1.5.20"
     kotlin("plugin.serialization") version "1.5.20"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.14.2"
+    id("com.diffplug.spotless") version "5.14.3"
     id("idea")
 }
 
@@ -87,7 +87,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation(project.dependencies.enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.231-kotlin-1.5.21"))
+                implementation(project.dependencies.enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.234-kotlin-1.5.21"))
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table")
@@ -154,7 +154,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.47") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.52") // testcontainers need it
             }
         }
     }
