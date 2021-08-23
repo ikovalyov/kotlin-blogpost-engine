@@ -1,7 +1,7 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import io.micronaut.context.annotation.Property
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import kotlinx.coroutines.future.await
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue

@@ -2,8 +2,8 @@ package com.github.ikovalyov.command
 
 import com.github.ikovalyov.infrastructure.dynamodb.InitDynamoDbDatabaseInterface
 import io.micronaut.configuration.picocli.PicocliRunner
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking

@@ -2,6 +2,7 @@ package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.react.components.template.table.Button
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.css.Color
@@ -47,6 +48,7 @@ external interface TemplateEditState : State {
   var currentTemplate: Template?
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
   override fun RBuilder.render() {
     form {

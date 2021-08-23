@@ -3,6 +3,7 @@ package com.github.ikovalyov.react.components.template
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.react.components.template.table.Table
 import kotlinext.js.jsObject
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.html.ButtonType
@@ -10,7 +11,7 @@ import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RComponent
 import react.RProps
-import react.RState
+import react.State
 import react.child
 import react.dom.attrs
 import react.dom.button
@@ -20,13 +21,14 @@ external interface TemplateListProps : RProps {
   var switchToEditState: (Template) -> Unit
   var switchToInsertState: () -> Unit
   var deleteItem: suspend (Template) -> Unit
-  var templates: List<Template>
+  var templates: List<Template>?
 }
 
-class TemplateList : RComponent<TemplateListProps, RState>() {
+@OptIn(DelicateCoroutinesApi::class)
+class TemplateList : RComponent<TemplateListProps, State>() {
   override fun RBuilder.render() {
     child(
-        component = Table,
+        type = Table,
         props =
             jsObject {
               templates =

@@ -4,7 +4,7 @@ import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.extension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.toDynamoDbMap
 import io.micronaut.http.HttpStatus
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
