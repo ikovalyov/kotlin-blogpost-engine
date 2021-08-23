@@ -26,30 +26,31 @@ external interface TemplateListProps : RProps {
 
 @OptIn(DelicateCoroutinesApi::class)
 class TemplateList : RComponent<TemplateListProps, State>() {
-    override fun RBuilder.render() {
-        child(
-            type = Table,
-            props = jsObject {
-                templates =
-                    props
-                        .templates
-                        ?.map {
-                            if (it.template.length > 255) {
-                                it.copy(template = it.template.substring(0, 125) + "...")
-                            } else it
-                        }
-                        ?.toTypedArray()
-                onViewClick = { props.switchToViewState(it) }
-                onEditClick = { props.switchToEditState(it) }
-                onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
+  override fun RBuilder.render() {
+    child(
+        type = Table,
+        props =
+            jsObject {
+              templates =
+                  props
+                      .templates
+                      ?.map {
+                        if (it.template.length > 255) {
+                          it.copy(template = it.template.substring(0, 125) + "...")
+                        } else it
+                      }
+                      ?.toTypedArray()
+              onViewClick = { props.switchToViewState(it) }
+              onEditClick = { props.switchToEditState(it) }
+              onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
             })
-        button {
-            attrs {
-                text("Add new")
-                name = "new"
-                type = ButtonType.button
-                onClickFunction = { props.switchToInsertState() }
-            }
-        }
+    button {
+      attrs {
+        text("Add new")
+        name = "new"
+        type = ButtonType.button
+        onClickFunction = { props.switchToInsertState() }
+      }
     }
+  }
 }

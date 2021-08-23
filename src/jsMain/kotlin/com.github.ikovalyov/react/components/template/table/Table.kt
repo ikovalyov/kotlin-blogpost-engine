@@ -1,6 +1,5 @@
 package com.github.ikovalyov.react.components.template.table
 
-import com.github.ikovalyov.extenstion.extraAttrs
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.styles.Colors
 import kotlinext.js.Object
