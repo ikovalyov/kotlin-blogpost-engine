@@ -44,6 +44,7 @@ kotlin {
             tasks.named<KotlinCompile>(compileKotlinTaskName) {
                 kotlinOptions {
                     jvmTarget = "1.8"
+                    freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
                 }
             }
             tasks.named<Test>("${target.name}Test") {
@@ -127,7 +128,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:2.5.7"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.0"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -142,7 +143,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:2.5.7"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.0"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -245,5 +246,5 @@ tasks.named<KotlinJsCompile>("compileKotlinJs").configure {
 }
 
 rootProject.plugins.withType<NodeJsRootPlugin> {
-    rootProject.the<NodeJsRootExtension>().versions.webpackDevServer.version = "4.0.0-beta.3"
+    rootProject.the<NodeJsRootExtension>().versions.webpackDevServer.version = "4.0.0"
 }

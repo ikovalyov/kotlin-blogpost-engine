@@ -3,6 +3,7 @@ package com.github.ikovalyov.react.components.template.table
 import com.github.ikovalyov.extenstion.extraAttrs
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.styles.Colors
+import kotlinext.js.Object
 import kotlinext.js.jsObject
 import kotlinx.css.BorderCollapse
 import kotlinx.css.BorderStyle
@@ -34,6 +35,7 @@ import kotlinx.css.width
 import react.RProps
 import react.buildElement
 import react.dom.div
+import react.dom.setProp
 import react.dom.tr
 import react.fc
 import react.table.Cell
@@ -115,7 +117,9 @@ val Table =
       if (!componentProps.templates.isNullOrEmpty()) {
         styledDiv {
           styledTable {
-            extraAttrs = table.getTableProps()
+            for (key in Object.keys(table.getTableProps())) {
+              setProp(key, table.getTableProps().asDynamic()[key])
+            }
 
             css {
               width = 400.px
@@ -135,14 +139,18 @@ val Table =
               }
               for (headerGroup in table.headerGroups) {
                 tr {
-                  extraAttrs = headerGroup.getHeaderGroupProps()
+                  for (key in Object.keys(headerGroup.getHeaderGroupProps())) {
+                    setProp(key, headerGroup.getHeaderGroupProps().asDynamic()[key])
+                  }
 
                   for (h in headerGroup.headers) {
                     val originalHeader = h.placeholderOf
                     val header = originalHeader ?: h
 
                     styledTh {
-                      extraAttrs = header.getHeaderProps()
+                      for (key in Object.keys(header.getHeaderProps())) {
+                        setProp(key, header.getHeaderProps().asDynamic()[key])
+                      }
 
                       css {
                         fontWeight = FontWeight.normal
@@ -164,7 +172,9 @@ val Table =
               }
             }
             styledTbody {
-              extraAttrs = table.getTableBodyProps()
+              for (key in Object.keys(table.getTableBodyProps())) {
+                setProp(key, table.getTableBodyProps().asDynamic()[key])
+              }
 
               css {
                 color = Colors.Text.Black
@@ -175,7 +185,9 @@ val Table =
                 table.prepareRow(row)
 
                 styledTr {
-                  extraAttrs = row.getRowProps()
+                  for (key in Object.keys(row.getRowProps())) {
+                    setProp(key, row.getRowProps().asDynamic()[key])
+                  }
 
                   css {
                     fontSize = 16.px
@@ -186,7 +198,9 @@ val Table =
                   }
                   for (cell in row.cells) {
                     styledTd {
-                      extraAttrs = cell.getCellProps()
+                      for (key in Object.keys(cell.getCellProps())) {
+                        setProp(key, cell.getCellProps().asDynamic()[key])
+                      }
 
                       css { padding(10.px, 12.px) }
 

@@ -4,9 +4,9 @@ import com.github.ikovalyov.infrastructure.dynamodb.repository.ConfigurationRepo
 import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
 import com.github.ikovalyov.model.Template
 import freemarker.cache.TemplateLoader
+import jakarta.inject.Singleton
 import java.io.Reader
 import java.io.StringReader
-import javax.inject.Singleton
 import kotlinx.coroutines.runBlocking
 
 @Singleton

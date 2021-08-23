@@ -3,6 +3,7 @@ package com.github.ikovalyov.react.components.template
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.model.Template
 import kotlinx.browser.window
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
@@ -23,6 +24,7 @@ external interface TemplateComponentState : State {
   var templatesList: List<Template>
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
   enum class State {
     LIST,

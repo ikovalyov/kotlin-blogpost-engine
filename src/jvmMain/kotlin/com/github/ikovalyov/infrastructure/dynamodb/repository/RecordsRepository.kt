@@ -1,6 +1,6 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @Singleton
