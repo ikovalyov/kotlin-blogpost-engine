@@ -2,7 +2,7 @@ package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
-import javax.inject.Inject
+import jakarta.inject.Inject
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test

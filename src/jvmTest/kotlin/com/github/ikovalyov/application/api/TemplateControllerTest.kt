@@ -4,7 +4,7 @@ import com.github.ikovalyov.command.DynamoDbInitCommand
 import com.github.ikovalyov.model.Template
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
-import javax.inject.Inject
+import jakarta.inject.Inject
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.serialization.builtins.ListSerializer
