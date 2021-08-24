@@ -13,8 +13,7 @@
     {
       "matchPackagePatterns": [
         "^org\\.jetbrains\\.kotlin\\.",
-        "^org\\.jetbrains\\.kotlin:",
-        "^org\\.jetbrains\\.kotlin-wrappers"
+        "^org\\.jetbrains\\.kotlin:"
       ],
       "groupName": "Kotlin"
     }
