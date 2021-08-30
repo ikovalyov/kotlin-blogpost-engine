@@ -10,13 +10,12 @@ import kotlinx.html.ButtonType
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RComponent
-import react.RProps
+import react.PropsWithChildren
 import react.State
-import react.child
 import react.dom.attrs
 import react.dom.button
 
-external interface TemplateListProps : RProps {
+external interface TemplateListProps : PropsWithChildren {
   var switchToViewState: (Template) -> Unit
   var switchToEditState: (Template) -> Unit
   var switchToInsertState: () -> Unit
@@ -35,8 +34,8 @@ class TemplateList : RComponent<TemplateListProps, State>() {
                   props
                       .templates
                       ?.map {
-                        if (it.template.length > 255) {
-                          it.copy(template = it.template.substring(0, 125) + "...")
+                        if (it.body.length > 255) {
+                          it.copy(body = it.body.substring(0, 125) + "...")
                         } else it
                       }
                       ?.toTypedArray()

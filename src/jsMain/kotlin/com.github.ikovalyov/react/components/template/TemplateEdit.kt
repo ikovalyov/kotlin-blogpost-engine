@@ -25,7 +25,7 @@ import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
 import react.RBuilder
 import react.RComponent
-import react.RProps
+import react.PropsWithChildren
 import react.State
 import react.dom.attrs
 import react.dom.defaultValue
@@ -38,7 +38,7 @@ import styled.styledLabel
 import styled.styledP
 import styled.styledTextarea
 
-external interface TemplateEditProps : RProps {
+external interface TemplateEditProps : PropsWithChildren {
   var template: Template
   var switchToListState: suspend () -> Unit
   var submitForm: suspend (t: Template) -> Unit
@@ -79,7 +79,7 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
           input {
             attrs {
               name = "id"
-              value = props.template.id
+              value = props.template.id.toString()
               readonly = true
             }
           }
@@ -103,15 +103,15 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
               defaultValue = props.template.lastModified.epochSeconds.toString()
               type = InputType.number
               onChangeFunction =
-                  {
-                    val value = it.target.asDynamic().value
-                    setState {
-                      val template = currentTemplate ?: props.template
-                      currentTemplate =
-                          template.copy(
-                              lastModified = Instant.fromEpochSeconds(value.toLong() as Long))
-                    }
+                {
+                  val value = it.target.asDynamic().value as String
+                  setState {
+                    val template = currentTemplate ?: props.template
+                    currentTemplate = template.copy(
+                      lastModified = Instant.fromEpochSeconds(value.toLong() as Long)
+                    )
                   }
+                }
             }
           }
         }
@@ -140,10 +140,10 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
                     setState {
                       val template = currentTemplate ?: props.template
                       currentTemplate =
-                          template.copy(template = it.target.asDynamic().value as String)
+                          template.copy(body = it.target.asDynamic().value as String)
                     }
                   }
-              defaultValue = props.template.template
+              defaultValue = props.template.body
             }
           }
         }

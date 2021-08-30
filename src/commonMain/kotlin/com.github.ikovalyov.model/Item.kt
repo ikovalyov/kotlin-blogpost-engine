@@ -1,3 +1,5 @@
 package com.github.ikovalyov.model
 
-data class Item(val id: Int, val content: String)
+import com.benasher44.uuid.Uuid
+
+data class Item(val id: Uuid, val content: String)

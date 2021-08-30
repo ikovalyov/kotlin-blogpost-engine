@@ -5,14 +5,14 @@ import kotlinx.html.ButtonType
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RComponent
-import react.RProps
+import react.PropsWithChildren
 import react.State
 import react.dom.attrs
 import react.dom.button
 
 typealias OnClickFunc = (Template) -> Unit
 
-external interface ButtonProps : RProps {
+external interface ButtonProps : PropsWithChildren {
   var template: Template
   var onClick: OnClickFunc?
   var text: String
@@ -25,7 +25,7 @@ class Button : RComponent<ButtonProps, State>() {
     button {
       attrs {
         text(properties.text)
-        value = properties.template.id
+        value = properties.template.id.toString()
         name = "edit"
         type = properties.type ?: ButtonType.button
         onClickFunction = { properties.onClick?.let { it(properties.template) } }

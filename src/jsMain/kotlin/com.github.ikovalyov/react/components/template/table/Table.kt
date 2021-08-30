@@ -31,13 +31,12 @@ import kotlinx.css.px
 import kotlinx.css.textAlign
 import kotlinx.css.whiteSpace
 import kotlinx.css.width
-import react.RProps
+import react.PropsWithChildren
 import react.buildElement
 import react.dom.div
 import react.dom.setProp
 import react.dom.tr
 import react.fc
-import react.table.Cell
 import react.table.RenderType
 import react.table.columns
 import react.table.useTable
@@ -51,7 +50,7 @@ import styled.styledTh
 import styled.styledThead
 import styled.styledTr
 
-external interface TemplateProps : RProps {
+external interface TemplateProps : PropsWithChildren {
   var templates: Array<Template>?
   var onEditClick: (Template) -> Unit
   var onDeleteClick: (Template) -> Unit
@@ -64,11 +63,11 @@ val Table =
         columns<Template> {
           column<String> {
             header = "Id"
-            accessorFunction = { it.id }
+            accessorFunction = { it.id.toString() }
           }
           column<String> {
             header = "Template"
-            accessorFunction = { it.template }
+            accessorFunction = { it.body }
           }
           column<String> {
             header = "Action"

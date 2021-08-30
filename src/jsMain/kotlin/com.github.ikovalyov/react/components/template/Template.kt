@@ -1,5 +1,6 @@
 package com.github.ikovalyov.react.components.template
 
+import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.model.Template
 import kotlinx.browser.window
@@ -14,7 +15,7 @@ import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
 import react.RBuilder
 import react.RComponent
-import react.RProps
+import react.PropsWithChildren
 import react.State
 import react.setState
 
@@ -25,7 +26,7 @@ external interface TemplateComponentState : State {
 }
 
 @OptIn(DelicateCoroutinesApi::class)
-class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
+class TemplateComponent : RComponent<PropsWithChildren, TemplateComponentState>() {
   enum class State {
     LIST,
     VIEW,
@@ -128,10 +129,10 @@ class TemplateComponent : RComponent<RProps, TemplateComponentState>() {
     response.text().await()
   }
 
-  private suspend fun loadTemplate(templateId: String): Template {
+  private suspend fun loadTemplate(templateId: Uuid): Template {
     val result =
         window
-            .fetch("http://localhost:8082" + Api.templateUrl + "/$templateId")
+            .fetch("http://localhost:8082" + Api.templateUrl + "/${templateId.toString()}")
             .await()
             .text()
             .await()

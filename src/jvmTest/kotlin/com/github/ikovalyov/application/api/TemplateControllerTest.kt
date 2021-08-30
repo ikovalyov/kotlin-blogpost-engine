@@ -61,11 +61,11 @@ class TemplateControllerTest : TestPropertyProvider {
   private suspend fun testUpdate() {
     val templateString = controller.get("home.ftl")
     val template = Json.decodeFromString(Template.serializer(), templateString)
-    val newTemplate = template.copy(template = template.template + "TEST")
+    val newTemplate = template.copy(body = template.body + "TEST")
     controller.update(newTemplate)
     val updatedTemplateString = controller.get("home.ftl")
     val updatedTemplate = Json.decodeFromString(Template.serializer(), updatedTemplateString)
-    assert(updatedTemplate.template.endsWith("TEST"))
+    assert(updatedTemplate.body.endsWith("TEST"))
   }
 
   private suspend fun testInsert() {

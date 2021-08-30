@@ -7,7 +7,7 @@ import kotlinx.coroutines.async
 import kotlinx.html.unsafe
 import react.RBuilder
 import react.RComponent
-import react.RProps
+import react.PropsWithChildren
 import react.State
 import react.dom.attrs
 import react.dom.div
@@ -16,7 +16,7 @@ import react.dom.iframe
 import react.dom.p
 import react.dom.section
 
-external interface TemplateViewProps : RProps {
+external interface TemplateViewProps : PropsWithChildren {
   var template: Template
   var switchToListState: suspend () -> Unit
 }
@@ -26,7 +26,7 @@ class TemplateView : RComponent<TemplateViewProps, State>() {
     div {
       section {
         h1 { +"Id" }
-        p { +props.template.id }
+        p { +props.template.id.toString() }
       }
       section {
         h1 { +"Updated at" }
@@ -35,7 +35,7 @@ class TemplateView : RComponent<TemplateViewProps, State>() {
       section {
         h1 { +"Template" }
         div { attrs.unsafe { +"<b>text</b>" } }
-        iframe { attrs { set("srcDoc", props.template.template) } }
+        iframe { attrs { set("srcDoc", props.template.body) } }
       }
       child(Button::class) {
         attrs {
