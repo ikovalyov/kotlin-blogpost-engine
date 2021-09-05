@@ -27,6 +27,7 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.html.ButtonType
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
+import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onSubmitFunction
 import react.RBuilder
 import react.RComponent
@@ -163,6 +164,18 @@ class TemplateInsert : RComponent<TemplateInsertProps, TemplateInsertState>() {
           text("Insert")
           name = "insert"
           type = ButtonType.submit
+        }
+      }
+      button {
+        attrs {
+          text("Cancel")
+          name = "insert"
+          type = ButtonType.button
+          onClickFunction = {
+            GlobalScope.async {
+              props.switchToListState()
+            }
+          }
         }
       }
     }

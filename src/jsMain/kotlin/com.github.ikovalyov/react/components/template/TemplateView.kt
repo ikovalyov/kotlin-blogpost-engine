@@ -40,7 +40,7 @@ class TemplateView : RComponent<TemplateViewProps, State>() {
       child(Button::class) {
         attrs {
           onClick = { GlobalScope.async { props.switchToListState() } }
-          template = props.template
+          body = props.template
           text = "Back to list"
         }
       }

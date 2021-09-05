@@ -102,16 +102,15 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
               name = "lastModified"
               defaultValue = props.template.lastModified.epochSeconds.toString()
               type = InputType.number
-              onChangeFunction =
-                {
-                  val value = it.target.asDynamic().value as String
-                  setState {
-                    val template = currentTemplate ?: props.template
-                    currentTemplate = template.copy(
-                      lastModified = Instant.fromEpochSeconds(value.toLong() as Long)
-                    )
-                  }
+              onChangeFunction = {
+                val value = it.target.asDynamic().value as String
+                setState {
+                  val template = currentTemplate ?: props.template
+                  currentTemplate = template.copy(
+                    lastModified = Instant.fromEpochSeconds(value.toLong() as Long)
+                  )
                 }
+              }
             }
           }
         }
@@ -150,7 +149,7 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
       }
       child(Button::class) {
         attrs {
-          template = props.template
+          body = props.template
           text = "Update"
           type = ButtonType.submit
         }
@@ -158,7 +157,7 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
       child(Button::class) {
         attrs {
           onClick = { GlobalScope.async { props.switchToListState() } }
-          template = props.template
+          body = props.template
           text = "Cancel"
         }
       }

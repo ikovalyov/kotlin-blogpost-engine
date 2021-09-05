@@ -1,7 +1,7 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.Template
-import com.github.ikovalyov.react.components.template.table.Table
+import com.github.ikovalyov.react.components.template.table.createTableComponent
 import kotlinext.js.jsObject
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -25,31 +25,30 @@ external interface TemplateListProps : PropsWithChildren {
 
 @OptIn(DelicateCoroutinesApi::class)
 class TemplateList : RComponent<TemplateListProps, State>() {
-  override fun RBuilder.render() {
-    child(
-        type = Table,
-        props =
-            jsObject {
-              templates =
-                  props
-                      .templates
-                      ?.map {
-                        if (it.body.length > 255) {
-                          it.copy(body = it.body.substring(0, 125) + "...")
-                        } else it
-                      }
-                      ?.toTypedArray()
-              onViewClick = { props.switchToViewState(it) }
-              onEditClick = { props.switchToEditState(it) }
-              onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
+    override fun RBuilder.render() {
+        child(
+            type = createTableComponent<Template>(),
+            props = jsObject {
+                items =
+                    props
+                        .templates
+                        ?.map {
+                            if (it.body.length > 255) {
+                                it.copy(body = it.body.substring(0, 125) + "...")
+                            } else it
+                        }
+                        ?.toTypedArray()
+                onViewClick = { props.switchToViewState(it) }
+                onEditClick = { props.switchToEditState(it) }
+                onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
             })
-    button {
-      attrs {
-        text("Add new")
-        name = "new"
-        type = ButtonType.button
-        onClickFunction = { props.switchToInsertState() }
-      }
+        button {
+            attrs {
+                text("Add new")
+                name = "new"
+                type = ButtonType.button
+                onClickFunction = { props.switchToInsertState() }
+            }
+        }
     }
-  }
 }
