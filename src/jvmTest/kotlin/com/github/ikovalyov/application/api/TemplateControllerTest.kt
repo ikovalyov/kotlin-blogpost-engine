@@ -5,6 +5,7 @@ import com.github.ikovalyov.model.Template
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
+import java.util.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.serialization.builtins.ListSerializer
@@ -34,6 +35,9 @@ class TemplateControllerTest : TestPropertyProvider {
             localstack.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString())
   }
 
+  private lateinit var uuid: UUID
+  private val uuid2 = UUID.randomUUID()
+
   @BeforeAll
   fun init() {
     dynamoDbInitCommand.run()
@@ -59,34 +63,50 @@ class TemplateControllerTest : TestPropertyProvider {
   }
 
   private suspend fun testUpdate() {
-    val templateString = controller.get("home.ftl")
+    val templateString = controller.get(uuid)
+    require(templateString != null) {
+      "$uuid template not found"
+    }
     val template = Json.decodeFromString(Template.serializer(), templateString)
     val newTemplate = template.copy(body = template.body + "TEST")
     controller.update(newTemplate)
-    val updatedTemplateString = controller.get("home.ftl")
+    val updatedTemplateString = controller.get(uuid)
+    require(updatedTemplateString != null) {
+      "$uuid template not found"
+    }
     val updatedTemplate = Json.decodeFromString(Template.serializer(), updatedTemplateString)
     assert(updatedTemplate.body.endsWith("TEST"))
   }
 
   private suspend fun testInsert() {
-    val templateString = controller.get("home.ftl")
+    val templateString = controller.get(uuid)
+    require(templateString != null) {
+      "$uuid template not found"
+    }
     val template = Json.decodeFromString(Template.serializer(), templateString)
-    val newTemplate = template.copy(id = "home2.ftl", lastModified = Clock.System.now())
+    val newTemplate = template.copy(id = uuid2, lastModified = Clock.System.now())
     controller.insert(newTemplate)
-    val newTemplateString = controller.get("home2.ftl")
+    val newTemplateString = controller.get(uuid2)
+    require(newTemplateString != null) {
+      "$uuid2 template not found"
+    }
     val newTemplateResponseBody = Json.decodeFromString(Template.serializer(), newTemplateString)
-    assert(newTemplateResponseBody.id == "home2.ftl")
+    assert(newTemplateResponseBody.id == uuid2)
   }
 
   private suspend fun testGet() {
-    val templateResponseString = controller.get("home.ftl")
+    val templateResponseString = controller.get(uuid)
+    require(templateResponseString != null) {
+      "$uuid template not found"
+    }
     val templateResponse = Json.decodeFromString(Template.serializer(), templateResponseString)
-    assert(templateResponse.id == "home.ftl")
+    assert(templateResponse.id == uuid)
   }
 
   private suspend fun testList() {
     val resultString = controller.list()
     val result = Json.decodeFromString(ListSerializer(Template.serializer()), resultString)
     assert(result.count() == 1)
+    uuid = result.first().id
   }
 }

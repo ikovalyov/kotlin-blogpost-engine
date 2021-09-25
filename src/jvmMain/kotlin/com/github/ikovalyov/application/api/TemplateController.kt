@@ -25,8 +25,9 @@ class TemplateController(private val templateRepository: TemplateRepository) {
   }
 
   @Get("/{itemId}")
-  suspend fun get(itemId: Uuid): String {
-    return Json.encodeToString(Template.serializer(), templateRepository.get(itemId)!!)
+  suspend fun get(itemId: Uuid): String? {
+    val template = templateRepository.get(itemId) ?: return null
+    return Json.encodeToString(Template.serializer(), template)
   }
 
   @Delete("/{itemId}")
