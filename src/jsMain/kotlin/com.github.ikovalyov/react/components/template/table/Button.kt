@@ -25,7 +25,7 @@ private fun <T : IdInterface> RBuilder.Button(props: ButtonProps<T>) {
       value = props.body.id.toString()
       name = "edit"
       type = props.type ?: ButtonType.button
-      onClickFunction = { props.onClick?.let { it(props.body) } }
+      onClickFunction = { props.onClick(props.body) }
     }
   }
 }

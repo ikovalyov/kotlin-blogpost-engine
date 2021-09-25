@@ -89,7 +89,11 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation(project.dependencies.enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.248-kotlin-1.5.31"))
+                implementation(
+                    project.dependencies.enforcedPlatform(
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.248-kotlin-1.5.31"
+                    )
+                )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table")
@@ -222,21 +226,22 @@ kapt {
     }
 }
 
-configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+spotless {
     kotlin {
-        val files = project.fileTree(rootDir)
-        files.include("**/*.kt")
-
-        toggleOffOn()
-        target(files)
-        ktfmt("0.25")
+        ktlint("0.42.1").userData(
+            mapOf(
+                "max_line_length" to "125",
+                "insert_final_newline" to "true"
+            )
+        )
     }
     kotlinGradle {
-        val files = project.fileTree(rootDir)
-        files.include("**/*.gradle.kts")
-
-        target(files)
-        ktlint()
+        ktlint("0.42.1").userData(
+            mapOf(
+                "max_line_length" to "125",
+                "insert_final_newline" to "true"
+            )
+        )
     }
 }
 
