@@ -1,5 +1,6 @@
 package com.github.ikovalyov.application.api
 
+import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
 import com.github.ikovalyov.model.Template
@@ -24,12 +25,13 @@ class TemplateController(private val templateRepository: TemplateRepository) {
   }
 
   @Get("/{itemId}")
-  suspend fun get(itemId: String): String {
-    return Json.encodeToString(Template.serializer(), templateRepository.get(itemId)!!)
+  suspend fun get(itemId: Uuid): String? {
+    val template = templateRepository.get(itemId) ?: return null
+    return Json.encodeToString(Template.serializer(), template)
   }
 
   @Delete("/{itemId}")
-  suspend fun delete(itemId: String): HttpResponse<Nothing> {
+  suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
     val result = templateRepository.delete(itemId)
     return if (result) {
       HttpResponse.accepted()

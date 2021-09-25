@@ -1,35 +1,37 @@
 package com.github.ikovalyov.react.components.template.table
 
-import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.model.markers.IdInterface
+import kotlinext.js.jsObject
 import kotlinx.html.ButtonType
 import kotlinx.html.js.onClickFunction
+import react.FC
+import react.PropsWithChildren
 import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.State
 import react.dom.attrs
 import react.dom.button
+import react.fc
 
-typealias OnClickFunc = (Template) -> Unit
-
-external interface ButtonProps : RProps {
-  var template: Template
-  var onClick: OnClickFunc?
+external interface ButtonProps<T : IdInterface> : PropsWithChildren {
+  var body: T
+  var onClick: (T) -> Unit
   var text: String
   var type: ButtonType?
 }
 
-class Button : RComponent<ButtonProps, State>() {
-  override fun RBuilder.render() {
-    val properties = props
-    button {
-      attrs {
-        text(properties.text)
-        value = properties.template.id
-        name = "edit"
-        type = properties.type ?: ButtonType.button
-        onClickFunction = { properties.onClick?.let { it(properties.template) } }
-      }
+private fun <T : IdInterface> RBuilder.Button(props: ButtonProps<T>) {
+  button {
+    attrs {
+      text(props.text)
+      value = props.body.id.toString()
+      name = "edit"
+      type = props.type ?: ButtonType.button
+      onClickFunction = { props.onClick?.let { it(props.body) } }
     }
   }
+}
+
+private val Button: FC<ButtonProps<*>> = fc { Button(it) }
+
+fun <T : IdInterface> RBuilder.Button(block: ButtonProps<T>.() -> Unit) {
+  child(type = Button, props = jsObject(block))
 }

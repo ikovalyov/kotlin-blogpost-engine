@@ -1,6 +1,7 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.model.markers.IdInterface
 import com.github.ikovalyov.react.components.template.table.Button
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -23,9 +24,9 @@ import kotlinx.html.ButtonType
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
+import react.PropsWithChildren
 import react.RBuilder
 import react.RComponent
-import react.RProps
 import react.State
 import react.dom.attrs
 import react.dom.defaultValue
@@ -38,7 +39,7 @@ import styled.styledLabel
 import styled.styledP
 import styled.styledTextarea
 
-external interface TemplateEditProps : RProps {
+external interface TemplateEditProps : PropsWithChildren {
   var template: Template
   var switchToListState: suspend () -> Unit
   var submitForm: suspend (t: Template) -> Unit
@@ -79,7 +80,7 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
           input {
             attrs {
               name = "id"
-              value = props.template.id
+              value = props.template.id.toString()
               readonly = true
             }
           }
@@ -104,7 +105,7 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
               type = InputType.number
               onChangeFunction =
                   {
-                    val value = it.target.asDynamic().value
+                    val value = it.target.asDynamic().value as String
                     setState {
                       val template = currentTemplate ?: props.template
                       currentTemplate =
@@ -139,28 +140,23 @@ class TemplateEdit : RComponent<TemplateEditProps, TemplateEditState>() {
                   {
                     setState {
                       val template = currentTemplate ?: props.template
-                      currentTemplate =
-                          template.copy(template = it.target.asDynamic().value as String)
+                      currentTemplate = template.copy(body = it.target.asDynamic().value as String)
                     }
                   }
-              defaultValue = props.template.template
+              defaultValue = props.template.body
             }
           }
         }
       }
-      child(Button::class) {
-        attrs {
-          template = props.template
-          text = "Update"
-          type = ButtonType.submit
-        }
+      Button<IdInterface> {
+        body = props.template
+        text = "Update"
+        type = ButtonType.submit
       }
-      child(Button::class) {
-        attrs {
-          onClick = { GlobalScope.async { props.switchToListState() } }
-          template = props.template
-          text = "Cancel"
-        }
+      Button<IdInterface> {
+        onClick = { GlobalScope.async { props.switchToListState() } }
+        body = props.template
+        text = "Cancel"
       }
     }
   }

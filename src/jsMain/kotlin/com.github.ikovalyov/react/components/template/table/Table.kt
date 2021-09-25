@@ -1,8 +1,9 @@
 package com.github.ikovalyov.react.components.template.table
 
-import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.extenstion.extraAttrs
+import com.github.ikovalyov.model.markers.BodyInterface
+import com.github.ikovalyov.model.markers.IdInterface
 import com.github.ikovalyov.styles.Colors
-import kotlinext.js.Object
 import kotlinext.js.jsObject
 import kotlinx.css.BorderCollapse
 import kotlinx.css.BorderStyle
@@ -31,14 +32,16 @@ import kotlinx.css.px
 import kotlinx.css.textAlign
 import kotlinx.css.whiteSpace
 import kotlinx.css.width
-import react.RProps
+import react.FC
+import react.PropsWithChildren
+import react.RBuilder
 import react.buildElement
 import react.dom.div
-import react.dom.setProp
 import react.dom.tr
 import react.fc
-import react.table.Cell
+import react.table.Column
 import react.table.RenderType
+import react.table.TableInstance
 import react.table.columns
 import react.table.useTable
 import react.useMemo
@@ -51,165 +54,159 @@ import styled.styledTh
 import styled.styledThead
 import styled.styledTr
 
-external interface TemplateProps : RProps {
-  var templates: Array<Template>?
-  var onEditClick: (Template) -> Unit
-  var onDeleteClick: (Template) -> Unit
-  var onViewClick: (Template) -> Unit
+external interface TableProps<T : IdInterface> : PropsWithChildren {
+  var items: Array<T>?
+  var onEditClick: (T) -> Unit
+  var onDeleteClick: (T) -> Unit
+  var onViewClick: (T) -> Unit
 }
 
-val Table =
-    fc<TemplateProps> { componentProps ->
-      val tableColumns = useMemo {
-        columns<Template> {
-          column<String> {
-            header = "Id"
-            accessorFunction = { it.id }
-          }
-          column<String> {
-            header = "Template"
-            accessorFunction = { it.template }
-          }
-          column<String> {
-            header = "Action"
-            accessor = "id"
-            cellFunction =
-                { props ->
-                  buildElement {
-                    div {
-                      child(Button::class) {
-                        attrs {
-                          onClick = componentProps.onViewClick
-                          template = props.row.original
-                          text = "view"
-                        }
-                      }
-                      child(Button::class) {
-                        attrs {
-                          onClick = componentProps.onEditClick
-                          template = props.row.original
-                          text = "update"
-                        }
-                      }
-                      child(Button::class) {
-                        attrs {
-                          onClick = componentProps.onDeleteClick
-                          template = props.row.original
-                          text = "delete"
-                        }
-                      }
-                    }
+private fun <T : IdInterface> RBuilder.Table(
+    props: TableProps<T>,
+) {
+  val items = props.items
+  if (!items.isNullOrEmpty()) {
+    val tableColumns = buildTableColumns(props, items.first())
+    val table =
+        useTable<T>(
+            options =
+                jsObject {
+                  this.data = useMemo { props.items ?: emptyArray() }
+                  this.columns = tableColumns
+                })
+    buildTableBody(table)
+  }
+}
+
+private fun <T : IdInterface> buildTableColumns(
+    componentProps: TableProps<T>,
+    item: T
+): Array<out Column<T, *>> {
+  return useMemo {
+    columns {
+      column<String> {
+        header = "Id"
+        accessorFunction = { (it as? IdInterface)?.id.toString() }
+      }
+      if (item is BodyInterface) {
+        column<String> {
+          header = "Body"
+          accessorFunction = { (it as? BodyInterface)?.preview ?: "" }
+        }
+      }
+      column<T> {
+        header = "Action"
+        accessor = "id"
+        cellFunction =
+            { props ->
+              buildElement {
+                div {
+                  Button<T> {
+                    onClick = componentProps.onViewClick
+                    body = props.row.original
+                    text = "view"
+                  }
+                  Button<T> {
+                    onClick = componentProps.onEditClick
+                    body = props.row.original
+                    text = "update"
+                  }
+                  Button<T> {
+                    onClick = componentProps.onDeleteClick
+                    body = props.row.original
+                    text = "delete"
                   }
                 }
+              }
+            }
+      }
+    }
+  }
+}
+
+private fun <T : IdInterface> RBuilder.buildTableBody(table: TableInstance<T>) {
+  styledDiv {
+    styledTable {
+      extraAttrs = table.getTableProps()
+
+      css {
+        width = 400.px
+        borderSpacing = 0.px
+        borderCollapse = BorderCollapse.collapse
+        whiteSpace = WhiteSpace.nowrap
+        borderWidth = 2.px
+        borderStyle = BorderStyle.solid
+        borderColor = Colors.Stroke.Gray
+        margin(LinearDimension.auto)
+      }
+      styledThead {
+        css {
+          color = Colors.Text.Gray
+          fontSize = 18.px
+          backgroundColor = Colors.Background.Gray
+        }
+        for (headerGroup in table.headerGroups) {
+          tr {
+            extraAttrs = headerGroup.getHeaderGroupProps()
+            for (h in headerGroup.headers) {
+              val originalHeader = h.placeholderOf
+              val header = originalHeader ?: h
+
+              styledTh {
+                extraAttrs = header.getHeaderProps()
+                css {
+                  fontWeight = FontWeight.normal
+                  padding(4.px, 12.px)
+                  borderRightColor = Colors.Stroke.Gray
+                  borderRight = BorderStyle.solid.toString()
+                  if (header.columns != null) {
+                    borderBottomColor = Colors.Stroke.Gray
+                    borderBottom = BorderStyle.solid.toString()
+                  }
+                  lastChild { borderRight = "none" }
+                }
+                +header.render(RenderType.Header)
+              }
+            }
           }
         }
       }
+      styledTbody {
+        extraAttrs = table.getTableBodyProps()
 
-      val table =
-          useTable<Template>(
-              options =
-                  jsObject {
-                    this.data = componentProps.templates ?: emptyArray()
-                    this.columns = tableColumns
-                  })
+        css {
+          color = Colors.Text.Black
+          backgroundColor = Colors.Background.White
+          textAlign = TextAlign.start
+        }
+        for (row in table.rows) {
+          table.prepareRow(row)
 
-      if (!componentProps.templates.isNullOrEmpty()) {
-        styledDiv {
-          styledTable {
-            for (key in Object.keys(table.getTableProps())) {
-              setProp(key, table.getTableProps().asDynamic()[key])
-            }
-
+          styledTr {
+            extraAttrs = row.getRowProps()
             css {
-              width = 400.px
-              borderSpacing = 0.px
-              borderCollapse = BorderCollapse.collapse
-              whiteSpace = WhiteSpace.nowrap
-              borderWidth = 2.px
-              borderStyle = BorderStyle.solid
-              borderColor = Colors.Stroke.Gray
-              margin(LinearDimension.auto)
+              fontSize = 16.px
+              cursor = Cursor.pointer
+              borderBottomColor = Colors.Stroke.LightGray
+              borderBottom = BorderStyle.solid.toString()
+              hover { backgroundColor = Colors.Background.Gray }
             }
-            styledThead {
-              css {
-                color = Colors.Text.Gray
-                fontSize = 18.px
-                backgroundColor = Colors.Background.Gray
-              }
-              for (headerGroup in table.headerGroups) {
-                tr {
-                  for (key in Object.keys(headerGroup.getHeaderGroupProps())) {
-                    setProp(key, headerGroup.getHeaderGroupProps().asDynamic()[key])
-                  }
-
-                  for (h in headerGroup.headers) {
-                    val originalHeader = h.placeholderOf
-                    val header = originalHeader ?: h
-
-                    styledTh {
-                      for (key in Object.keys(header.getHeaderProps())) {
-                        setProp(key, header.getHeaderProps().asDynamic()[key])
-                      }
-
-                      css {
-                        fontWeight = FontWeight.normal
-                        padding(4.px, 12.px)
-                        borderRightColor = Colors.Stroke.Gray
-                        borderRight = BorderStyle.solid.toString()
-
-                        if (header.columns != null) {
-                          borderBottomColor = Colors.Stroke.Gray
-                          borderBottom = BorderStyle.solid.toString()
-                        }
-
-                        lastChild { borderRight = "none" }
-                      }
-                      +header.render(RenderType.Header)
-                    }
-                  }
-                }
-              }
-            }
-            styledTbody {
-              for (key in Object.keys(table.getTableBodyProps())) {
-                setProp(key, table.getTableBodyProps().asDynamic()[key])
-              }
-
-              css {
-                color = Colors.Text.Black
-                backgroundColor = Colors.Background.White
-                textAlign = TextAlign.start
-              }
-              for (row in table.rows) {
-                table.prepareRow(row)
-
-                styledTr {
-                  for (key in Object.keys(row.getRowProps())) {
-                    setProp(key, row.getRowProps().asDynamic()[key])
-                  }
-
-                  css {
-                    fontSize = 16.px
-                    cursor = Cursor.pointer
-                    borderBottomColor = Colors.Stroke.LightGray
-                    borderBottom = BorderStyle.solid.toString()
-                    hover { backgroundColor = Colors.Background.Gray }
-                  }
-                  for (cell in row.cells) {
-                    styledTd {
-                      for (key in Object.keys(cell.getCellProps())) {
-                        setProp(key, cell.getCellProps().asDynamic()[key])
-                      }
-
-                      css { padding(10.px, 12.px) }
-
-                      +cell.render(RenderType.Cell)
-                    }
-                  }
-                }
+            for (cell in row.cells) {
+              styledTd {
+                extraAttrs = cell.getCellProps()
+                css { padding(10.px, 12.px) }
+                +cell.render(RenderType.Cell)
               }
             }
           }
         }
       }
     }
+  }
+}
+
+private val Table: FC<TableProps<*>> = fc { Table(it) }
+
+fun <T : IdInterface> RBuilder.Table(block: TableProps<T>.() -> Unit) {
+  child(type = Table, props = jsObject(block))
+}

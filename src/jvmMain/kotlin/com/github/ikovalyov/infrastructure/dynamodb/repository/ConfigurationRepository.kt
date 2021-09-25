@@ -1,5 +1,6 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
+import com.benasher44.uuid.Uuid
 import io.micronaut.context.annotation.Property
 import jakarta.inject.Singleton
 import kotlinx.coroutines.future.await
@@ -24,8 +25,9 @@ class ConfigurationRepository(
     return insertConfiguration(activeTemplateKeyId, defaultTemplate)
   }
 
-  suspend fun getActiveTemplateName(): String? {
-    return getConfigProperty(activeTemplateKeyId).item()[configurationValueFieldName]?.s()
+  suspend fun getActiveTemplateId(): Uuid? {
+    return Uuid.fromString(
+        getConfigProperty(activeTemplateKeyId).item()[configurationValueFieldName]?.s())
   }
 
   private suspend fun insertConfiguration(key: String, value: String): Boolean {

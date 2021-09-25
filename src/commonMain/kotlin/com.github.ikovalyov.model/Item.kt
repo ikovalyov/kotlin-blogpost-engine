@@ -1,3 +1,6 @@
 package com.github.ikovalyov.model
 
-data class Item(val id: Int, val content: String)
+import com.benasher44.uuid.Uuid
+import com.github.ikovalyov.model.markers.IdInterface
+
+data class Item(override val id: Uuid, val content: String) : IdInterface

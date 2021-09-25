@@ -1,56 +1,47 @@
 package com.github.ikovalyov.react.components.template
 
-import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.model.markers.IdInterface
 import com.github.ikovalyov.react.components.template.table.Table
 import kotlinext.js.jsObject
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.html.ButtonType
 import kotlinx.html.js.onClickFunction
+import react.FC
+import react.PropsWithChildren
 import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.State
-import react.child
 import react.dom.attrs
 import react.dom.button
+import react.fc
 
-external interface TemplateListProps : RProps {
-  var switchToViewState: (Template) -> Unit
-  var switchToEditState: (Template) -> Unit
+external interface TemplateListProps<T : Any> : PropsWithChildren {
+  var switchToViewState: (T) -> Unit
+  var switchToEditState: (T) -> Unit
   var switchToInsertState: () -> Unit
-  var deleteItem: suspend (Template) -> Unit
-  var templates: List<Template>?
+  var deleteItem: suspend (T) -> Unit
+  var items: List<T>?
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-class TemplateList : RComponent<TemplateListProps, State>() {
-  override fun RBuilder.render() {
-    child(
-        type = Table,
-        props =
-            jsObject {
-              templates =
-                  props
-                      .templates
-                      ?.map {
-                        if (it.template.length > 255) {
-                          it.copy(template = it.template.substring(0, 125) + "...")
-                        } else it
-                      }
-                      ?.toTypedArray()
-              onViewClick = { props.switchToViewState(it) }
-              onEditClick = { props.switchToEditState(it) }
-              onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
-            })
-    button {
-      attrs {
-        text("Add new")
-        name = "new"
-        type = ButtonType.button
-        onClickFunction = { props.switchToInsertState() }
-      }
+private fun <T : IdInterface> RBuilder.TemplateList(props: TemplateListProps<T>) {
+  Table<T> {
+    items = props.items?.toTypedArray()
+    onViewClick = { props.switchToViewState(it) }
+    onEditClick = { props.switchToEditState(it) }
+    onDeleteClick = { GlobalScope.async { props.deleteItem(it) } }
+  }
+
+  button {
+    attrs {
+      text("Add new")
+      name = "new"
+      type = ButtonType.button
+      onClickFunction = { props.switchToInsertState() }
     }
   }
+}
+
+private val TemplateList: FC<TemplateListProps<IdInterface>> = fc { TemplateList(it) }
+
+fun <T : IdInterface> RBuilder.TemplateList(block: TemplateListProps<T>.() -> Unit) {
+  child(type = TemplateList, props = jsObject(block))
 }

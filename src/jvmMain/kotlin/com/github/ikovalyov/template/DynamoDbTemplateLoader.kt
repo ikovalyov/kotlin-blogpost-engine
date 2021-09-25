@@ -15,7 +15,7 @@ class DynamoDbTemplateLoader(
     private val templateRepository: TemplateRepository
 ) : TemplateLoader {
   override fun findTemplateSource(name: String): Template? = runBlocking {
-    val templateName = configurationRepository.getActiveTemplateName()
+    val templateName = configurationRepository.getActiveTemplateId()
     templateName?.let { templateRepository.get(it) }
   }
 
@@ -26,7 +26,7 @@ class DynamoDbTemplateLoader(
 
   override fun getReader(templateSource: Any?, encoding: String?): Reader {
     require(templateSource is Template)
-    return StringReader(templateSource.template)
+    return StringReader(templateSource.body)
   }
 
   override fun closeTemplateSource(templateSource: Any?) {}

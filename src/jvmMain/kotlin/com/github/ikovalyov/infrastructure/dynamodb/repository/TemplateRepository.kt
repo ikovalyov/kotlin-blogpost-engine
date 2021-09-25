@@ -1,5 +1,7 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
+import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.extension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.toDynamoDbMap
@@ -44,24 +46,24 @@ class TemplateRepository(dynamoDbClient: DynamoDbAsyncClient) :
     }
   }
 
-  suspend fun get(templateName: String): Template? {
+  suspend fun get(id: Uuid): Template? {
     val response =
         dynamoDbClient
             .getItem {
               it.tableName(tableName)
-              it.key(mapOf(primaryKey to AttributeValue.builder().s(templateName).build()))
+              it.key(mapOf(primaryKey to AttributeValue.builder().s(id.toString()).build()))
             }
             .await()
     if (!response.hasItem()) return null
     return Template.fromDynamoDbMap(response.item())
   }
 
-  suspend fun delete(templateName: String): Boolean {
+  suspend fun delete(id: Uuid): Boolean {
     val response =
         dynamoDbClient
             .deleteItem {
               it.tableName(tableName)
-                  .key(mapOf(primaryKey to AttributeValue.builder().s(templateName).build()))
+                  .key(mapOf(primaryKey to AttributeValue.builder().s(id.toString()).build()))
             }
             .await()
     return response.sdkHttpResponse().isSuccessful
@@ -71,7 +73,7 @@ class TemplateRepository(dynamoDbClient: DynamoDbAsyncClient) :
     super.init()
     val stream = javaClass.classLoader.getResourceAsStream("template/home.ftl")!!
     val templateString = stream.readAllBytes().decodeToString()
-    val template = Template.create("home.ftl", templateString)
+    val template = Template.create(uuid4(), "home.ftl", templateString)
     return insert(template)
   }
 }
