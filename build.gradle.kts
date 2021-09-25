@@ -6,12 +6,12 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.5.30"
-    kotlin("kapt") version "1.5.30"
-    kotlin("plugin.allopen") version "1.5.30"
-    kotlin("plugin.serialization") version "1.5.30"
+    kotlin("multiplatform") version "1.5.31"
+    kotlin("kapt") version "1.5.31"
+    kotlin("plugin.allopen") version "1.5.31"
+    kotlin("plugin.serialization") version "1.5.31"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.14.3"
+    id("com.diffplug.spotless") version "5.15.1"
     id("idea")
 }
 
@@ -76,7 +76,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:2.0.11")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
                 implementation("com.benasher44:uuid:0.3.0")
             }
         }
@@ -89,7 +89,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation(project.dependencies.enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.238-kotlin-1.5.30"))
+                implementation(project.dependencies.enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.248-kotlin-1.5.31"))
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table")
@@ -100,15 +100,15 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-styled")
                 implementation(npm("styled-components", "5.2.3"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
             }
         }
         val jvmMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.1")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.0.0"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2")
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.0.1"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -129,7 +129,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.0"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.1"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -144,7 +144,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.0"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.1"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -152,11 +152,11 @@ kotlin {
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.57") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.74") // testcontainers need it
             }
         }
     }
