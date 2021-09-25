@@ -4,7 +4,6 @@ import com.github.ikovalyov.extenstion.extraAttrs
 import com.github.ikovalyov.model.markers.BodyInterface
 import com.github.ikovalyov.model.markers.IdInterface
 import com.github.ikovalyov.styles.Colors
-import kotlin.reflect.KClass
 import kotlinext.js.jsObject
 import kotlinx.css.BorderCollapse
 import kotlinx.css.BorderStyle
@@ -55,81 +54,77 @@ import styled.styledTh
 import styled.styledThead
 import styled.styledTr
 
-external interface TableProps<T: Any>: PropsWithChildren {
+external interface TableProps<T : IdInterface> : PropsWithChildren {
   var items: Array<T>?
   var onEditClick: (T) -> Unit
   var onDeleteClick: (T) -> Unit
   var onViewClick: (T) -> Unit
 }
 
-fun <T: Any>buildTableColumns(componentProps: TableProps<T>, forClass: KClass<T>): Array<out Column<Any, *>> {
+private fun <T : IdInterface> RBuilder.Table(
+    props: TableProps<T>,
+) {
+  val items = props.items
+  if (!items.isNullOrEmpty()) {
+    val tableColumns = buildTableColumns(props, items.first())
+    val table =
+        useTable<T>(
+            options =
+                jsObject {
+                  this.data = useMemo { props.items ?: emptyArray() }
+                  this.columns = tableColumns
+                })
+    buildTableBody(table)
+  }
+}
+
+private fun <T : IdInterface> buildTableColumns(
+    componentProps: TableProps<T>,
+    item: T
+): Array<out Column<T, *>> {
   return useMemo {
     columns {
-//      if (IdInterface::class.isInstance(forClass)) {
-        column<String> {
-          header = "Id"
-          accessorFunction = { (it as? IdInterface)?.id.toString() }
-        }
-//      }
-//      if (forClass.isInstance(BodyInterface::class)) {
+      column<String> {
+        header = "Id"
+        accessorFunction = { (it as? IdInterface)?.id.toString() }
+      }
+      if (item is BodyInterface) {
         column<String> {
           header = "Body"
-          accessorFunction = { (it as? BodyInterface<*>)?.body.toString() }
+          accessorFunction = { (it as? BodyInterface)?.preview ?: "" }
         }
-//      }
-//      if (forClass.isInstance(IdInterface::class)) {
-        column<String> {
-          header = "Action"
-          accessor = "id"
-          cellFunction = { props ->
-            buildElement {
-              div {
-                child(Button::class) {
-                  attrs {
-                    onClick = componentProps.onViewClick as (IdInterface) -> Unit
-                    body = props.row.original as IdInterface
+      }
+      column<T> {
+        header = "Action"
+        accessor = "id"
+        cellFunction =
+            { props ->
+              buildElement {
+                div {
+                  Button<T> {
+                    onClick = componentProps.onViewClick
+                    body = props.row.original
                     text = "view"
                   }
-                }
-                child(Button::class) {
-                  attrs {
-                    onClick = componentProps.onEditClick as (IdInterface) -> Unit
-                    body = props.row.original as IdInterface
+                  Button<T> {
+                    onClick = componentProps.onEditClick
+                    body = props.row.original
                     text = "update"
                   }
-                }
-                child(Button::class) {
-                  attrs {
-                    onClick = componentProps.onDeleteClick as (IdInterface) -> Unit
-                    body = props.row.original as IdInterface
+                  Button<T> {
+                    onClick = componentProps.onDeleteClick
+                    body = props.row.original
                     text = "delete"
                   }
                 }
               }
             }
-          }
-        }
       }
     }
-//  }
-}
-
-inline fun <reified T: Any>createTableComponent(): FC<TableProps<T>> {
-  return fc { componentProps ->
-    val tableColumns = buildTableColumns<T>(componentProps, T::class)
-    val table = useTable<Any>(
-      options = jsObject {
-        this.data = useMemo{ componentProps.items ?: emptyArray<T>() }
-        this.columns = tableColumns
-      }
-    )
-    buildTableBody(table)
   }
 }
 
-fun RBuilder.buildTableBody(
-  table: TableInstance<Any>
-) {
+private fun <T : IdInterface> RBuilder.buildTableBody(table: TableInstance<T>) {
   styledDiv {
     styledTable {
       extraAttrs = table.getTableProps()
@@ -208,4 +203,10 @@ fun RBuilder.buildTableBody(
       }
     }
   }
+}
+
+private val Table: FC<TableProps<*>> = fc { Table(it) }
+
+fun <T : IdInterface> RBuilder.Table(block: TableProps<T>.() -> Unit) {
+  child(type = Table, props = jsObject(block))
 }

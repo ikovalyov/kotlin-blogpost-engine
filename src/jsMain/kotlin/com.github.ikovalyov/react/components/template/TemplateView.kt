@@ -1,13 +1,14 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.model.markers.IdInterface
 import com.github.ikovalyov.react.components.template.table.Button
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.html.unsafe
+import react.PropsWithChildren
 import react.RBuilder
 import react.RComponent
-import react.PropsWithChildren
 import react.State
 import react.dom.attrs
 import react.dom.div
@@ -37,12 +38,10 @@ class TemplateView : RComponent<TemplateViewProps, State>() {
         div { attrs.unsafe { +"<b>text</b>" } }
         iframe { attrs { set("srcDoc", props.template.body) } }
       }
-      child(Button::class) {
-        attrs {
-          onClick = { GlobalScope.async { props.switchToListState() } }
-          body = props.template
-          text = "Back to list"
-        }
+      Button<IdInterface> {
+        onClick = { GlobalScope.async { props.switchToListState() } }
+        body = props.template
+        text = "Back to list"
       }
     }
   }

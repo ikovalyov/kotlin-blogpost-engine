@@ -26,7 +26,8 @@ class ConfigurationRepository(
   }
 
   suspend fun getActiveTemplateId(): Uuid? {
-    return Uuid.fromString(getConfigProperty(activeTemplateKeyId).item()[configurationValueFieldName]?.s())
+    return Uuid.fromString(
+        getConfigProperty(activeTemplateKeyId).item()[configurationValueFieldName]?.s())
   }
 
   private suspend fun insertConfiguration(key: String, value: String): Boolean {

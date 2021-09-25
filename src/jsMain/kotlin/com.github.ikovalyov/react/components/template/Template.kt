@@ -13,9 +13,9 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
+import react.PropsWithChildren
 import react.RBuilder
 import react.RComponent
-import react.PropsWithChildren
 import react.State
 import react.setState
 
@@ -146,14 +146,12 @@ class TemplateComponent : RComponent<PropsWithChildren, TemplateComponentState>(
     }
     when (state.currentState) {
       State.LIST ->
-          child(TemplateList::class) {
-            attrs {
-              this.switchToEditState = ::switchToEditStateFuncVar
-              this.switchToViewState = ::switchToViewStateFunc
-              this.switchToInsertState = ::switchToInsertStateFunc
-              this.deleteItem = ::deleteItem
-              this.templates = state.templatesList
-            }
+          TemplateList<Template> {
+            this.switchToEditState = ::switchToEditStateFuncVar
+            this.switchToViewState = ::switchToViewStateFunc
+            this.switchToInsertState = ::switchToInsertStateFunc
+            this.deleteItem = ::deleteItem
+            this.items = state.templatesList
           }
       State.EDIT ->
           child(TemplateEdit::class) {

@@ -1,5 +1,6 @@
 package com.github.ikovalyov.model.markers
 
-interface BodyInterface<T: Any> {
-    val body: T
+interface BodyInterface {
+  val body: String
+  val preview: String
 }

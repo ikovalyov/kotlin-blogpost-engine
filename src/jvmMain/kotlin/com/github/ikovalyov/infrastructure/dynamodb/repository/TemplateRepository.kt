@@ -73,7 +73,7 @@ class TemplateRepository(dynamoDbClient: DynamoDbAsyncClient) :
     super.init()
     val stream = javaClass.classLoader.getResourceAsStream("template/home.ftl")!!
     val templateString = stream.readAllBytes().decodeToString()
-    val template = Template.create(uuid4(),"home.ftl", templateString)
+    val template = Template.create(uuid4(), "home.ftl", templateString)
     return insert(template)
   }
 }

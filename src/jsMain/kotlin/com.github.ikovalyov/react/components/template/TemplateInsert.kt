@@ -1,9 +1,7 @@
 package com.github.ikovalyov.react.components.template
 
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.benasher44.uuid.uuidFrom
-import com.benasher44.uuid.uuidOf
 import com.github.ikovalyov.model.Template
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -29,9 +27,9 @@ import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onSubmitFunction
+import react.PropsWithChildren
 import react.RBuilder
 import react.RComponent
-import react.PropsWithChildren
 import react.State
 import react.dom.attrs
 import react.dom.button
@@ -171,11 +169,7 @@ class TemplateInsert : RComponent<TemplateInsertProps, TemplateInsertState>() {
           text("Cancel")
           name = "insert"
           type = ButtonType.button
-          onClickFunction = {
-            GlobalScope.async {
-              props.switchToListState()
-            }
-          }
+          onClickFunction = { GlobalScope.async { props.switchToListState() } }
         }
       }
     }

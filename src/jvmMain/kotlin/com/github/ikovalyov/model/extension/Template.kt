@@ -14,5 +14,9 @@ fun Template.toDynamoDbMap(): Map<String, AttributeValue> {
 }
 
 fun Template.Companion.fromDynamoDbMap(map: Map<String, AttributeValue>): Template {
-  return Template(uuidFrom(map["id"]!!.s()), map["name"]!!.s(), map["body"]!!.s(), Instant.parse(map["lastModified"]!!.s()))
+  return Template(
+      uuidFrom(map["id"]!!.s()),
+      map["name"]!!.s(),
+      map["body"]!!.s(),
+      Instant.parse(map["lastModified"]!!.s()))
 }

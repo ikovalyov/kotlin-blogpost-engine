@@ -24,20 +24,17 @@ class RecordsController(private val client: DynamoDbAsyncClient) {
 
   @Get("{id}")
   fun getItem(id: Int): HttpResponse<Item> {
-      val keyToGet = mapOf("id" to AttributeValue.builder().s(id.toString()).build())
-      val request = GetItemRequest.builder().key(keyToGet).tableName("record").build()
-      val response = client.getItem(request).get()
-      return if (response.hasItem()) {
-          val itemId = response.item()["id"]!!.s()
-          val uuid = uuidFrom(itemId)
-          val item = Item(
-              id = uuid,
-              content = response.item()["body"]!!.s()
-          )
-          HttpResponse.ok(item)
-      } else {
-          HttpResponse.notFound()
-      }
+    val keyToGet = mapOf("id" to AttributeValue.builder().s(id.toString()).build())
+    val request = GetItemRequest.builder().key(keyToGet).tableName("record").build()
+    val response = client.getItem(request).get()
+    return if (response.hasItem()) {
+      val itemId = response.item()["id"]!!.s()
+      val uuid = uuidFrom(itemId)
+      val item = Item(id = uuid, content = response.item()["body"]!!.s())
+      HttpResponse.ok(item)
+    } else {
+      HttpResponse.notFound()
+    }
   }
 
   @Post("/")
