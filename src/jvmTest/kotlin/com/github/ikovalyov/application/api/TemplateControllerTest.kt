@@ -64,41 +64,31 @@ class TemplateControllerTest : TestPropertyProvider {
 
   private suspend fun testUpdate() {
     val templateString = controller.get(uuid)
-    require(templateString != null) {
-      "$uuid template not found"
-    }
+    require(templateString != null) { "$uuid template not found" }
     val template = Json.decodeFromString(Template.serializer(), templateString)
     val newTemplate = template.copy(body = template.body + "TEST")
     controller.update(newTemplate)
     val updatedTemplateString = controller.get(uuid)
-    require(updatedTemplateString != null) {
-      "$uuid template not found"
-    }
+    require(updatedTemplateString != null) { "$uuid template not found" }
     val updatedTemplate = Json.decodeFromString(Template.serializer(), updatedTemplateString)
     assert(updatedTemplate.body.endsWith("TEST"))
   }
 
   private suspend fun testInsert() {
     val templateString = controller.get(uuid)
-    require(templateString != null) {
-      "$uuid template not found"
-    }
+    require(templateString != null) { "$uuid template not found" }
     val template = Json.decodeFromString(Template.serializer(), templateString)
     val newTemplate = template.copy(id = uuid2, lastModified = Clock.System.now())
     controller.insert(newTemplate)
     val newTemplateString = controller.get(uuid2)
-    require(newTemplateString != null) {
-      "$uuid2 template not found"
-    }
+    require(newTemplateString != null) { "$uuid2 template not found" }
     val newTemplateResponseBody = Json.decodeFromString(Template.serializer(), newTemplateString)
     assert(newTemplateResponseBody.id == uuid2)
   }
 
   private suspend fun testGet() {
     val templateResponseString = controller.get(uuid)
-    require(templateResponseString != null) {
-      "$uuid template not found"
-    }
+    require(templateResponseString != null) { "$uuid template not found" }
     val templateResponse = Json.decodeFromString(Template.serializer(), templateResponseString)
     assert(templateResponse.id == uuid)
   }
