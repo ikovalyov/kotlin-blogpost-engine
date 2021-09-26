@@ -4,8 +4,10 @@ import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.model.extension.UserRoleExtension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.UserRoleExtension.toDynamoDbMap
 import com.github.ikovalyov.model.security.UserRole
+import jakarta.inject.Singleton
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
+@Singleton
 class UserRoleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<UserRole>(dynamoDbClient) {
     companion object {
         const val tableName = "userRole"
