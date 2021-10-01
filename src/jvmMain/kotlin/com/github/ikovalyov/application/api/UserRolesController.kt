@@ -2,8 +2,8 @@ package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
-import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.infrastructure.dynamodb.repository.UserRoleRepository
+import com.github.ikovalyov.model.security.UserRole
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -15,24 +15,24 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
-@Controller(Api.templateUrl)
-class TemplateController(private val templateRepository: TemplateRepository) {
+@Controller(Api.userRoleUrl)
+class UserRolesController(private val userRolesRepository: UserRoleRepository) {
     private val logger = KotlinLogging.logger {}
 
     @Get
     suspend fun list(): String {
-        return Json.encodeToString(ListSerializer(Template.serializer()), templateRepository.list())
+        return Json.encodeToString(ListSerializer(UserRole.serializer()), userRolesRepository.list())
     }
 
     @Get("/{itemId}")
     suspend fun get(itemId: Uuid): String? {
-        val template = templateRepository.get(itemId) ?: return null
-        return Json.encodeToString(Template.serializer(), template)
+        val template = userRolesRepository.get(itemId) ?: return null
+        return Json.encodeToString(UserRole.serializer(), template)
     }
 
     @Delete("/{itemId}")
     suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
-        val result = templateRepository.delete(itemId)
+        val result = userRolesRepository.delete(itemId)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -41,8 +41,8 @@ class TemplateController(private val templateRepository: TemplateRepository) {
     }
 
     @Post
-    suspend fun insert(@Body item: Template): HttpResponse<Nothing> {
-        val result = templateRepository.insert(item)
+    suspend fun insert(@Body item: UserRole): HttpResponse<Nothing> {
+        val result = userRolesRepository.insert(item)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -51,8 +51,8 @@ class TemplateController(private val templateRepository: TemplateRepository) {
     }
 
     @Patch
-    suspend fun update(@Body item: Template): HttpResponse<Nothing> {
-        val result = templateRepository.update(item)
+    suspend fun update(@Body item: UserRole): HttpResponse<Nothing> {
+        val result = userRolesRepository.update(item)
         return if (result) {
             HttpResponse.accepted()
         } else {
