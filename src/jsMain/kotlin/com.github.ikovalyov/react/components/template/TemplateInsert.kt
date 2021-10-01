@@ -40,6 +40,7 @@ import styled.styledP
 external interface TemplateInsertProps<T> : PropsWithChildren {
   var switchToListState: suspend () -> Unit
   var submitForm: suspend (t: T) -> Unit
+  var item: T
 }
 
 external interface TemplateInsertState<T> : State {
@@ -50,10 +51,11 @@ external interface TemplateInsertState<T> : State {
 private fun <T: IEditable<T>> RBuilder.TemplateInsert(props: TemplateInsertProps<T>) {
   val stateInstance = useState<TemplateInsertState<T>> {
     jsObject {
-      currentItem = null
+      currentItem = props.item
     }
   }
   val state = stateInstance.component1()
+  val updateState = stateInstance.component2()
   val currentItem = state.currentItem
   if (currentItem != null) {
     form {
@@ -62,7 +64,6 @@ private fun <T: IEditable<T>> RBuilder.TemplateInsert(props: TemplateInsertProps
           {
             it.preventDefault()
             GlobalScope.launch {
-              console.info("Inserting new template into database")
               props.submitForm(state.currentItem!!)
             }
           }
@@ -81,22 +82,24 @@ private fun <T: IEditable<T>> RBuilder.TemplateInsert(props: TemplateInsertProps
                 float = Float.left
                 after { content = QuotedString(":") }
               }
-              attrs { this.attributes["htmlFor"] = "id" }
+              attrs { this.attributes["htmlFor"] = it.fieldName }
             }
             input {
               attrs {
                 name = it.fieldName
                 readonly = it.readOnly
-                defaultValue = ""
                 if (!it.readOnly) {
+                  defaultValue = ""
                   onChangeFunction = { event ->
                     val value = event.target.asDynamic().value.toString()
-                    val newTemplate = currentItem.updateField(field = it, serializedData = value)
-                    stateInstance.component2().invoke { state ->
-                      state.currentItem = newTemplate
-                      state
+                    updateState{ state ->
+                      jsObject {
+                        this.currentItem = state.currentItem?.updateField(field = it, serializedData = value)
+                      }
                     }
                   }
+                } else {
+                  value = currentItem.getFieldValueAsString(it)
                 }
               }
             }

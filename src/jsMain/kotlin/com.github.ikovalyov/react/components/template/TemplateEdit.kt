@@ -61,7 +61,6 @@ private fun <T: IEditable<T>> RBuilder.TemplateEdit(props: ItemEditProps<T>) {
         {
           it.preventDefault()
           GlobalScope.launch {
-            console.info("submit form ${state.item}")
             props.submitForm(state.item)
           }
         }

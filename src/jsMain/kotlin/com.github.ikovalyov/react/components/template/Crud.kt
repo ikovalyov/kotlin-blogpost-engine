@@ -21,12 +21,13 @@ external interface CrudComponentProps<T> : PropsWithChildren {
   var decodeItem: (String) -> T
   var decodeItems: (String) -> List<T>
   var apiUri: String
+  var factory: () -> T
 }
 
 external interface CrudComponentState<T> : State {
   var currentState: CrudState?
   var currentItem: T?
-  var itemsList: List<T>
+  var itemsList: List<T>?
 }
 
 enum class CrudState {
@@ -78,7 +79,6 @@ private fun <T: IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<T
       )
     val response = fetchResult.await()
     val result = response.text().await()
-    console.info(result)
   }
 
   fun switchToViewStateFunc(t: T) {
@@ -106,7 +106,6 @@ private fun <T: IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<T
   }
 
   suspend fun switchToListViewStateFunc() {
-    console.info("switchToListViewStateFunc")
     val result = window.fetch("http://localhost:8082" + props.apiUri).await().text().await()
     val templatesList = props.decodeItems(result)
     updateState {
@@ -129,8 +128,7 @@ private fun <T: IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<T
 
   suspend fun deleteItem(t: T) {
     if (window.confirm("Are you sure you want to delete this item?")) {
-      window
-        .fetch(
+      window.fetch(
           "http://localhost:8082" + props.apiUri + "/${t.id}",
           RequestInit(method = "DELETE")
         )
@@ -140,13 +138,11 @@ private fun <T: IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<T
   }
 
   suspend fun submitEditItemForm(t: T) {
-    console.info("inside submitEditTemplateForm")
     updateItem(t)
     switchToListViewStateFunc()
   }
 
   suspend fun submitInsertItemForm(t: T) {
-    console.info("inside submitInsertTemplateForm")
     insertItem(t)
     switchToListViewStateFunc()
   }
@@ -163,12 +159,9 @@ private fun <T: IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<T
     }
   }
 
-  console.info("displaying component")
   if (state.currentState == null) {
-    console.info("state is null")
     GlobalScope.launch { switchToListViewStateFunc() }
   }
-  console.info("${state.currentState} updateState")
   when (state.currentState) {
     CrudState.LIST -> {
       TemplateList<T> {
@@ -192,6 +185,7 @@ private fun <T: IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<T
     CrudState.ADD -> TemplateInsert<T> {
       switchToListState = ::switchToListViewStateFunc
       submitForm = ::submitInsertItemForm
+      item = props.factory()
     }
   }
 }

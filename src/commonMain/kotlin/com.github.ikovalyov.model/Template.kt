@@ -93,10 +93,14 @@ data class Template(
             fieldType = Instant::class,
             readOnly = false,
             serialize = {
-                Json.encodeToString(InstantIso8601Serializer, it)
+                it.toString()
             },
             deserialize = {
-                Json.decodeFromString(InstantIso8601Serializer, it)
+                if (it.isEmpty()) {
+                    Clock.System.now()
+                } else {
+                    it.toInstant()
+                }
             }),
     )
 

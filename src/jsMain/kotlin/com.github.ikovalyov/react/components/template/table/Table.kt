@@ -67,13 +67,10 @@ private fun <T : IEditable<T>> RBuilder.Table(
   val items = props.items
   if (!items.isNullOrEmpty()) {
     val tableColumns = buildTableColumns(props, items.first())
-    val table =
-        useTable<T>(
-            options =
-                jsObject {
-                  this.data = useMemo { props.items ?: emptyArray() }
-                  this.columns = tableColumns
-                })
+    val table = useTable<T>(options = jsObject {
+      this.data = props.items ?: emptyArray()
+      this.columns = tableColumns
+    })
     buildTableBody(table)
   }
 }
@@ -84,17 +81,20 @@ private fun <T : IEditable<T>> buildTableColumns(
 ): Array<out Column<T, *>> {
   return useMemo {
     columns {
-      column<String> {
-        header = "Id"
-        accessorFunction = { it.id.toString() }
-      }
-      if (item is BodyInterface) {
+      val metadataList = item.getMetadata()
+      metadataList.forEach { metadata ->
         column<String> {
-          header = "Body"
-          accessorFunction = { (it as? BodyInterface)?.preview ?: "" }
+          header = metadata.fieldName
+          accessorFunction = {
+            val str = it.getFieldValueAsString(metadata)
+            if (str.length > 128) {
+              str.substring(0, 128)
+            } else str
+          }
         }
       }
       column<T> {
+        id = "Action"
         header = "Action"
         accessor = "id"
         cellFunction =
