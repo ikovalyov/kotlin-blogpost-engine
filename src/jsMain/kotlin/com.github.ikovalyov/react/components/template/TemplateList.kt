@@ -1,6 +1,6 @@
 package com.github.ikovalyov.react.components.template
 
-import com.github.ikovalyov.model.markers.IdInterface
+import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.react.components.template.table.Table
 import kotlinext.js.jsObject
 import kotlinx.coroutines.GlobalScope
@@ -22,7 +22,7 @@ external interface TemplateListProps<T : Any> : PropsWithChildren {
   var items: List<T>?
 }
 
-private fun <T : IdInterface> RBuilder.TemplateList(props: TemplateListProps<T>) {
+private fun <T : IEditable<T>> RBuilder.TemplateList(props: TemplateListProps<T>) {
   Table<T> {
     items = props.items?.toTypedArray()
     onViewClick = { props.switchToViewState(it) }
@@ -40,8 +40,8 @@ private fun <T : IdInterface> RBuilder.TemplateList(props: TemplateListProps<T>)
   }
 }
 
-private val TemplateList: FC<TemplateListProps<IdInterface>> = fc { TemplateList(it) }
+private val TemplateList: FC<TemplateListProps<IEditable<*>>> = fc { TemplateList(it) }
 
-fun <T : IdInterface> RBuilder.TemplateList(block: TemplateListProps<T>.() -> Unit) {
+fun <T : IEditable<T>> RBuilder.TemplateList(block: TemplateListProps<T>.() -> Unit) {
   child(type = TemplateList, props = jsObject(block))
 }

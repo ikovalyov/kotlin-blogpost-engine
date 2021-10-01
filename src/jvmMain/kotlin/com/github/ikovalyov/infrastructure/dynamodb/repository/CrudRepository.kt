@@ -3,14 +3,14 @@ package com.github.ikovalyov.infrastructure.dynamodb.repository
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.extension.fromDynamoDbMap
-import com.github.ikovalyov.model.markers.IdInterface
+import com.github.ikovalyov.model.markers.IEditable
 import io.micronaut.http.HttpStatus
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-abstract class CrudRepository<T : IdInterface>(dynamoDbClient: DynamoDbAsyncClient) :
+abstract class CrudRepository<T : IEditable<T>>(dynamoDbClient: DynamoDbAsyncClient) :
     AbstractKeyValueRepository(dynamoDbClient) {
 
   private val logger = KotlinLogging.logger {}

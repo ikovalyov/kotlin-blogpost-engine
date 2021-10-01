@@ -8,6 +8,8 @@ import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
 import java.util.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
@@ -54,10 +56,10 @@ internal class UserRolesControllerTest: TestPropertyProvider {
     @Test
     @Order(1)
     fun insert(): Unit = runBlocking {
-        with(userRolesController.insert(UserRole(uuid, name))) {
+        with(userRolesController.insert(UserRole(uuid, Clock.System.now(), name))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
-        with(userRolesController.insert(UserRole(uuid2, name2))) {
+        with(userRolesController.insert(UserRole(uuid2, Clock.System.now(), name2))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
     }
@@ -75,12 +77,12 @@ internal class UserRolesControllerTest: TestPropertyProvider {
     fun getItems() = runBlocking {
         with(userRolesController.get(UserRolesControllerTest.uuid)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(UserRolesControllerTest.name, name)
+                assertEquals(UserRolesControllerTest.name, body)
             }
         }
         with(userRolesController.get(UserRolesControllerTest.uuid2)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(UserRolesControllerTest.name2, name)
+                assertEquals(UserRolesControllerTest.name2, body)
             }
         }
     }
@@ -98,7 +100,7 @@ internal class UserRolesControllerTest: TestPropertyProvider {
     @Test
     @Order(5)
     fun update() = runBlocking {
-        val userRole = UserRole(uuid2, UserRolesControllerTest.name)
+        val userRole = UserRole(uuid2, Clock.System.now(), UserRolesControllerTest.name)
         userRolesController.update(userRole)
 
         with(userRolesController.get(UserRolesControllerTest.uuid2)!!) {

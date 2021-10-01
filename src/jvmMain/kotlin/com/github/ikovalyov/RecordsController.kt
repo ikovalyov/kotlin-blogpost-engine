@@ -10,6 +10,8 @@ import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
@@ -30,7 +32,7 @@ class RecordsController(private val client: DynamoDbAsyncClient) {
     return if (response.hasItem()) {
       val itemId = response.item()["id"]!!.s()
       val uuid = uuidFrom(itemId)
-      val item = Item(id = uuid, content = response.item()["body"]!!.s())
+      val item = Item(id = uuid, body = response.item()["body"]!!.s(), lastModified = Clock.System.now())
       HttpResponse.ok(item)
     } else {
       HttpResponse.notFound()
@@ -46,7 +48,7 @@ class RecordsController(private val client: DynamoDbAsyncClient) {
             .item(
                 mutableMapOf(
                     "id" to AttributeValue.builder().s(item.id.toString()).build(),
-                    "body" to AttributeValue.builder().s(item.content).build()))
+                    "body" to AttributeValue.builder().s(item.body).build()))
             .build()
     val response = client.putItem(request).get()
     return HttpResponse.status<Nothing>(HttpStatus.valueOf(response.sdkHttpResponse().statusCode()))

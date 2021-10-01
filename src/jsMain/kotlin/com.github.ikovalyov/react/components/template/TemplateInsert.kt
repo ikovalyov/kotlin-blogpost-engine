@@ -1,10 +1,11 @@
 package com.github.ikovalyov.react.components.template
 
-import com.benasher44.uuid.uuid4
-import com.benasher44.uuid.uuidFrom
-import com.github.ikovalyov.model.Template
+import com.github.ikovalyov.model.markers.IEditable
+import kotlinext.js.jsObject
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.css.Color
 import kotlinx.css.Display
 import kotlinx.css.Float
@@ -27,6 +28,7 @@ import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onSubmitFunction
+import react.FC
 import react.PropsWithChildren
 import react.RBuilder
 import react.RComponent
@@ -37,141 +39,103 @@ import react.dom.defaultValue
 import react.dom.fieldset
 import react.dom.form
 import react.dom.input
+import react.fc
 import react.setState
+import react.useState
 import styled.css
 import styled.styledLabel
 import styled.styledP
 import styled.styledTextarea
 
-external interface TemplateInsertProps : PropsWithChildren {
+external interface TemplateInsertProps<T> : PropsWithChildren {
   var switchToListState: suspend () -> Unit
-  var submitForm: suspend (t: Template) -> Unit
+  var submitForm: suspend (t: T) -> Unit
 }
 
-external interface TemplateInsertState : State {
-  var currentTemplate: Template?
+external interface TemplateInsertState<T> : State {
+  var currentItem: T?
 }
 
-class TemplateInsert : RComponent<TemplateInsertProps, TemplateInsertState>() {
-  override fun RBuilder.render() {
-    if (state.currentTemplate == null) {
-      state.currentTemplate = Template.create(uuid4(), "", "")
+@DelicateCoroutinesApi
+private fun <T: IEditable<T>> RBuilder.TemplateInsert(props: TemplateInsertProps<T>) {
+  val stateInstance = useState<TemplateInsertState<T>> {
+    jsObject {
+      currentItem = null
     }
+  }
+  val state = stateInstance.component1()
+  val currentItem = state.currentItem
+  if (currentItem != null) {
     form {
       attrs {
         onSubmitFunction =
-            {
-              it.preventDefault()
-              GlobalScope.async {
-                console.info("Inserting new template into database")
-                props.submitForm(state.currentTemplate!!)
-              }
+          {
+            it.preventDefault()
+            GlobalScope.launch {
+              console.info("Inserting new template into database")
+              props.submitForm(state.currentItem!!)
             }
+          }
       }
       fieldset {
-        styledP {
-          styledLabel {
-            +"Id"
-            css {
-              color = Color("B4886B")
-              fontWeight = FontWeight.bold
-              display = Display.block
-              width = LinearDimension("150px")
-              float = Float.left
-              after { content = QuotedString(":") }
+        val metadata = currentItem.getMetadata()
+        metadata.forEach {
+          styledP {
+            styledLabel {
+              +it.fieldName
+              css {
+                color = Color("B4886B")
+                fontWeight = FontWeight.bold
+                display = Display.block
+                width = LinearDimension("150px")
+                float = Float.left
+                after { content = QuotedString(":") }
+              }
+              attrs { this.attributes["htmlFor"] = "id" }
             }
-            attrs { this.attributes["htmlFor"] = "id" }
-          }
-          input {
-            attrs {
-              name = "id"
-              defaultValue = ""
-              onChangeFunction =
-                  {
-                    val id = it.target.asDynamic().value.toString()
-                    val newTemplate = state.currentTemplate?.copy(id = uuidFrom(id))
-                    setState { currentTemplate = newTemplate }
-                  }
-            }
-          }
-        }
-        styledP {
-          styledLabel {
-            css {
-              color = Color("B4886B")
-              fontWeight = FontWeight.bold
-              display = Display.block
-              width = LinearDimension("150px")
-              float = Float.left
-              after { content = QuotedString(":") }
-            }
-            attrs { this.attributes["htmlFor"] = "lastModified" }
-            +"Updated at"
-          }
-          input {
-            attrs {
-              name = "lastModified"
-              defaultValue =
-                  state.currentTemplate?.lastModified?.toLocalDateTime(TimeZone.UTC).toString()
-              type = InputType.dateTimeLocal
-              onChangeFunction =
-                  {
-                    val value = it.target.asDynamic().value.toString()
-                    val ldt = LocalDateTime.parse(value)
-                    val newTemplate =
-                        state.currentTemplate?.copy(lastModified = ldt.toInstant(TimeZone.UTC))
-                    setState { currentTemplate = newTemplate }
-                  }
-            }
-          }
-        }
-        styledP {
-          styledLabel {
-            css {
-              color = Color("B4886B")
-              fontWeight = FontWeight.bold
-              display = Display.block
-              width = LinearDimension("150px")
-              float = Float.left
-              after { content = QuotedString(":") }
-            }
-            attrs { this.attributes["htmlFor"] = "template" }
-            +"Template"
-          }
-          styledTextarea {
-            css {
-              height = LinearDimension("400px")
-              width = LinearDimension("100%")
-            }
-            attrs {
-              name = "template"
-              onChangeFunction =
-                  {
-                    setState {
-                      currentTemplate =
-                          currentTemplate?.copy(body = it.target.asDynamic().value as String)
+            input {
+              attrs {
+                name = it.fieldName
+                readonly = it.readOnly
+                defaultValue = ""
+                if (!it.readOnly) {
+                  onChangeFunction = { event ->
+                    val value = event.target.asDynamic().value.toString()
+                    val newTemplate = currentItem.updateField(field = it, serializedData = value)
+                    stateInstance.component2().invoke { state ->
+                      state.currentItem = newTemplate
+                      state
                     }
                   }
-              defaultValue = ""
+                }
+              }
             }
           }
         }
-      }
-      button {
-        attrs {
-          text("Insert")
-          name = "insert"
-          type = ButtonType.submit
+        button {
+          attrs {
+            text("Insert")
+            name = "insert"
+            type = ButtonType.submit
+          }
         }
-      }
-      button {
-        attrs {
-          text("Cancel")
-          name = "insert"
-          type = ButtonType.button
-          onClickFunction = { GlobalScope.async { props.switchToListState() } }
+        button {
+          attrs {
+            text("Cancel")
+            name = "insert"
+            type = ButtonType.button
+            onClickFunction = { GlobalScope.launch { props.switchToListState() } }
+          }
         }
       }
     }
   }
+}
+
+@DelicateCoroutinesApi
+private val TemplateInsert: FC<TemplateInsertProps<IEditable<*>>> = fc { TemplateInsert(it) }
+
+@DelicateCoroutinesApi
+fun <T : IEditable<T>> RBuilder.TemplateInsert(block: TemplateInsertProps<T>.() -> Unit) {
+  child(type = TemplateInsert, props = jsObject(block))
 }

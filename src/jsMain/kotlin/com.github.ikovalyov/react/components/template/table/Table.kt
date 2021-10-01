@@ -2,7 +2,7 @@ package com.github.ikovalyov.react.components.template.table
 
 import com.github.ikovalyov.extenstion.extraAttrs
 import com.github.ikovalyov.model.markers.BodyInterface
-import com.github.ikovalyov.model.markers.IdInterface
+import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.styles.Colors
 import kotlinext.js.jsObject
 import kotlinx.css.BorderCollapse
@@ -54,14 +54,14 @@ import styled.styledTh
 import styled.styledThead
 import styled.styledTr
 
-external interface TableProps<T : IdInterface> : PropsWithChildren {
+external interface TableProps<T : IEditable<T>> : PropsWithChildren {
   var items: Array<T>?
   var onEditClick: (T) -> Unit
   var onDeleteClick: (T) -> Unit
   var onViewClick: (T) -> Unit
 }
 
-private fun <T : IdInterface> RBuilder.Table(
+private fun <T : IEditable<T>> RBuilder.Table(
     props: TableProps<T>,
 ) {
   val items = props.items
@@ -78,7 +78,7 @@ private fun <T : IdInterface> RBuilder.Table(
   }
 }
 
-private fun <T : IdInterface> buildTableColumns(
+private fun <T : IEditable<T>> buildTableColumns(
     componentProps: TableProps<T>,
     item: T
 ): Array<out Column<T, *>> {
@@ -86,7 +86,7 @@ private fun <T : IdInterface> buildTableColumns(
     columns {
       column<String> {
         header = "Id"
-        accessorFunction = { (it as? IdInterface)?.id.toString() }
+        accessorFunction = { it.id.toString() }
       }
       if (item is BodyInterface) {
         column<String> {
@@ -124,7 +124,7 @@ private fun <T : IdInterface> buildTableColumns(
   }
 }
 
-private fun <T : IdInterface> RBuilder.buildTableBody(table: TableInstance<T>) {
+private fun <T : IEditable<T>> RBuilder.buildTableBody(table: TableInstance<T>) {
   styledDiv {
     styledTable {
       extraAttrs = table.getTableProps()
@@ -207,6 +207,6 @@ private fun <T : IdInterface> RBuilder.buildTableBody(table: TableInstance<T>) {
 
 private val Table: FC<TableProps<*>> = fc { Table(it) }
 
-fun <T : IdInterface> RBuilder.Table(block: TableProps<T>.() -> Unit) {
+fun <T : IEditable<T>> RBuilder.Table(block: TableProps<T>.() -> Unit) {
   child(type = Table, props = jsObject(block))
 }

@@ -15,7 +15,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
-@Controller(Api.templateUrl)
+@Controller(Api.userRoleUrl)
 class UserRolesController(private val userRolesRepository: UserRoleRepository) {
   private val logger = KotlinLogging.logger {}
 
