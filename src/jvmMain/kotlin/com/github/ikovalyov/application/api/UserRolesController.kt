@@ -17,46 +17,46 @@ import mu.KotlinLogging
 
 @Controller(Api.userRoleUrl)
 class UserRolesController(private val userRolesRepository: UserRoleRepository) {
-  private val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger {}
 
-  @Get
-  suspend fun list(): String {
-    return Json.encodeToString(ListSerializer(UserRole.serializer()), userRolesRepository.list())
-  }
-
-  @Get("/{itemId}")
-  suspend fun get(itemId: Uuid): String? {
-    val template = userRolesRepository.get(itemId) ?: return null
-    return Json.encodeToString(UserRole.serializer(), template)
-  }
-
-  @Delete("/{itemId}")
-  suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
-    val result = userRolesRepository.delete(itemId)
-    return if (result) {
-      HttpResponse.accepted()
-    } else {
-      HttpResponse.notFound()
+    @Get
+    suspend fun list(): String {
+        return Json.encodeToString(ListSerializer(UserRole.serializer()), userRolesRepository.list())
     }
-  }
 
-  @Post
-  suspend fun insert(@Body item: UserRole): HttpResponse<Nothing> {
-    val result = userRolesRepository.insert(item)
-    return if (result) {
-      HttpResponse.accepted()
-    } else {
-      HttpResponse.notFound()
+    @Get("/{itemId}")
+    suspend fun get(itemId: Uuid): String? {
+        val template = userRolesRepository.get(itemId) ?: return null
+        return Json.encodeToString(UserRole.serializer(), template)
     }
-  }
 
-  @Patch
-  suspend fun update(@Body item: UserRole): HttpResponse<Nothing> {
-    val result = userRolesRepository.update(item)
-    return if (result) {
-      HttpResponse.accepted()
-    } else {
-      HttpResponse.notFound()
+    @Delete("/{itemId}")
+    suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
+        val result = userRolesRepository.delete(itemId)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
     }
-  }
+
+    @Post
+    suspend fun insert(@Body item: UserRole): HttpResponse<Nothing> {
+        val result = userRolesRepository.insert(item)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
+    }
+
+    @Patch
+    suspend fun update(@Body item: UserRole): HttpResponse<Nothing> {
+        val result = userRolesRepository.update(item)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
+    }
 }

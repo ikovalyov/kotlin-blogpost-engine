@@ -1,7 +1,6 @@
 package com.github.ikovalyov.react.components.template.table
 
 import com.github.ikovalyov.extenstion.extraAttrs
-import com.github.ikovalyov.model.markers.BodyInterface
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.styles.Colors
 import kotlinext.js.jsObject
@@ -55,158 +54,160 @@ import styled.styledThead
 import styled.styledTr
 
 external interface TableProps<T : IEditable<T>> : PropsWithChildren {
-  var items: Array<T>?
-  var onEditClick: (T) -> Unit
-  var onDeleteClick: (T) -> Unit
-  var onViewClick: (T) -> Unit
+    var items: Array<T>?
+    var onEditClick: (T) -> Unit
+    var onDeleteClick: (T) -> Unit
+    var onViewClick: (T) -> Unit
 }
 
 private fun <T : IEditable<T>> RBuilder.Table(
     props: TableProps<T>,
 ) {
-  val items = props.items
-  if (!items.isNullOrEmpty()) {
-    val tableColumns = buildTableColumns(props, items.first())
-    val table = useTable<T>(options = jsObject {
-      this.data = props.items ?: emptyArray()
-      this.columns = tableColumns
-    })
-    buildTableBody(table)
-  }
+    val items = props.items
+    if (!items.isNullOrEmpty()) {
+        val tableColumns = buildTableColumns(props, items.first())
+        val table = useTable<T>(
+            options = jsObject {
+                this.data = props.items ?: emptyArray()
+                this.columns = tableColumns
+            }
+        )
+        buildTableBody(table)
+    }
 }
 
 private fun <T : IEditable<T>> buildTableColumns(
     componentProps: TableProps<T>,
     item: T
 ): Array<out Column<T, *>> {
-  return useMemo {
-    columns {
-      val metadataList = item.getMetadata()
-      metadataList.forEach { metadata ->
-        column<String> {
-          header = metadata.fieldName
-          accessorFunction = {
-            val str = it.getFieldValueAsString(metadata)
-            if (str.length > 128) {
-              str.substring(0, 128)
-            } else str
-          }
-        }
-      }
-      column<T> {
-        id = "Action"
-        header = "Action"
-        accessor = "id"
-        cellFunction =
-            { props ->
-              buildElement {
-                div {
-                  Button<T> {
-                    onClick = componentProps.onViewClick
-                    body = props.row.original
-                    text = "view"
-                  }
-                  Button<T> {
-                    onClick = componentProps.onEditClick
-                    body = props.row.original
-                    text = "update"
-                  }
-                  Button<T> {
-                    onClick = componentProps.onDeleteClick
-                    body = props.row.original
-                    text = "delete"
-                  }
+    return useMemo {
+        columns {
+            val metadataList = item.getMetadata()
+            metadataList.forEach { metadata ->
+                column<String> {
+                    header = metadata.fieldName
+                    accessorFunction = {
+                        val str = it.getFieldValueAsString(metadata)
+                        if (str.length > 128) {
+                            str.substring(0, 128)
+                        } else str
+                    }
                 }
-              }
             }
-      }
+            column<T> {
+                id = "Action"
+                header = "Action"
+                accessor = "id"
+                cellFunction =
+                    { props ->
+                        buildElement {
+                            div {
+                                Button<T> {
+                                    onClick = componentProps.onViewClick
+                                    body = props.row.original
+                                    text = "view"
+                                }
+                                Button<T> {
+                                    onClick = componentProps.onEditClick
+                                    body = props.row.original
+                                    text = "update"
+                                }
+                                Button<T> {
+                                    onClick = componentProps.onDeleteClick
+                                    body = props.row.original
+                                    text = "delete"
+                                }
+                            }
+                        }
+                    }
+            }
+        }
     }
-  }
 }
 
 private fun <T : IEditable<T>> RBuilder.buildTableBody(table: TableInstance<T>) {
-  styledDiv {
-    styledTable {
-      extraAttrs = table.getTableProps()
+    styledDiv {
+        styledTable {
+            extraAttrs = table.getTableProps()
 
-      css {
-        width = 400.px
-        borderSpacing = 0.px
-        borderCollapse = BorderCollapse.collapse
-        whiteSpace = WhiteSpace.nowrap
-        borderWidth = 2.px
-        borderStyle = BorderStyle.solid
-        borderColor = Colors.Stroke.Gray
-        margin(LinearDimension.auto)
-      }
-      styledThead {
-        css {
-          color = Colors.Text.Gray
-          fontSize = 18.px
-          backgroundColor = Colors.Background.Gray
-        }
-        for (headerGroup in table.headerGroups) {
-          tr {
-            extraAttrs = headerGroup.getHeaderGroupProps()
-            for (h in headerGroup.headers) {
-              val originalHeader = h.placeholderOf
-              val header = originalHeader ?: h
-
-              styledTh {
-                extraAttrs = header.getHeaderProps()
-                css {
-                  fontWeight = FontWeight.normal
-                  padding(4.px, 12.px)
-                  borderRightColor = Colors.Stroke.Gray
-                  borderRight = BorderStyle.solid.toString()
-                  if (header.columns != null) {
-                    borderBottomColor = Colors.Stroke.Gray
-                    borderBottom = BorderStyle.solid.toString()
-                  }
-                  lastChild { borderRight = "none" }
-                }
-                +header.render(RenderType.Header)
-              }
-            }
-          }
-        }
-      }
-      styledTbody {
-        extraAttrs = table.getTableBodyProps()
-
-        css {
-          color = Colors.Text.Black
-          backgroundColor = Colors.Background.White
-          textAlign = TextAlign.start
-        }
-        for (row in table.rows) {
-          table.prepareRow(row)
-
-          styledTr {
-            extraAttrs = row.getRowProps()
             css {
-              fontSize = 16.px
-              cursor = Cursor.pointer
-              borderBottomColor = Colors.Stroke.LightGray
-              borderBottom = BorderStyle.solid.toString()
-              hover { backgroundColor = Colors.Background.Gray }
+                width = 400.px
+                borderSpacing = 0.px
+                borderCollapse = BorderCollapse.collapse
+                whiteSpace = WhiteSpace.nowrap
+                borderWidth = 2.px
+                borderStyle = BorderStyle.solid
+                borderColor = Colors.Stroke.Gray
+                margin(LinearDimension.auto)
             }
-            for (cell in row.cells) {
-              styledTd {
-                extraAttrs = cell.getCellProps()
-                css { padding(10.px, 12.px) }
-                +cell.render(RenderType.Cell)
-              }
+            styledThead {
+                css {
+                    color = Colors.Text.Gray
+                    fontSize = 18.px
+                    backgroundColor = Colors.Background.Gray
+                }
+                for (headerGroup in table.headerGroups) {
+                    tr {
+                        extraAttrs = headerGroup.getHeaderGroupProps()
+                        for (h in headerGroup.headers) {
+                            val originalHeader = h.placeholderOf
+                            val header = originalHeader ?: h
+
+                            styledTh {
+                                extraAttrs = header.getHeaderProps()
+                                css {
+                                    fontWeight = FontWeight.normal
+                                    padding(4.px, 12.px)
+                                    borderRightColor = Colors.Stroke.Gray
+                                    borderRight = BorderStyle.solid.toString()
+                                    if (header.columns != null) {
+                                        borderBottomColor = Colors.Stroke.Gray
+                                        borderBottom = BorderStyle.solid.toString()
+                                    }
+                                    lastChild { borderRight = "none" }
+                                }
+                                +header.render(RenderType.Header)
+                            }
+                        }
+                    }
+                }
             }
-          }
+            styledTbody {
+                extraAttrs = table.getTableBodyProps()
+
+                css {
+                    color = Colors.Text.Black
+                    backgroundColor = Colors.Background.White
+                    textAlign = TextAlign.start
+                }
+                for (row in table.rows) {
+                    table.prepareRow(row)
+
+                    styledTr {
+                        extraAttrs = row.getRowProps()
+                        css {
+                            fontSize = 16.px
+                            cursor = Cursor.pointer
+                            borderBottomColor = Colors.Stroke.LightGray
+                            borderBottom = BorderStyle.solid.toString()
+                            hover { backgroundColor = Colors.Background.Gray }
+                        }
+                        for (cell in row.cells) {
+                            styledTd {
+                                extraAttrs = cell.getCellProps()
+                                css { padding(10.px, 12.px) }
+                                +cell.render(RenderType.Cell)
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
 
 private val Table: FC<TableProps<*>> = fc { Table(it) }
 
 fun <T : IEditable<T>> RBuilder.Table(block: TableProps<T>.() -> Unit) {
-  child(type = Table, props = jsObject(block))
+    child(type = Table, props = jsObject(block))
 }

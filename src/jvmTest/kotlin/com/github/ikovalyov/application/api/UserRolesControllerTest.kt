@@ -1,34 +1,34 @@
 package com.github.ikovalyov.application.api
 
+import com.benasher44.uuid.uuid4
 import com.github.ikovalyov.command.DynamoDbInitCommand
 import com.github.ikovalyov.model.security.UserRole
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
-import java.util.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 import org.testcontainers.containers.localstack.LocalStackContainer
 import org.testcontainers.utility.DockerImageName
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @MicronautTest
 @TestMethodOrder(OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class UserRolesControllerTest: TestPropertyProvider {
+internal class UserRolesControllerTest : TestPropertyProvider {
     companion object {
-        private val uuid = UUID.randomUUID()
-        private val uuid2 = UUID.randomUUID()
+        private val uuid = uuid4()
+        private val uuid2 = uuid4()
         private val name = "name"
         private val name2 = "name2"
     }

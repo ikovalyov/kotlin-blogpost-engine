@@ -6,10 +6,10 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-
-data class Item(override val id: Uuid,
-                override val lastModified: Instant,
-                override val body: String
+data class Item(
+    override val id: Uuid,
+    override val lastModified: Instant,
+    override val body: String
 ) : IEditable<Item> {
 
     companion object {
@@ -19,7 +19,7 @@ data class Item(override val id: Uuid,
     }
 
     override fun <F : Any> updateField(field: IEditable.EditableMetadata<F>, fieldValue: F): Item {
-        return when(field.fieldName) {
+        return when (field.fieldName) {
             Companion.id -> copy(id = fieldValue as Uuid)
             Companion.lastModified -> copy(lastModified = fieldValue as Instant)
             Companion.body -> copy(body = fieldValue as String)
@@ -41,7 +41,7 @@ data class Item(override val id: Uuid,
             fieldName = Companion.id,
             fieldType = String::class,
             readOnly = true,
-            serialize =  {
+            serialize = {
                 it
             },
             deserialize = {

@@ -1,10 +1,8 @@
 package com.github.ikovalyov.model.extension
 
 import com.benasher44.uuid.uuidFrom
-import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.security.UserRole
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 object UserRoleExtension {

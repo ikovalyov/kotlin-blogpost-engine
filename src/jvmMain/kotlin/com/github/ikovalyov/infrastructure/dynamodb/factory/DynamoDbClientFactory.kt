@@ -5,11 +5,11 @@ import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Singleton
-import java.net.URI
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClientBuilder
+import java.net.URI
 
 @Factory
 @Requires(property = "blog.aws.localstack", value = "true")
@@ -20,18 +20,18 @@ class DynamoDbClientFactory(
     @Property(name = "aws.region", defaultValue = "") private val region: String?,
     private val clientBuilder: DynamoDbAsyncClientBuilder
 ) {
-  @Singleton
-  @Requires(property = "blog.aws.localstack", value = "true")
-  @Replaces(DynamoDbAsyncClient::class)
-  fun createDynamoDbClient(): DynamoDbAsyncClient {
-    return clientBuilder
-        .endpointOverride(URI(endpoint))
-        .credentialsProvider { AwsBasicCredentials.create(username, accessKey) }
-        .also {
-          if (!region.isNullOrEmpty()) {
-            it.region(Region.of(region))
-          }
-        }
-        .build()
-  }
+    @Singleton
+    @Requires(property = "blog.aws.localstack", value = "true")
+    @Replaces(DynamoDbAsyncClient::class)
+    fun createDynamoDbClient(): DynamoDbAsyncClient {
+        return clientBuilder
+            .endpointOverride(URI(endpoint))
+            .credentialsProvider { AwsBasicCredentials.create(username, accessKey) }
+            .also {
+                if (!region.isNullOrEmpty()) {
+                    it.region(Region.of(region))
+                }
+            }
+            .build()
+    }
 }

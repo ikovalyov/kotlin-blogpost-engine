@@ -9,9 +9,6 @@ import com.github.ikovalyov.model.markers.TimedInterface
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.serializers.InstantIso8601Serializer
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -24,19 +21,19 @@ data class Template(
     override val body: String,
     override val lastModified: Instant = Clock.System.now()
 ) : IEditable<Template>, TimedInterface, NamedInterface, BodyInterface {
-  companion object {
-      const val id = "id"
-      const val name = "name"
-      const val body = "body"
-      const val lastModified = "lastModified"
+    companion object {
+        const val id = "id"
+        const val name = "name"
+        const val body = "body"
+        const val lastModified = "lastModified"
 
-    fun create(id: Uuid, name: String, body: String) = Template(id, name, body, Clock.System.now())
-  }
-
-  override val preview: String
-    get() {
-      return body.substring(0, 255)
+        fun create(id: Uuid, name: String, body: String) = Template(id, name, body, Clock.System.now())
     }
+
+    override val preview: String
+        get() {
+            return body.substring(0, 255)
+        }
 
     override fun <F : Any> updateField(field: IEditable.EditableMetadata<F>, fieldValue: F): Template {
         return when (field.fieldName) {
@@ -69,7 +66,8 @@ data class Template(
             },
             deserialize = {
                 uuidFrom(it)
-            }),
+            }
+        ),
         IEditable.EditableMetadata(
             fieldName = Companion.name,
             fieldType = String::class,
@@ -101,7 +99,8 @@ data class Template(
                 } else {
                     it.toInstant()
                 }
-            }),
+            }
+        ),
     )
 
     override fun serialize(): String {

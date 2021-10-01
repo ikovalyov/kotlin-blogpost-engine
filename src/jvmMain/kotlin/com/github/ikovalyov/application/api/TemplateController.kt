@@ -17,46 +17,46 @@ import mu.KotlinLogging
 
 @Controller(Api.templateUrl)
 class TemplateController(private val templateRepository: TemplateRepository) {
-  private val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger {}
 
-  @Get
-  suspend fun list(): String {
-    return Json.encodeToString(ListSerializer(Template.serializer()), templateRepository.list())
-  }
-
-  @Get("/{itemId}")
-  suspend fun get(itemId: Uuid): String? {
-    val template = templateRepository.get(itemId) ?: return null
-    return Json.encodeToString(Template.serializer(), template)
-  }
-
-  @Delete("/{itemId}")
-  suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
-    val result = templateRepository.delete(itemId)
-    return if (result) {
-      HttpResponse.accepted()
-    } else {
-      HttpResponse.notFound()
+    @Get
+    suspend fun list(): String {
+        return Json.encodeToString(ListSerializer(Template.serializer()), templateRepository.list())
     }
-  }
 
-  @Post
-  suspend fun insert(@Body item: Template): HttpResponse<Nothing> {
-    val result = templateRepository.insert(item)
-    return if (result) {
-      HttpResponse.accepted()
-    } else {
-      HttpResponse.notFound()
+    @Get("/{itemId}")
+    suspend fun get(itemId: Uuid): String? {
+        val template = templateRepository.get(itemId) ?: return null
+        return Json.encodeToString(Template.serializer(), template)
     }
-  }
 
-  @Patch
-  suspend fun update(@Body item: Template): HttpResponse<Nothing> {
-    val result = templateRepository.update(item)
-    return if (result) {
-      HttpResponse.accepted()
-    } else {
-      HttpResponse.notFound()
+    @Delete("/{itemId}")
+    suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
+        val result = templateRepository.delete(itemId)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
     }
-  }
+
+    @Post
+    suspend fun insert(@Body item: Template): HttpResponse<Nothing> {
+        val result = templateRepository.insert(item)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
+    }
+
+    @Patch
+    suspend fun update(@Body item: Template): HttpResponse<Nothing> {
+        val result = templateRepository.update(item)
+        return if (result) {
+            HttpResponse.accepted()
+        } else {
+            HttpResponse.notFound()
+        }
+    }
 }

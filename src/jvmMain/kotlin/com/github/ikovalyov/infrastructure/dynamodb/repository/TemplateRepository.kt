@@ -15,7 +15,6 @@ class TemplateRepository(dynamoDbClient: DynamoDbAsyncClient) :
         const val tableName = "template"
     }
 
-
     override val tableName = TemplateRepository.tableName
 
     suspend fun list(): List<Template> {

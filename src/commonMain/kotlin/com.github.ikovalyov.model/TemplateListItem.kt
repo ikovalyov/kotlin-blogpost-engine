@@ -10,9 +10,9 @@ data class TemplateListItem(
     @Serializable(with = UuidSerializer::class) val id: Uuid,
     val lastModified: Instant
 ) {
-  companion object {
-    fun fromTemplate(template: Template): TemplateListItem {
-      return TemplateListItem(template.id, template.lastModified)
+    companion object {
+        fun fromTemplate(template: Template): TemplateListItem {
+            return TemplateListItem(template.id, template.lastModified)
+        }
     }
-  }
 }

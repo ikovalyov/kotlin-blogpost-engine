@@ -228,9 +228,12 @@ kapt {
 
 spotless {
     kotlin {
+        val files = project.fileTree(rootDir)
+        files.include("**/*.kt")
+        target(files)
         ktlint("0.42.1").userData(
             mapOf(
-                "max_line_length" to "125",
+                "max_line_length" to "256",
                 "insert_final_newline" to "true"
             )
         )

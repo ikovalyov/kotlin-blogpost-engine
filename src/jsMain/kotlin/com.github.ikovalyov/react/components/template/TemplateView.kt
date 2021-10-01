@@ -16,26 +16,26 @@ import react.dom.section
 import react.fc
 
 external interface TemplateViewProps<T> : PropsWithChildren {
-  var item: T
-  var switchToListState: suspend () -> Unit
+    var item: T
+    var switchToListState: suspend () -> Unit
 }
 
 @DelicateCoroutinesApi
-private fun <T: IEditable<T>> RBuilder.TemplateView(props: TemplateViewProps<T>) {
-  div {
-    val fields = props.item.getMetadata()
-    fields.forEach {
-      section {
-        h1 { +it.fieldName }
-        p { +props.item.getFieldValueAsString(it) }
-      }
+private fun <T : IEditable<T>> RBuilder.TemplateView(props: TemplateViewProps<T>) {
+    div {
+        val fields = props.item.getMetadata()
+        fields.forEach {
+            section {
+                h1 { +it.fieldName }
+                p { +props.item.getFieldValueAsString(it) }
+            }
+        }
+        Button<T> {
+            onClick = { GlobalScope.launch { props.switchToListState() } }
+            body = props.item
+            text = "Back to list"
+        }
     }
-    Button<T> {
-      onClick = { GlobalScope.launch { props.switchToListState() } }
-      body = props.item
-      text = "Back to list"
-    }
-  }
 }
 
 @DelicateCoroutinesApi
@@ -43,5 +43,5 @@ private val TemplateView: FC<TemplateViewProps<IEditable<*>>> = fc { TemplateVie
 
 @DelicateCoroutinesApi
 fun <T : IEditable<T>> RBuilder.TemplateView(block: TemplateViewProps<T>.() -> Unit) {
-  child(type = TemplateView, props = jsObject(block))
+    child(type = TemplateView, props = jsObject(block))
 }

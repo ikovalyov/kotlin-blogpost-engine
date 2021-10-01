@@ -2,7 +2,6 @@ package com.github.ikovalyov.model.security
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
-import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.datetime.Clock
@@ -17,7 +16,7 @@ data class UserRole(
     @Serializable(with = UuidSerializer::class) override val id: Uuid,
     override val lastModified: Instant,
     override val body: String
-): IEditable<UserRole> {
+) : IEditable<UserRole> {
     companion object {
         const val id = "id"
         const val body = "body"

@@ -10,15 +10,15 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 object UuidSerializer : KSerializer<Uuid> {
-  override fun serialize(encoder: Encoder, value: Uuid) {
-    encoder.encodeString(value = value.toString())
-  }
+    override fun serialize(encoder: Encoder, value: Uuid) {
+        encoder.encodeString(value = value.toString())
+    }
 
-  override fun deserialize(decoder: Decoder): Uuid {
-    val string = decoder.decodeString()
-    return uuidFrom(string)
-  }
+    override fun deserialize(decoder: Decoder): Uuid {
+        val string = decoder.decodeString()
+        return uuidFrom(string)
+    }
 
-  override val descriptor: SerialDescriptor =
-      PrimitiveSerialDescriptor("Uuid", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("Uuid", PrimitiveKind.STRING)
 }
