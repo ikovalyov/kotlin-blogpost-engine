@@ -112,7 +112,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.0.2"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.0.3"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
