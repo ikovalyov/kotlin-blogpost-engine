@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.allopen") version "1.5.31"
     kotlin("plugin.serialization") version "1.5.31"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.15.1"
+    id("com.diffplug.spotless") version "5.15.2"
     id("idea")
 }
 
@@ -75,9 +75,9 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:2.0.11")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
-                implementation("com.benasher44:uuid:0.3.0")
+                implementation("com.benasher44:uuid:0.3.1")
             }
         }
         val commonTest by getting {
@@ -91,7 +91,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.248-kotlin-1.5.31"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.251-kotlin-1.5.31"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -160,7 +160,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.74") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.78") // testcontainers need it
             }
         }
     }
