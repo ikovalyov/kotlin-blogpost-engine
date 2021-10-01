@@ -2,13 +2,10 @@ package com.github.ikovalyov.react.components.template
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.model.markers.IEditable
-import com.github.ikovalyov.react.components.template.table.Button
-import com.github.ikovalyov.react.components.template.table.ButtonProps
 import kotlinext.js.jsObject
 import kotlinx.browser.window
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
 import org.w3c.fetch.Headers
@@ -16,10 +13,8 @@ import org.w3c.fetch.RequestInit
 import react.FC
 import react.PropsWithChildren
 import react.RBuilder
-import react.RComponent
 import react.State
 import react.fc
-import react.setState
 import react.useState
 
 external interface CrudComponentProps<T> : PropsWithChildren {

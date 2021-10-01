@@ -5,7 +5,7 @@ import com.github.ikovalyov.react.components.template.CrudComponent
 import kotlinx.browser.document
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import react.dom.*
+import react.dom.render
 
 suspend fun main() {
   render(document.getElementById("root")) {

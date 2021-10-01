@@ -4,7 +4,6 @@ import com.github.ikovalyov.model.markers.IEditable
 import kotlinext.js.jsObject
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.css.Color
 import kotlinx.css.Display
@@ -17,21 +16,14 @@ import kotlinx.css.content
 import kotlinx.css.display
 import kotlinx.css.float
 import kotlinx.css.fontWeight
-import kotlinx.css.height
 import kotlinx.css.width
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.html.ButtonType
-import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onSubmitFunction
 import react.FC
 import react.PropsWithChildren
 import react.RBuilder
-import react.RComponent
 import react.State
 import react.dom.attrs
 import react.dom.button
@@ -40,12 +32,10 @@ import react.dom.fieldset
 import react.dom.form
 import react.dom.input
 import react.fc
-import react.setState
 import react.useState
 import styled.css
 import styled.styledLabel
 import styled.styledP
-import styled.styledTextarea
 
 external interface TemplateInsertProps<T> : PropsWithChildren {
   var switchToListState: suspend () -> Unit

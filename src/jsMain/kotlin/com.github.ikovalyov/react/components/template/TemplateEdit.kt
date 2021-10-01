@@ -1,14 +1,10 @@
 package com.github.ikovalyov.react.components.template
 
-import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.react.components.template.table.Button
-import com.github.ikovalyov.react.components.template.table.ButtonProps
-import kotlinext.js.clone
 import kotlinext.js.jsObject
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.css.Color
 import kotlinx.css.Display
@@ -22,7 +18,6 @@ import kotlinx.css.display
 import kotlinx.css.float
 import kotlinx.css.fontWeight
 import kotlinx.css.width
-import kotlinx.datetime.Instant
 import kotlinx.html.ButtonType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
@@ -36,8 +31,6 @@ import react.dom.fieldset
 import react.dom.form
 import react.dom.input
 import react.fc
-import react.setState
-import react.useFunctionState
 import react.useState
 import styled.css
 import styled.styledLabel
