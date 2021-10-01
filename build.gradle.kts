@@ -133,7 +133,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.2"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.3"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -148,7 +148,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.2"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.3"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -160,7 +160,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.78") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.79") // testcontainers need it
             }
         }
     }
