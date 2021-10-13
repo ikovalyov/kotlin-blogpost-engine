@@ -77,12 +77,12 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     fun getItems() = runBlocking {
         with(userRolesController.get(UserRolesControllerTest.uuid)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(UserRolesControllerTest.name, body)
+                assertEquals(UserRolesControllerTest.name, name)
             }
         }
         with(userRolesController.get(UserRolesControllerTest.uuid2)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(UserRolesControllerTest.name2, body)
+                assertEquals(UserRolesControllerTest.name2, name)
             }
         }
     }

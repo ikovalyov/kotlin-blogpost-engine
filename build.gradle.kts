@@ -43,7 +43,7 @@ kotlin {
         compilations.all {
             tasks.named<KotlinCompile>(compileKotlinTaskName) {
                 kotlinOptions {
-                    jvmTarget = "1.8"
+                    jvmTarget = "11"
                     freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
                 }
             }

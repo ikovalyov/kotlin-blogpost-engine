@@ -1,15 +1,19 @@
 package com.github.ikovalyov.model
 
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+@Serializable
 data class Item(
-    override val id: Uuid,
-    override val lastModified: Instant,
-    override val body: String
+    @Serializable(with = UuidSerializer::class) override val id: Uuid,
+    val lastModified: Instant,
+    val body: String
 ) : IEditable<Item> {
 
     companion object {
@@ -18,53 +22,44 @@ data class Item(
         const val body = "body"
     }
 
-    override fun <F : Any> updateField(field: IEditable.EditableMetadata<F>, fieldValue: F): Item {
-        return when (field.fieldName) {
-            Companion.id -> copy(id = fieldValue as Uuid)
-            Companion.lastModified -> copy(lastModified = fieldValue as Instant)
-            Companion.body -> copy(body = fieldValue as String)
-            else -> throw IllegalStateException("Unknown field name {$field.fieldName}")
-        }
-    }
-
-    override fun <F : Any> getFieldValue(field: IEditable.EditableMetadata<F>): F {
-        return when (field.fieldName) {
-            Companion.id -> id as F
-            Companion.body -> body as F
-            Companion.lastModified -> lastModified as F
-            else -> throw IllegalStateException("Unknown field name {$field.fieldName}")
-        }
-    }
-
-    override fun getMetadata(): List<IEditable.EditableMetadata<*>> = listOf(
+    override fun getMetadata(): List<IEditable.EditableMetadata<*, Item>> = listOf(
         IEditable.EditableMetadata(
-            fieldName = Companion.id,
-            fieldType = String::class,
+            fieldType = IEditable.FieldType.Id,
             readOnly = true,
             serialize = {
-                it
+                it.toString()
             },
             deserialize = {
-                it
-            }
+                uuidFrom(it)
+            },
+            update = {
+                copy(id = it)
+            },
+            get = { id }
         ),
         IEditable.EditableMetadata(
-            fieldName = Companion.body,
-            fieldType = String::class,
+            fieldType = IEditable.FieldType.Body,
             readOnly = false,
             serialize = { it },
-            deserialize = { it }
+            deserialize = { it },
+            update = {
+                copy(body = it)
+            },
+            get = { body }
         ),
         IEditable.EditableMetadata(
-            fieldName = Companion.lastModified,
-            fieldType = Instant::class,
+            fieldType = IEditable.FieldType.LastModified,
             readOnly = false,
             serialize = {
                 it.toString()
             },
             deserialize = {
                 Instant.parse(it)
-            }
+            },
+            update = {
+                copy(lastModified = it)
+            },
+            get = { lastModified }
         ),
     )
 

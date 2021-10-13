@@ -9,7 +9,7 @@ object UserRoleExtension {
     fun UserRole.toDynamoDbMap(): Map<String, AttributeValue> {
         return mapOf(
             "id" to AttributeValue.builder().s(id.toString()).build(),
-            "body" to AttributeValue.builder().s(body).build(),
+            "body" to AttributeValue.builder().s(name).build(),
             "lastModified" to AttributeValue.builder().n(lastModified.epochSeconds.toString()).build()
         )
     }

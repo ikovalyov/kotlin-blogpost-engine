@@ -71,7 +71,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateEdit(props: ItemEditProps<T>) {
                 it.forEach {
                     styledP {
                         styledLabel {
-                            +it.fieldName
+                            +it.fieldType
                             css {
                                 color = Color("B4886B")
                                 fontWeight = FontWeight.bold
