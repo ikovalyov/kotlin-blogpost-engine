@@ -71,7 +71,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateEdit(props: ItemEditProps<T>) {
                 it.forEach {
                     styledP {
                         styledLabel {
-                            +it.fieldType
+                            +it.fieldType::class.simpleName!!
                             css {
                                 color = Color("B4886B")
                                 fontWeight = FontWeight.bold
@@ -84,7 +84,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateEdit(props: ItemEditProps<T>) {
                         }
                         input {
                             attrs {
-                                name = it.fieldName
+                                name = it.hashCode().toString()
                                 readonly = it.readOnly
                                 if (!it.readOnly) {
                                     defaultValue = state.item.getFieldValueAsString(it)
@@ -98,7 +98,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateEdit(props: ItemEditProps<T>) {
                                             }
                                         }
                                 } else {
-                                    value = state.item.getFieldValue(it).toString()
+                                    value = state.item.getFieldValueAsString(it)
                                 }
                             }
                         }
@@ -119,6 +119,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateEdit(props: ItemEditProps<T>) {
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 private val TemplateEdit: FC<ItemEditProps<IEditable<*>>> = fc { TemplateEdit(it) }
 
 fun <T : IEditable<T>> RBuilder.TemplateEdit(block: ItemEditProps<T>.() -> Unit) {

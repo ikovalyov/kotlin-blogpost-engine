@@ -164,7 +164,7 @@ private fun <T : IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<
     }
     when (state.currentState) {
         CrudState.LIST -> {
-            TemplateList<T> {
+            ItemList<T> {
                 this.switchToEditState = ::switchToEditStateFuncVar
                 this.switchToViewState = ::switchToViewStateFunc
                 this.switchToInsertState = ::switchToInsertStateFunc
