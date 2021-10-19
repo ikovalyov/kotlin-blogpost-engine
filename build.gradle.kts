@@ -91,7 +91,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.251-kotlin-1.5.31"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.257-kotlin-1.5.31"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -112,7 +112,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.0.3"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.1.0"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -133,7 +133,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.3"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.1.0"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -148,7 +148,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.0.3"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.1.0"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -160,7 +160,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.79") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.84") // testcontainers need it
             }
         }
     }
