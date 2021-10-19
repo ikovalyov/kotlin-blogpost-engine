@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.allopen") version "1.5.31"
     kotlin("plugin.serialization") version "1.5.31"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.diffplug.spotless") version "5.16.0"
+    id("com.diffplug.spotless") version "5.17.0"
     id("idea")
 }
 
@@ -91,7 +91,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.257-kotlin-1.5.31"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.259-kotlin-1.5.31"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -117,7 +117,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.1.0"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.1.1"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -138,7 +138,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.1.0"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.1.1"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
@@ -153,11 +153,11 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.1.0"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.1.1"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.16.0"))
+                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.16.1"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
@@ -165,7 +165,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.84") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.90") // testcontainers need it
             }
         }
     }
