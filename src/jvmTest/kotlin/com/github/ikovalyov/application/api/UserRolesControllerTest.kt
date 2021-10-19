@@ -29,8 +29,8 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     companion object {
         private val uuid = uuid4()
         private val uuid2 = uuid4()
-        private val name = "name"
-        private val name2 = "name2"
+        private const val name = "name"
+        private const val name2 = "name2"
     }
     @Inject lateinit var userRolesController: UserRolesController
     @Inject lateinit var dynamoDbInitCommand: DynamoDbInitCommand
@@ -56,10 +56,10 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Test
     @Order(1)
     fun insert(): Unit = runBlocking {
-        with(userRolesController.insert(UserRole(uuid, Clock.System.now(), name))) {
+        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(),UserRole(uuid, Clock.System.now(), name)))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
-        with(userRolesController.insert(UserRole(uuid2, Clock.System.now(), name2))) {
+        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(),UserRole(uuid2, Clock.System.now(), name2)))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
     }
@@ -75,14 +75,14 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Test
     @Order(3)
     fun getItems() = runBlocking {
-        with(userRolesController.get(UserRolesControllerTest.uuid)!!) {
+        with(userRolesController.get(uuid)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
                 assertEquals(UserRolesControllerTest.name, name)
             }
         }
-        with(userRolesController.get(UserRolesControllerTest.uuid2)!!) {
+        with(userRolesController.get(uuid2)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(UserRolesControllerTest.name2, name)
+                assertEquals(name2, name)
             }
         }
     }
@@ -100,10 +100,10 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Test
     @Order(5)
     fun update() = runBlocking {
-        val userRole = UserRole(uuid2, Clock.System.now(), UserRolesControllerTest.name)
-        userRolesController.update(userRole)
+        val userRole = UserRole(uuid2, Clock.System.now(), name)
+        userRolesController.update(Json.encodeToString(UserRole.serializer(),userRole))
 
-        with(userRolesController.get(UserRolesControllerTest.uuid2)!!) {
+        with(userRolesController.get(uuid2)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
                 assertEquals(UserRolesControllerTest.name, name)
             }
