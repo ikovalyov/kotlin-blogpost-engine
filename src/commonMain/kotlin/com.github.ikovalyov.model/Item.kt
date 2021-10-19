@@ -1,3 +1,5 @@
+@file:UseSerializers(UuidSerializer::class)
+
 package com.github.ikovalyov.model
 
 import com.benasher44.uuid.Uuid
@@ -6,12 +8,13 @@ import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
 data class Item(
-    @Serializable(with = UuidSerializer::class) override val id: Uuid,
+    override val id: Uuid,
     val lastModified: Instant,
     val body: String
 ) : IEditable<Item> {

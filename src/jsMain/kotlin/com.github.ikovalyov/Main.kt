@@ -10,10 +10,12 @@ import com.github.ikovalyov.model.security.UserRole
 import com.github.ikovalyov.react.components.template.CrudComponent
 import kotlinx.browser.document
 import kotlinx.datetime.Clock
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import react.dom.render
 
+@ExperimentalSerializationApi
 suspend fun main() {
     render(document.getElementById("root")) {
         child(App::class) {}

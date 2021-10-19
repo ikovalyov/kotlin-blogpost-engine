@@ -1,21 +1,26 @@
+@file:UseSerializers(UuidSerializer::class)
+
 package com.github.ikovalyov.model.security
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.serializer.UuidSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+@ExperimentalSerializationApi
 @Serializable
 data class User(
-    @Serializable(with = UuidSerializer::class) override val id: Uuid,
+    override val id: Uuid,
     val email: Email,
     val loggedIn: Boolean,
     val nickname: String,
-    val roles: List<UserRole>,
+    val roles: List<Uuid>,
     val password: Password
 ) : IEditable<User> {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, User>> {
@@ -47,8 +52,8 @@ data class User(
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.UserRoles,
                 readOnly = true,
-                serialize = { Json.encodeToString(ListSerializer(UserRole.serializer()), it) },
-                deserialize = { Json.decodeFromString(ListSerializer(UserRole.serializer()), it) },
+                serialize = { Json.encodeToString(ListSerializer(UuidSerializer), it) },
+                deserialize = { Json.decodeFromString(ListSerializer(UuidSerializer), it) },
                 get = { roles },
                 update = { copy(roles = it) }
             ),

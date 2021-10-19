@@ -25,7 +25,7 @@ interface IEditable<T : IEditable<T>> {
         object Name : FieldType<String>()
         object Email: FieldType<com.github.ikovalyov.model.security.Email>()
         object Nickname : FieldType<String>()
-        object UserRoles : FieldType<List<UserRole>>()
+        object UserRoles : FieldType<List<Uuid>>()
         object Password : FieldType<com.github.ikovalyov.model.security.Password>()
     }
 

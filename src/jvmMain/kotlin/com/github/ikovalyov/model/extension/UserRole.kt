@@ -6,10 +6,12 @@ import kotlinx.datetime.Clock
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 object UserRoleExtension {
+    val fieldName = "name"
+
     fun UserRole.toDynamoDbMap(): Map<String, AttributeValue> {
         return mapOf(
             "id" to AttributeValue.builder().s(id.toString()).build(),
-            "body" to AttributeValue.builder().s(name).build(),
+            fieldName to AttributeValue.builder().s(name).build(),
             "lastModified" to AttributeValue.builder().n(lastModified.epochSeconds.toString()).build()
         )
     }
@@ -18,7 +20,7 @@ object UserRoleExtension {
         return UserRole(
             uuidFrom(map["id"]!!.s()),
             Clock.System.now(),
-            map["body"]!!.s()
+            map[fieldName]!!.s()
         )
     }
 }

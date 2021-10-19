@@ -1,3 +1,5 @@
+@file:UseSerializers(UuidSerializer::class)
+
 package com.github.ikovalyov.model
 
 import com.benasher44.uuid.Uuid
@@ -11,12 +13,13 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
 data class Template(
-    @Serializable(with = UuidSerializer::class) override val id: Uuid,
+    override val id: Uuid,
     val name: String,
     val body: String,
     val lastModified: Instant = Clock.System.now()
