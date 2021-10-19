@@ -45,8 +45,9 @@ class UsersController(private val userRepository: UserRepository) {
     }
 
     @Post
-    suspend fun insert(@Body item: User): HttpResponse<Nothing> {
-        val result = userRepository.insert(item)
+    suspend fun insert(@Body item: String): HttpResponse<Nothing> {
+        val user = Json.decodeFromString(User.serializer(), item)
+        val result = userRepository.insert(user)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -55,8 +56,9 @@ class UsersController(private val userRepository: UserRepository) {
     }
 
     @Patch
-    suspend fun update(@Body item: User): HttpResponse<Nothing> {
-        val result = userRepository.update(item)
+    suspend fun update(@Body item: String): HttpResponse<Nothing> {
+        val user = Json.decodeFromString(User.serializer(), item)
+        val result = userRepository.update(user)
         return if (result) {
             HttpResponse.accepted()
         } else {

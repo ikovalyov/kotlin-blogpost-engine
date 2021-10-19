@@ -35,7 +35,7 @@ data class User(
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Email,
-                readOnly = true,
+                readOnly = false,
                 serialize = { it.value.value },
                 deserialize = { Email(ShortString(it)) },
                 get = { email },
@@ -43,7 +43,7 @@ data class User(
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Nickname,
-                readOnly = true,
+                readOnly = false,
                 serialize = { it },
                 deserialize = { it },
                 get = { nickname },
@@ -51,7 +51,7 @@ data class User(
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.UserRoles,
-                readOnly = true,
+                readOnly = false,
                 serialize = { Json.encodeToString(ListSerializer(UuidSerializer), it) },
                 deserialize = { Json.decodeFromString(ListSerializer(UuidSerializer), it) },
                 get = { roles },
@@ -59,7 +59,7 @@ data class User(
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Password,
-                readOnly = true,
+                readOnly = false,
                 serialize = { it.value.value },
                 deserialize = { Password(ShortString(it)) },
                 get = { password },

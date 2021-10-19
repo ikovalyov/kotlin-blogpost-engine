@@ -62,7 +62,7 @@ kotlin {
             }
         }
     }
-    js {
+    js(IR) {
         browser {
             commonWebpackConfig {
                 cssSupport.enabled = true
@@ -105,6 +105,11 @@ kotlin {
                 implementation(npm("styled-components", "5.2.3"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+            }
+        }
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test-js"))
             }
         }
         val jvmMain by getting {

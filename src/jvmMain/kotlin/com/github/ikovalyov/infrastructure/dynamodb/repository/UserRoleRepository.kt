@@ -24,8 +24,7 @@ class UserRoleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<U
 
     override val tableName = UserRoleRepository.tableName
 
-    override suspend fun init(): Boolean {
-        super.init()
+    suspend fun createDefaultUserRoles(): Boolean {
         val adminRoleFromDb = getByName(adminRoleName)
         val userRole = UserRole(uuid4(), Clock.System.now(), userRoleName)
         val guestRole = UserRole(uuid4(), Clock.System.now(), guestRoleName)

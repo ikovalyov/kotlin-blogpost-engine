@@ -41,8 +41,9 @@ class UserRolesController(private val userRolesRepository: UserRoleRepository) {
     }
 
     @Post
-    suspend fun insert(@Body item: UserRole): HttpResponse<Nothing> {
-        val result = userRolesRepository.insert(item)
+    suspend fun insert(@Body item: String): HttpResponse<Nothing> {
+        val userRole = Json.decodeFromString(UserRole.serializer(), item)
+        val result = userRolesRepository.insert(userRole)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -51,8 +52,9 @@ class UserRolesController(private val userRolesRepository: UserRoleRepository) {
     }
 
     @Patch
-    suspend fun update(@Body item: UserRole): HttpResponse<Nothing> {
-        val result = userRolesRepository.update(item)
+    suspend fun update(@Body item: String): HttpResponse<Nothing> {
+        val userRole = Json.decodeFromString(UserRole.serializer(), item)
+        val result = userRolesRepository.update(userRole)
         return if (result) {
             HttpResponse.accepted()
         } else {

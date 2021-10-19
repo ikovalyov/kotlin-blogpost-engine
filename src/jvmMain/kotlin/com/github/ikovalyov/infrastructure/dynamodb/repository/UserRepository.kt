@@ -9,6 +9,7 @@ import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
 import jakarta.inject.Singleton
+import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
@@ -27,14 +28,11 @@ class UserRepository(
 
     override suspend fun init(): Boolean {
         super.init()
-        val adminRoleOpt = userRoleRepository.getByName(UserRoleRepository.adminRoleName)
-        val adminRole = if (adminRoleOpt == null) {
-            userRoleRepository.createAdmin()
-            userRoleRepository.getByName(UserRoleRepository.adminRoleName)!!
-        } else {
-            adminRoleOpt
+        while(!userRoleRepository.initialized) {
+            delay(100)
         }
-
+        userRoleRepository.createDefaultUserRoles()
+        val adminRole = userRoleRepository.getByName(UserRoleRepository.adminRoleName)!!
         val admin = User(
             id = uuid4(),
             email = Email(ShortString("test@example.com")),
