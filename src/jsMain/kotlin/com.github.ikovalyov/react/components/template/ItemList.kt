@@ -15,7 +15,7 @@ import react.dom.attrs
 import react.dom.button
 import react.fc
 
-external interface TemplateListProps<T : Any> : PropsWithChildren {
+external interface ItemListProps<T : Any> : PropsWithChildren {
     var switchToViewState: (T) -> Unit
     var switchToEditState: (T) -> Unit
     var switchToInsertState: () -> Unit
@@ -24,7 +24,7 @@ external interface TemplateListProps<T : Any> : PropsWithChildren {
 }
 
 @DelicateCoroutinesApi
-private fun <T : IEditable<T>> RBuilder.TemplateList(props: TemplateListProps<T>) {
+private fun <T : IEditable<T>> RBuilder.ItemList(props: ItemListProps<T>) {
     Table<T> {
         items = props.items?.toTypedArray()
         onViewClick = { props.switchToViewState(it) }
@@ -43,9 +43,10 @@ private fun <T : IEditable<T>> RBuilder.TemplateList(props: TemplateListProps<T>
 }
 
 @DelicateCoroutinesApi
-private val TemplateList: FC<TemplateListProps<IEditable<*>>> = fc { TemplateList(it) }
+@Suppress("TYPE_MISMATCH_WARNING")
+private val ItemList: FC<ItemListProps<IEditable<*>>> = fc { ItemList(it) }
 
 @DelicateCoroutinesApi
-fun <T : IEditable<T>> RBuilder.TemplateList(block: TemplateListProps<T>.() -> Unit) {
-    child(type = TemplateList, props = jsObject(block))
+fun <T : IEditable<T>> RBuilder.ItemList(block: ItemListProps<T>.() -> Unit) {
+    child(type = ItemList, props = jsObject(block))
 }

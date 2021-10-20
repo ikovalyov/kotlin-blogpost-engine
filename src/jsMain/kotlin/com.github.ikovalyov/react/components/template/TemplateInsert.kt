@@ -73,7 +73,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateInsert(props: TemplateInsertProp
                 metadata.forEach {
                     styledP {
                         styledLabel {
-                            +it.fieldName
+                            +it.fieldType::class.simpleName!!
                             css {
                                 color = Color("B4886B")
                                 fontWeight = FontWeight.bold
@@ -82,11 +82,11 @@ private fun <T : IEditable<T>> RBuilder.TemplateInsert(props: TemplateInsertProp
                                 float = Float.left
                                 after { content = QuotedString(":") }
                             }
-                            attrs { this.attributes["htmlFor"] = it.fieldName }
+                            attrs { this.attributes["htmlFor"] = it.hashCode().toString() }
                         }
                         input {
                             attrs {
-                                name = it.fieldName
+                                name = it.hashCode().toString()
                                 readonly = it.readOnly
                                 if (!it.readOnly) {
                                     defaultValue = ""
@@ -126,6 +126,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateInsert(props: TemplateInsertProp
 }
 
 @DelicateCoroutinesApi
+@Suppress("TYPE_MISMATCH_WARNING")
 private val TemplateInsert: FC<TemplateInsertProps<IEditable<*>>> = fc { TemplateInsert(it) }
 
 @DelicateCoroutinesApi

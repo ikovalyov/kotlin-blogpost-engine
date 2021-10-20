@@ -1,5 +1,9 @@
 package com.github.ikovalyov.model.security
 
+import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
-@JvmInline value class Password(val value: ShortString)
+@Serializable
+@JvmInline value class Password(val value: ShortString) {
+    override fun toString() = value.toString()
+}
