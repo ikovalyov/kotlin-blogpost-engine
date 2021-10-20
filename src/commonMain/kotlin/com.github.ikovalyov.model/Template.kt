@@ -4,10 +4,7 @@ package com.github.ikovalyov.model
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
-import com.github.ikovalyov.model.markers.BodyInterface
 import com.github.ikovalyov.model.markers.IEditable
-import com.github.ikovalyov.model.markers.NamedInterface
-import com.github.ikovalyov.model.markers.TimedInterface
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant

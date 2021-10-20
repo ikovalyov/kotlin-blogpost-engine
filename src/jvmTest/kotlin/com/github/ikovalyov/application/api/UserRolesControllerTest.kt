@@ -56,10 +56,10 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Test
     @Order(1)
     fun insert(): Unit = runBlocking {
-        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(),UserRole(uuid, Clock.System.now(), name)))) {
+        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(), UserRole(uuid, Clock.System.now(), name)))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
-        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(),UserRole(uuid2, Clock.System.now(), name2)))) {
+        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(), UserRole(uuid2, Clock.System.now(), name2)))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
     }
@@ -69,7 +69,7 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     fun list() = runBlocking {
         val listJson = userRolesController.list()
         val result = Json.decodeFromString(ListSerializer(UserRole.serializer()), listJson)
-        assert(result.count() == 2)
+        assert(result.count() == 5)
     }
 
     @Test
@@ -101,7 +101,7 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Order(5)
     fun update() = runBlocking {
         val userRole = UserRole(uuid2, Clock.System.now(), name)
-        userRolesController.update(Json.encodeToString(UserRole.serializer(),userRole))
+        userRolesController.update(Json.encodeToString(UserRole.serializer(), userRole))
 
         with(userRolesController.get(uuid2)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {

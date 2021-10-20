@@ -68,9 +68,11 @@ class UserRoleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<U
             it.tableName(tableName)
             it.expressionAttributeValues(mutableMapOf(Pair(":nameParam", AttributeValue.builder().s(name).build())))
             it.filterExpression("#keyone = :nameParam")
-            it.expressionAttributeNames(mutableMapOf(
-                Pair("#keyone", fieldName)
-            ))
+            it.expressionAttributeNames(
+                mutableMapOf(
+                    Pair("#keyone", fieldName)
+                )
+            )
         }.await()
         if (!response.hasItems() || response.items().isEmpty()) return null
         return UserRole.fromDynamoDbMap(response.items()[0])

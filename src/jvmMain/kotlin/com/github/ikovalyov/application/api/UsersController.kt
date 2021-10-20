@@ -3,9 +3,7 @@ package com.github.ikovalyov.application.api
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.infrastructure.dynamodb.repository.UserRepository
-import com.github.ikovalyov.infrastructure.dynamodb.repository.UserRoleRepository
 import com.github.ikovalyov.model.security.User
-import com.github.ikovalyov.model.security.UserRole
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller

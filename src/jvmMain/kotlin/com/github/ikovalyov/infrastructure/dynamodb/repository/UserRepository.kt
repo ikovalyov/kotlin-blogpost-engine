@@ -10,7 +10,6 @@ import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
 import jakarta.inject.Singleton
 import kotlinx.coroutines.delay
-import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
@@ -28,7 +27,7 @@ class UserRepository(
 
     override suspend fun init(): Boolean {
         super.init()
-        while(!userRoleRepository.initialized) {
+        while (!userRoleRepository.initialized) {
             delay(100)
         }
         userRoleRepository.createDefaultUserRoles()

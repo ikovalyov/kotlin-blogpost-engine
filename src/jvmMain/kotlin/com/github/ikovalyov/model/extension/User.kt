@@ -5,7 +5,6 @@ import com.github.ikovalyov.model.security.Email
 import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
-import com.github.ikovalyov.model.security.UserRole
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
