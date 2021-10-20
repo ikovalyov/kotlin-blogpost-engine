@@ -44,7 +44,7 @@ kotlin {
             tasks.named<KotlinCompile>(compileKotlinTaskName) {
                 kotlinOptions {
                     jvmTarget = "1.8"
-                    freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
+                    freeCompilerArgs = freeCompilerArgs + "-Xopt-in=org.mylibrary.OptInAnnotation"
                 }
             }
             tasks.named<Test>("${target.name}Test") {
@@ -175,8 +175,7 @@ tasks {
         }
         archiveClassifier.set("all")
         from(kotlin.jvm().compilations.getByName("main").output)
-        configurations =
-            mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles as Configuration)
+        configurations = mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles)
     }
 
     val build by existing {
