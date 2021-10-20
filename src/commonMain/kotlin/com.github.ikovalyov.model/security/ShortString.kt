@@ -1,6 +1,11 @@
 package com.github.ikovalyov.model.security
 
-class ShortString(value: String) {
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
+@Serializable
+@JvmInline
+value class ShortString(val value: String) {
     companion object {
         const val shortStringSize = 256
     }
@@ -9,5 +14,6 @@ class ShortString(value: String) {
             throw IllegalArgumentException("value can't be longer than $shortStringSize characters")
         }
     }
-    val content: ByteArray = value.encodeToByteArray().take(shortStringSize).toByteArray()
+
+    override fun toString() = value.toString()
 }

@@ -20,6 +20,8 @@ abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDb
 
     abstract val tableName: String
     private val logger = KotlinLogging.logger {}
+    var initialized = false
+        private set
 
     private val tableBuilder: CreateTableRequest.Builder by lazy {
         CreateTableRequest.builder().also {
@@ -41,9 +43,12 @@ abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDb
     override suspend fun init(): Boolean? {
         logger.info { "creating $tableName table" }
         return try {
-            dynamoDbClient.createTable(tableBuilder.build()).await().sdkHttpResponse().isSuccessful
+            dynamoDbClient.createTable(tableBuilder.build()).await().sdkHttpResponse().isSuccessful.also {
+                initialized = true
+            }
         } catch (t: ResourceInUseException) {
             logger.warn(t) { "Table already exists" }
+            initialized = true
             null
         }
     }

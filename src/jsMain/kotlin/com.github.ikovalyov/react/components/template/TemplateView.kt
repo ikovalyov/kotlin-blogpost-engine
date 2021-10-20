@@ -26,7 +26,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateView(props: TemplateViewProps<T>
         val fields = props.item.getMetadata()
         fields.forEach {
             section {
-                h1 { +it.fieldName }
+                h1 { +it.fieldType::class.simpleName!! }
                 p { +props.item.getFieldValueAsString(it) }
             }
         }
@@ -39,6 +39,7 @@ private fun <T : IEditable<T>> RBuilder.TemplateView(props: TemplateViewProps<T>
 }
 
 @DelicateCoroutinesApi
+@Suppress("TYPE_MISMATCH_WARNING")
 private val TemplateView: FC<TemplateViewProps<IEditable<*>>> = fc { TemplateView(it) }
 
 @DelicateCoroutinesApi

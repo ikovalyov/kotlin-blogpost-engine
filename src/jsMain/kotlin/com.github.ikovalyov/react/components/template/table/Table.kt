@@ -68,7 +68,7 @@ private fun <T : IEditable<T>> RBuilder.Table(
         val tableColumns = buildTableColumns(props, items.first())
         val table = useTable<T>(
             options = jsObject {
-                this.data = props.items ?: emptyArray()
+                this.data = items
                 this.columns = tableColumns
             }
         )
@@ -83,11 +83,12 @@ private fun <T : IEditable<T>> buildTableColumns(
     return useMemo {
         columns {
             val metadataList = item.getMetadata()
-            metadataList.forEach { metadata ->
+            metadataList.forEachIndexed { counter, metadata ->
                 column<String> {
-                    header = metadata.fieldName
+                    header = metadata.fieldType::class.simpleName!!
                     accessorFunction = {
-                        val str = it.getFieldValueAsString(metadata)
+                        val itemMetadata = it.getMetadata()[counter]
+                        val str = it.getFieldValueAsString(itemMetadata)
                         if (str.length > 128) {
                             str.substring(0, 128)
                         } else str
