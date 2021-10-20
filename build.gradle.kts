@@ -10,7 +10,7 @@ plugins {
     kotlin("kapt") version "1.5.31"
     kotlin("plugin.allopen") version "1.5.31"
     kotlin("plugin.serialization") version "1.5.31"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
     id("com.diffplug.spotless") version "5.17.0"
     id("idea")
 }
@@ -180,8 +180,7 @@ tasks {
         }
         archiveClassifier.set("all")
         from(kotlin.jvm().compilations.getByName("main").output)
-        configurations =
-            mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles as Configuration)
+        configurations = mutableListOf(kotlin.jvm().compilations.getByName("main").compileDependencyFiles)
     }
 
     val build by existing {
