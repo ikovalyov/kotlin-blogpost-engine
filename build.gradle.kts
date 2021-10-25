@@ -91,7 +91,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.259-kotlin-1.5.31"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.260-kotlin-1.5.31"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -157,7 +157,7 @@ kotlin {
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.1")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.16.1"))
+                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.16.2"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
@@ -165,7 +165,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.91") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.94") // testcontainers need it
             }
         }
     }
