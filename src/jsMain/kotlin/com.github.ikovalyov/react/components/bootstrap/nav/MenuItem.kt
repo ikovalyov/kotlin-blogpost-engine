@@ -19,16 +19,16 @@ fun RBuilder.MenuItem(
     styledLi {
         css {
             +"nav-item"
-            if (active) {
-                +"active"
-            }
-            if (disabled) {
-                +"disabled"
-            }
         }
         styledA(href=href) {
             css {
                 +"nav-link"
+                if (active) {
+                    +"active"
+                }
+                if (disabled) {
+                    +"disabled"
+                }
             }
             apply(block)
         }

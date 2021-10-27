@@ -58,7 +58,7 @@ class App : RComponent<Props, State>() {
                         css {
                             +"navbar-nav me-auto mb-2 mb-lg-0"
                         }
-                        MenuItem(href = "#", active = false, disabled = true) {
+                        MenuItem(href = "#", active = true, disabled = false) {
                             +"Home "
                             ScreenReaderSpan("(current)")
                         }
