@@ -1,6 +1,7 @@
 package com.github.ikovalyov
 
-import kotlinx.html.ButtonType
+import com.github.ikovalyov.react.components.bootstrap.Button
+import com.github.ikovalyov.react.components.bootstrap.nav.CollapseButton
 import kotlinx.html.InputType
 import kotlinx.html.id
 import react.Props
@@ -11,7 +12,6 @@ import react.dom.attrs
 import react.dom.h1
 import styled.css
 import styled.styledA
-import styled.styledButton
 import styled.styledDiv
 import styled.styledForm
 import styled.styledInput
@@ -21,6 +21,10 @@ import styled.styledSpan
 import styled.styledUl
 
 class App : RComponent<Props, State>() {
+    companion object {
+        const val navbarTogglerId = "navbarTogglerDemo01"
+    }
+
     override fun RBuilder.render() {
         styledNav {
             css {
@@ -30,37 +34,17 @@ class App : RComponent<Props, State>() {
                 css {
                     +"container-fluid"
                 }
-                styledButton {
-                    css {
-                        +"navbar-toggler"
-                    }
-                    attrs {
-                        type = ButtonType.button
-                    }
-                    attrs["data-bs-toggle"] = "collapse"
-                    attrs["data-bs-target"] = "#navbarTogglerDemo01"
-                    attrs["aria-controls"] = "navbarTogglerDemo01"
-                    attrs["aria-expanded"] = "false"
-                    attrs["aria-label"] = "Toggle navigation"
-                    styledSpan {
-                        css {
-                            +"navbar-toggler-icon"
-                        }
-                    }
-                }
+                CollapseButton(target = navbarTogglerId)
                 styledDiv {
                     css {
                         +"collapse navbar-collapse"
                     }
                     attrs {
-                        id = "navbarTogglerDemo01"
+                        id = navbarTogglerId
                     }
-                    styledA {
+                    styledA(href="#") {
                         css {
                             +"navbar-brand"
-                        }
-                        attrs {
-                            href = "#"
                         }
                         +"Hidden brand"
                     }
@@ -72,12 +56,9 @@ class App : RComponent<Props, State>() {
                             css {
                                 +"nav-item active"
                             }
-                            styledA {
+                            styledA(href="#") {
                                 css {
                                     +"nav-link"
-                                }
-                                attrs {
-                                    href = "#"
                                 }
                                 +"Home "
                                 styledSpan {
@@ -89,23 +70,17 @@ class App : RComponent<Props, State>() {
                             }
                         }
                         styledLi {
-                            styledA {
+                            styledA(href="#") {
                                 css {
                                     +"nav-link"
-                                }
-                                attrs {
-                                    href = "#"
                                 }
                                 +"Link"
                             }
                         }
                         styledLi {
-                            styledA {
+                            styledA(href="#") {
                                 css {
                                     +"nav-link disabled"
-                                }
-                                attrs {
-                                    href = "#"
                                 }
                                 +"Disabled"
                             }
@@ -116,25 +91,16 @@ class App : RComponent<Props, State>() {
                             +"d-flex"
                             declarations["margin-block-end"] = "0px"
                         }
-                        styledInput {
+                        styledInput(type = InputType.search) {
                             css {
                                 +"form-control me-2"
                             }
                             attrs {
-                                type = InputType.search
                                 placeholder = "Search"
                             }
                             attrs["aria-label"] = "Search"
                         }
-                        styledButton {
-                            css {
-                                +"btn btn-outline-success"
-                            }
-                            attrs {
-                                type = ButtonType.submit
-                            }
-                            +"Search"
-                        }
+                        Button.ButtonOutlineSuccess(this) { +"Search" }
                     }
                 }
             }
