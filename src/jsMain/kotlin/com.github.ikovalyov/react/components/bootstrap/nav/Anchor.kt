@@ -1,25 +1,27 @@
 package com.github.ikovalyov.react.components.bootstrap.nav
 
 import kotlinx.html.A
-import kotlinx.html.BUTTON
-import kotlinx.html.LI
 import react.RBuilder
-import react.ReactNode
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledA
-import styled.styledLi
 
-fun RBuilder.MenuItem(
+fun RBuilder.Anchor(
     href: String,
     active: Boolean,
     disabled: Boolean,
     block: StyledDOMBuilder<A>.() -> Unit
 ) {
-    styledLi {
+    styledA(href = href) {
         css {
-            +"nav-item"
+            +"nav-link"
+            if (active) {
+                +"active"
+            }
+            if (disabled) {
+                +"disabled"
+            }
         }
-        Anchor(href, active, disabled, block)
+        apply(block)
     }
 }
