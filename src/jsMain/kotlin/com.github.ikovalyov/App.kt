@@ -6,25 +6,17 @@ import com.github.ikovalyov.react.components.bootstrap.Input
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.CollapseButton
 import com.github.ikovalyov.react.components.bootstrap.nav.MenuItem
-import kotlinx.html.InputType
-import kotlinx.html.SPAN
 import kotlinx.html.id
 import react.Props
 import react.RBuilder
 import react.RComponent
-import react.ReactNode
 import react.State
 import react.dom.attrs
-import react.dom.h1
-import styled.StyledDOMBuilder
 import styled.css
 import styled.styledA
 import styled.styledDiv
 import styled.styledForm
-import styled.styledInput
-import styled.styledLi
 import styled.styledNav
-import styled.styledSpan
 import styled.styledUl
 
 class App : RComponent<Props, State>() {

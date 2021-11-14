@@ -1,8 +1,6 @@
 package com.github.ikovalyov.react.components.bootstrap
 
-import kotlinx.html.SPAN
 import react.RBuilder
-import styled.StyledDOMBuilder
 import styled.css
 import styled.styledSpan
 

@@ -1,14 +1,9 @@
 package com.github.ikovalyov.react.components.bootstrap
 
-import kotlinx.html.BUTTON
-import kotlinx.html.ButtonType
-import kotlinx.html.INPUT
 import kotlinx.html.InputType
 import react.RBuilder
 import react.dom.attrs
-import styled.StyledDOMBuilder
 import styled.css
-import styled.styledButton
 import styled.styledInput
 
 sealed class Input {

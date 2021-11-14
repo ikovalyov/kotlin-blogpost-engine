@@ -7,11 +7,7 @@ import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.security.UserRole
-import com.github.ikovalyov.react.components.bootstrap.Button
-import com.github.ikovalyov.react.components.bootstrap.Div
-import com.github.ikovalyov.react.components.bootstrap.Input
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
-import com.github.ikovalyov.react.components.bootstrap.nav.CollapseButton
 import com.github.ikovalyov.react.components.bootstrap.nav.MenuItem
 import com.github.ikovalyov.react.components.template.CrudComponent
 import kotlinx.browser.document
@@ -20,12 +16,9 @@ import kotlinx.html.id
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import react.dom.attrs
 import react.dom.render
 import styled.css
-import styled.styledA
 import styled.styledDiv
-import styled.styledForm
 import styled.styledNav
 import styled.styledUl
 
