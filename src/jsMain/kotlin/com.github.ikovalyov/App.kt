@@ -1,6 +1,7 @@
 package com.github.ikovalyov
 
 import com.github.ikovalyov.react.components.bootstrap.Button
+import com.github.ikovalyov.react.components.bootstrap.Div
 import com.github.ikovalyov.react.components.bootstrap.Input
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.CollapseButton
@@ -36,10 +37,7 @@ class App : RComponent<Props, State>() {
             css {
                 +"navbar navbar-expand-lg navbar-light bg-light"
             }
-            styledDiv {
-                css {
-                    +"container-fluid"
-                }
+            Div.ContainerFluidDiv(this) {
                 CollapseButton(target = navbarTogglerId)
                 styledDiv {
                     css {
@@ -70,13 +68,11 @@ class App : RComponent<Props, State>() {
                             +"d-flex"
                             declarations["margin-block-end"] = "0px"
                         }
-                        Input.SearchInput(name="Search", this)
+                        Input.SearchInput(name = "Search", this)
                         Button.ButtonOutlineSuccess(this) { +"Search" }
                     }
                 }
             }
         }
-
-        h1 { +"Hello, React+Kotlin/JS!" }
     }
 }
