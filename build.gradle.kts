@@ -74,7 +74,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:2.0.11")
+                implementation("io.github.microutils:kotlin-logging:2.1.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
                 implementation("com.benasher44:uuid:0.3.1")
