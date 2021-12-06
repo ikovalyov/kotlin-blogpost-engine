@@ -24,7 +24,7 @@ import styled.styledUl
 
 @ExperimentalSerializationApi
 suspend fun main() {
-    render(document.getElementById("root")) {
+    render(document.getElementById("root")!!) {
         child(App::class) {}
         styledDiv {
             css {
