@@ -6,12 +6,12 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.6.0"
-    kotlin("kapt") version "1.6.0"
-    kotlin("plugin.allopen") version "1.6.0"
-    kotlin("plugin.serialization") version "1.6.0"
+    kotlin("multiplatform") version "1.7.0"
+    kotlin("kapt") version "1.7.0"
+    kotlin("plugin.allopen") version "1.7.0"
+    kotlin("plugin.serialization") version "1.7.0"
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("com.diffplug.spotless") version "6.0.2"
+    id("com.diffplug.spotless") version "6.7.2"
     id("idea")
 }
 
@@ -74,7 +74,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:2.1.10")
+                implementation("io.github.microutils:kotlin-logging:2.1.23")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
                 implementation("com.benasher44:uuid:0.3.1")
@@ -91,7 +91,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.277-kotlin-1.6.0"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.335"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -134,7 +134,7 @@ kotlin {
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.2")
-                implementation("org.apache.logging.log4j:log4j-core:2.14.1")
+                implementation("org.apache.logging.log4j:log4j-core:2.17.2")
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
@@ -165,7 +165,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.125") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.246") // testcontainers need it
             }
         }
     }
