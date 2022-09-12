@@ -6,10 +6,10 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.6.0"
-    kotlin("kapt") version "1.6.0"
-    kotlin("plugin.allopen") version "1.6.0"
-    kotlin("plugin.serialization") version "1.6.0"
+    kotlin("multiplatform") version "1.7.0"
+    kotlin("kapt") version "1.7.0"
+    kotlin("plugin.allopen") version "1.7.0"
+    kotlin("plugin.serialization") version "1.7.0"
     id("com.github.johnrengelman.shadow") version "7.1.0"
     id("com.diffplug.spotless") version "6.7.2"
     id("idea")
