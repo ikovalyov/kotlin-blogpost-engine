@@ -10,7 +10,7 @@ plugins {
     kotlin("kapt") version "1.7.10"
     kotlin("plugin.allopen") version "1.7.10"
     kotlin("plugin.serialization") version "1.7.10"
-    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.diffplug.spotless") version "6.7.2"
     id("idea")
 }
@@ -117,7 +117,7 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.2.0"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.6.3"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -133,7 +133,7 @@ kotlin {
                 implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
+                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.2")
                 implementation("org.apache.logging.log4j:log4j-core:2.17.2")
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
