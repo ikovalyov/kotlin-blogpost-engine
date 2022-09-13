@@ -104,7 +104,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-styled")
                 implementation(npm("styled-components", "5.2.3"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             }
         }
         val jsTest by getting {
