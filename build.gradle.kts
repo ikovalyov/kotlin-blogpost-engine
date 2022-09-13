@@ -157,7 +157,7 @@ kotlin {
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.16.2"))
+                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.17.3"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
