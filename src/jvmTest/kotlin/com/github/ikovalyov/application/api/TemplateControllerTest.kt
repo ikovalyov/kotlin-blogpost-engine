@@ -21,6 +21,7 @@ import org.testcontainers.utility.DockerImageName
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TemplateControllerTest : TestPropertyProvider {
     @Inject lateinit var controller: TemplateController
+
     @Inject lateinit var dynamoDbInitCommand: DynamoDbInitCommand
     private val localstackImage = DockerImageName.parse("localstack/localstack:0.11.3")
 

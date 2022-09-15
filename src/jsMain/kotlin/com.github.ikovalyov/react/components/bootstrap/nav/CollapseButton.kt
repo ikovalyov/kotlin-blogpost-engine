@@ -1,25 +1,48 @@
 package com.github.ikovalyov.react.components.bootstrap.nav
 
-import kotlinx.html.ButtonType
-import react.RBuilder
-import styled.css
-import styled.styledButton
-import styled.styledSpan
+import csstype.ClassName
+import react.ChildrenBuilder
+import react.dom.html.ButtonType
+import react.dom.html.HTMLAttributes
+import react.dom.html.ReactHTML
+import react.dom.html.ReactHTML.span
 
-fun RBuilder.CollapseButton(
-    target: String
-) = styledButton(type = ButtonType.button) {
-    css {
-        +"navbar-toggler"
+var HTMLAttributes<*>.dataBsToggle: String?
+    get() = asDynamic()["data-bs-toggle"]
+    set(value) {
+        asDynamic()["data-bs-toggle"] = value
     }
-    attrs["data-bs-toggle"] = "collapse"
-    attrs["data-bs-target"] = "#$target"
-    attrs["aria-controls"] = target
-    attrs["aria-expanded"] = "false"
-    attrs["aria-label"] = "Toggle navigation"
-    styledSpan {
-        css {
-            +"navbar-toggler-icon"
-        }
+
+var HTMLAttributes<*>.dataBsTarget: String?
+    get() = asDynamic()["data-bs-toggle"]
+    set(value) {
+        asDynamic()["data-bs-toggle"] = value
+    }
+var HTMLAttributes<*>.ariaControls: String?
+    get() = asDynamic()["aria-controls"]
+    set(value) {
+        asDynamic()["aria-controls"] = value
+    }
+var HTMLAttributes<*>.ariaExpanded: String?
+    get() = asDynamic()["aria-expanded"]
+    set(value) {
+        asDynamic()["aria-expanded"] = value
+    }
+var HTMLAttributes<*>.ariaLabel: String?
+    get() = asDynamic()["aria-label"]
+    set(value) {
+        asDynamic()["aria-lable"] = value
+    }
+
+fun ChildrenBuilder.CollapseButton(target: String) = ReactHTML.button {
+    type = ButtonType.button
+    className = ClassName("navbar-toggler")
+    dataBsToggle = "collapse"
+    dataBsTarget = "#$target"
+    ariaControls = target
+    ariaExpanded = "false"
+    ariaLabel = "Toggle navigation"
+    span {
+        className = ClassName("navbar-toggler-icon")
     }
 }

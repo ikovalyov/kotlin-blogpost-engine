@@ -75,7 +75,7 @@ data class UserRole(
             update = {
                 copy(lastModified = it)
             }
-        ),
+        )
     )
 
     override fun serialize(): String {

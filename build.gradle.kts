@@ -1,8 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -11,7 +8,7 @@ plugins {
     kotlin("plugin.allopen") version "1.7.10"
     kotlin("plugin.serialization") version "1.7.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("com.diffplug.spotless") version "6.7.2"
+    id("com.diffplug.spotless") version "6.11.0"
     id("idea")
 }
 
@@ -30,9 +27,9 @@ repositories {
 }
 
 kotlin {
-    /* Targets configuration omitted. 
-    *  To find out how to configure the targets, please follow the link:
-    *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
+    /* Targets configuration omitted.
+     *  To find out how to configure the targets, please follow the link:
+     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
     jvm {
         withJava()
@@ -97,12 +94,10 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table")
-                implementation(npm("react", "17.0.2"))
-                implementation(npm("react-dom", "17.0.2"))
-                implementation(npm("react-is", "17.0.2"))
-
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-styled")
-                implementation(npm("styled-components", "5.2.3"))
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion")
+                implementation(npm("react", "18.2.0"))
+                implementation(npm("react-dom", "18.2.0"))
+                implementation(npm("react-is", "18.2.0"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             }
@@ -235,29 +230,23 @@ spotless {
         val files = project.fileTree(rootDir)
         files.include("**/*.kt")
         target(files)
-        ktlint("0.42.1").userData(
-            mapOf(
-                "max_line_length" to "256",
-                "insert_final_newline" to "true"
+        ktlint("0.47.1")
+            .setUseExperimental(true)
+            .editorConfigOverride(
+                mapOf(
+                    "max_line_length" to "256",
+                    "insert_final_newline" to "true"
+                )
             )
-        )
     }
     kotlinGradle {
-        ktlint("0.42.1").userData(
-            mapOf(
-                "max_line_length" to "125",
-                "insert_final_newline" to "true"
+        ktlint("0.47.1")
+            .setUseExperimental(true)
+            .editorConfigOverride(
+                mapOf(
+                    "max_line_length" to "256",
+                    "insert_final_newline" to "true"
+                )
             )
-        )
     }
-}
-
-tasks.named<KotlinJsCompile>("compileKotlinJs").configure {
-    kotlinOptions.moduleKind = "amd"
-    kotlinOptions.sourceMap = true
-    kotlinOptions.sourceMapEmbedSources = "always"
-}
-
-rootProject.plugins.withType<NodeJsRootPlugin> {
-    rootProject.the<NodeJsRootExtension>().versions.webpackDevServer.version = "4.0.0"
 }

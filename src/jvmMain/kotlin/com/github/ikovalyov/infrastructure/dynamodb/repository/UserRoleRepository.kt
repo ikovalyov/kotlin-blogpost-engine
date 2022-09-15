@@ -30,7 +30,9 @@ class UserRoleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<U
         val guestRole = UserRole(uuid4(), Clock.System.now(), guestRoleName)
         val adminInsertResult = if (adminRoleFromDb == null) {
             createAdmin()
-        } else true
+        } else {
+            true
+        }
         return adminInsertResult && insert(userRole) && insert(guestRole)
     }
 

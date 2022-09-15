@@ -1,21 +1,19 @@
 package com.github.ikovalyov.react.components.bootstrap
 
-import kotlinx.html.DIV
-import react.RBuilder
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledDiv
+import csstype.ClassName
+import react.ChildrenBuilder
+import react.dom.html.ReactHTML
 
 sealed class Div {
-    abstract operator fun invoke(builder: RBuilder, block: StyledDOMBuilder<DIV>.() -> Unit): Unit
+    abstract operator fun invoke(builder: ChildrenBuilder, block: ChildrenBuilder.() -> Unit): Unit
 
     object ContainerFluidDiv : Div() {
-        override operator fun invoke(builder: RBuilder, block: StyledDOMBuilder<DIV>.() -> Unit) {
-            builder.styledDiv {
-                css {
-                    +"container-fluid"
+        override operator fun invoke(builder: ChildrenBuilder, block: ChildrenBuilder.() -> Unit) {
+            with(builder) {
+                ReactHTML.div {
+                    className = ClassName("container-fluid")
+                    block()
                 }
-                block()
             }
         }
     }

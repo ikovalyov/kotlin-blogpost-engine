@@ -2,20 +2,22 @@ package com.github.ikovalyov.react.components.template
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.model.markers.IEditable
-import kotlinext.js.jsObject
 import kotlinx.browser.window
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
+import kotlinx.js.jso
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
-import react.FC
+import react.Component
+import react.Fragment
 import react.PropsWithChildren
-import react.RBuilder
+import react.ReactNode
 import react.State
-import react.fc
+import react.create
 import react.useState
+import kotlin.coroutines.CoroutineContext
 
 external interface CrudComponentProps<T> : PropsWithChildren {
     var decodeItem: (String) -> T
@@ -25,7 +27,7 @@ external interface CrudComponentProps<T> : PropsWithChildren {
 }
 
 external interface CrudComponentState<T> : State {
-    var currentState: CrudState?
+    var currentState: CrudState
     var currentItem: T?
     var itemsList: List<T>?
 }
@@ -34,28 +36,36 @@ enum class CrudState {
     LIST,
     VIEW,
     EDIT,
-    ADD
+    ADD,
+    INIT
 }
 
-@DelicateCoroutinesApi
-private fun <T : IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<T>) {
-    val stateInstance = useState<CrudComponentState<T>> {
-        jsObject()
+class CrudComponent<T : IEditable<T>>(props: CrudComponentProps<T>) :
+    Component<CrudComponentProps<T>, CrudComponentState<T>>(props),
+    CoroutineScope {
+
+    private var job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job
+
+    private val stateInstance = useState<CrudComponentState<T>> {
+        jso {
+            currentState = CrudState.INIT
+        }
     }
     val updateState = stateInstance.component2()
-    val state = stateInstance.component1()
+    private val componentState = stateInstance.component1()
 
-    suspend fun loadItem(itemId: Uuid): T {
-        val result =
-            window
-                .fetch("http://localhost:8082" + props.apiUri + "/$itemId")
-                .await()
-                .text()
-                .await()
+    private suspend fun loadItem(itemId: Uuid): T {
+        val result = window
+            .fetch("http://localhost:8082" + props.apiUri + "/$itemId")
+            .await()
+            .text()
+            .await()
         return props.decodeItem(result)
     }
 
-    suspend fun updateItem(item: T) {
+    private suspend fun updateItem(item: T) {
         val body = item.serialize()
         val headers = Headers()
         headers.append("Content-Type", "application/json")
@@ -68,7 +78,7 @@ private fun <T : IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<
         response.text().await()
     }
 
-    suspend fun insertItem(item: T) {
+    private suspend fun insertItem(item: T) {
         val body = item.serialize()
         val headers = Headers()
         headers.append("Content-Type", "application/json")
@@ -78,55 +88,51 @@ private fun <T : IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<
                 RequestInit(method = "POST", headers = headers, body = body)
             )
         val response = fetchResult.await()
-        val result = response.text().await()
+        response.text().await()
     }
 
     fun switchToViewStateFunc(t: T) {
-        GlobalScope.launch {
+        launch {
             val template = loadItem(t.id)
             updateState {
-                jsObject {
-                    currentItem = template
-                    currentState = CrudState.VIEW
-                    itemsList = state.itemsList
-                }
+                it.currentItem = template
+                it.currentState = CrudState.VIEW
+                it.itemsList = componentState.itemsList
+                it
             }
         }
     }
 
     fun switchToAddStateFunc() {
-        GlobalScope.launch {
+        launch {
             updateState {
-                val currentState = it ?: jsObject<CrudComponentState<T>>()
-                currentState.currentState = CrudState.ADD
-                currentState.currentItem = null
-                currentState
+                it.currentState = CrudState.ADD
+                it.currentItem = null
+                it
             }
         }
     }
 
-    suspend fun switchToListViewStateFunc() {
+    private suspend fun switchToListViewStateFunc() {
         val result = window.fetch("http://localhost:8082" + props.apiUri).await().text().await()
         val templatesList = props.decodeItems(result)
         updateState {
-            jsObject {
-                currentItem = null
-                currentState = CrudState.LIST
-                itemsList = templatesList
-            }
+            it.currentItem = null
+            it.currentState = CrudState.LIST
+            it.itemsList = templatesList
+            it
         }
     }
 
-    fun switchToInsertStateFunc() {
+    private fun switchToInsertStateFunc() {
         updateState {
-            jsObject {
-                currentItem = null
-                currentState = CrudState.ADD
-            }
+            it.currentItem = null
+            it.currentState = CrudState.ADD
+            it
         }
     }
 
-    suspend fun deleteItem(t: T) {
+    private suspend fun deleteItem(t: T) {
         if (window.confirm("Are you sure you want to delete this item?")) {
             window.fetch(
                 "http://localhost:8082" + props.apiUri + "/${t.id}",
@@ -137,61 +143,72 @@ private fun <T : IEditable<T>> RBuilder.CrudComponent(props: CrudComponentProps<
         }
     }
 
-    suspend fun submitEditItemForm(t: T) {
+    private suspend fun submitEditItemForm(t: T) {
         updateItem(t)
         switchToListViewStateFunc()
     }
 
-    suspend fun submitInsertItemForm(t: T) {
+    private suspend fun submitInsertItemForm(t: T) {
         insertItem(t)
         switchToListViewStateFunc()
     }
 
-    fun switchToEditStateFuncVar(t: T) {
-        GlobalScope.launch {
+    private fun switchToEditStateFuncVar(t: T) {
+        launch {
             val template = loadItem(t.id)
             updateState {
-                jsObject {
-                    currentState = CrudState.EDIT
-                    currentItem = template
+                it.currentItem = template
+                it.currentState = CrudState.EDIT
+                it
+            }
+        }
+    }
+
+    override fun render(): ReactNode {
+        return Fragment.create {
+            when (componentState.currentState) {
+                CrudState.INIT -> {
+                    launch { switchToListViewStateFunc() }
                 }
+                CrudState.LIST -> {
+                    val props: ItemListProps<T> = jso {
+                        switchToEditState = ::switchToEditStateFuncVar
+                        switchToViewState = ::switchToViewStateFunc
+                        switchToInsertState = ::switchToInsertStateFunc
+                        deleteItem = ::deleteItem
+                        items = componentState.itemsList
+                    }
+                    ItemList(props)
+                }
+                CrudState.EDIT -> TemplateEdit(
+                    jso {
+                        switchToListState = ::switchToListViewStateFunc
+                        submitForm = ::submitEditItemForm
+                    },
+                    jso<TemplateEditState<T>> {
+                        item = componentState.currentItem!!
+                    }
+                )
+                CrudState.VIEW ->
+                    TemplateView(
+                        jso<TemplateViewProps<T>> {
+                            switchToListState = ::switchToListViewStateFunc
+                        },
+                        jso {
+                            item = componentState.currentItem!!
+                        }
+                    )
+                CrudState.ADD -> TemplateInsert(
+                    jso<TemplateInsertProps<T>> {
+                        this.item = props.factory()
+                        this.submitForm = ::submitInsertItemForm
+                        this.switchToListState = ::switchToListViewStateFunc
+                    },
+                    jso {
+                        this.currentItem = props.factory()
+                    }
+                )
             }
         }
     }
-
-    if (state.currentState == null) {
-        GlobalScope.launch { switchToListViewStateFunc() }
-    }
-    when (state.currentState) {
-        CrudState.LIST -> {
-            ItemList<T> {
-                this.switchToEditState = ::switchToEditStateFuncVar
-                this.switchToViewState = ::switchToViewStateFunc
-                this.switchToInsertState = ::switchToInsertStateFunc
-                this.deleteItem = ::deleteItem
-                this.items = state.itemsList
-            }
-        }
-        CrudState.EDIT -> TemplateEdit<T> {
-            item = state.currentItem!!
-            switchToListState = ::switchToListViewStateFunc
-            submitForm = ::submitEditItemForm
-        }
-        CrudState.VIEW ->
-            TemplateView<T> {
-                item = state.currentItem!!
-                switchToListState = ::switchToListViewStateFunc
-            }
-        CrudState.ADD -> TemplateInsert<T> {
-            switchToListState = ::switchToListViewStateFunc
-            submitForm = ::submitInsertItemForm
-            item = props.factory()
-        }
-    }
-}
-
-private val CrudComponent: FC<CrudComponentProps<IEditable<*>>> = fc { CrudComponent(it) }
-
-fun <T : IEditable<T>> RBuilder.CrudComponent(block: CrudComponentProps<T>.() -> Unit) {
-    child(type = CrudComponent, props = jsObject(block))
 }

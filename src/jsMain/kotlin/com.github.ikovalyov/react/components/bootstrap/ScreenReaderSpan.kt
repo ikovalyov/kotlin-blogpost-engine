@@ -1,14 +1,12 @@
 package com.github.ikovalyov.react.components.bootstrap
 
-import react.RBuilder
-import styled.css
-import styled.styledSpan
+import csstype.ClassName
+import react.ChildrenBuilder
+import react.dom.html.ReactHTML
 
-fun RBuilder.ScreenReaderSpan(text: String) {
-    styledSpan {
-        css {
-            +"sr-only"
-        }
+fun ChildrenBuilder.ScreenReaderSpan(text: String) {
+    ReactHTML.span {
+        className = ClassName("sr-only")
         +text
     }
 }

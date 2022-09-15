@@ -21,7 +21,9 @@ internal class UserRolesRepositoryTest : TestPropertyProvider {
         MyGenericContainer("amazon/dynamodb-local:1.13.2")
             .withCommand("-jar DynamoDBLocal.jar -inMemory -sharedDb")
             .withExposedPorts(8000)
+
     @Inject lateinit var client: DynamoDbAsyncClient
+
     @Inject lateinit var userRolesRepository: UserRoleRepository
 
     init {

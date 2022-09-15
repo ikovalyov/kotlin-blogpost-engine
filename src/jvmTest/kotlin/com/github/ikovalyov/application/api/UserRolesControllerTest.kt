@@ -32,7 +32,9 @@ internal class UserRolesControllerTest : TestPropertyProvider {
         private const val name = "name"
         private const val name2 = "name2"
     }
+
     @Inject lateinit var userRolesController: UserRolesController
+
     @Inject lateinit var dynamoDbInitCommand: DynamoDbInitCommand
     private val localstackImage = DockerImageName.parse("localstack/localstack:0.11.3")
 

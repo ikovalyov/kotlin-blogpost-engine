@@ -5,63 +5,67 @@ import com.github.ikovalyov.react.components.bootstrap.Div
 import com.github.ikovalyov.react.components.bootstrap.Input
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.CollapseButton
-import com.github.ikovalyov.react.components.bootstrap.nav.MenuItem
-import kotlinx.html.id
+import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
+import csstype.ClassName
+import csstype.px
+import emotion.react.css
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import react.Component
+import react.FC
+import react.Fragment
 import react.Props
-import react.RBuilder
-import react.RComponent
+import react.ReactNode
 import react.State
-import react.dom.attrs
-import styled.css
-import styled.styledA
-import styled.styledDiv
-import styled.styledForm
-import styled.styledNav
-import styled.styledUl
+import react.create
+import react.dom.html.ReactHTML.a
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.form
+import react.dom.html.ReactHTML.nav
+import react.dom.html.ReactHTML.ul
+import kotlin.coroutines.CoroutineContext
 
-class App : RComponent<Props, State>() {
+class App : Component<Props, State>(), CoroutineScope {
+    private var job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job
     companion object {
         const val navbarTogglerId = "navbarTogglerDemo01"
     }
 
-    override fun RBuilder.render() {
-        styledNav {
-            css {
-                +"navbar navbar-expand-lg navbar-light bg-light"
-            }
-            Div.ContainerFluidDiv(this) {
-                CollapseButton(target = navbarTogglerId)
-                styledDiv {
-                    css {
-                        +"collapse navbar-collapse"
-                    }
-                    attrs {
+    override fun render(): ReactNode {
+        return Fragment.create {
+            FC<Props> {
+                nav {
+                    className = ClassName("navbar navbar-expand-lg navbar-light bg-light")
+                }
+                Div.ContainerFluidDiv(this) {
+                    CollapseButton(target = navbarTogglerId)
+                    div {
+                        className = ClassName("collapse navbar-collapse")
                         id = navbarTogglerId
-                    }
-                    styledA(href = "#") {
-                        css {
-                            +"navbar-brand"
+                        a {
+                            href = "#"
+                            className = ClassName("navbar-brand")
+                            +"Hidden brand"
                         }
-                        +"Hidden brand"
-                    }
-                    styledUl {
-                        css {
-                            +"navbar-nav me-auto mb-2 mb-lg-0"
+                        ul {
+                            className = ClassName("navbar-nav me-auto mb-2 mb-lg-0")
+                            menuItem(href = "#", active = true, disabled = false) {
+                                +"Home "
+                                ScreenReaderSpan("(current)")
+                            }
+                            menuItem(href = "#", active = false, disabled = false) { +"Link" }
+                            menuItem(href = "#", active = false, disabled = true) { +"Disabled" }
                         }
-                        MenuItem(href = "#", active = true, disabled = false) {
-                            +"Home "
-                            ScreenReaderSpan("(current)")
+                        form {
+                            className = ClassName("d-flex")
+                            css {
+                                marginBlockEnd = 0.px
+                            }
+                            Input.SearchInput(name = "Search", this)
+                            Button.ButtonOutlineSuccess(this) { +"Search" }
                         }
-                        MenuItem(href = "#", active = false, disabled = false) { +"Link" }
-                        MenuItem(href = "#", active = false, disabled = true) { +"Disabled" }
-                    }
-                    styledForm {
-                        css {
-                            +"d-flex"
-                            declarations["margin-block-end"] = "0px"
-                        }
-                        Input.SearchInput(name = "Search", this)
-                        Button.ButtonOutlineSuccess(this) { +"Search" }
                     }
                 }
             }
