@@ -1,15 +1,12 @@
 package com.github.ikovalyov.react.components.template.table
 
 import com.github.ikovalyov.model.markers.IEditable
-import kotlinext.js.jsObject
-import kotlinx.html.ButtonType
-import kotlinx.html.js.onClickFunction
+import kotlinx.js.jso
+import react.ChildrenBuilder
 import react.FC
 import react.PropsWithChildren
-import react.RBuilder
-import react.dom.attrs
-import react.dom.button
-import react.fc
+import react.dom.html.ButtonType
+import react.dom.html.ReactHTML.button
 
 external interface ButtonProps<T : IEditable<T>> : PropsWithChildren {
     var body: T
@@ -18,20 +15,20 @@ external interface ButtonProps<T : IEditable<T>> : PropsWithChildren {
     var type: ButtonType?
 }
 
-private fun <T : IEditable<T>> RBuilder.Button(props: ButtonProps<T>) {
+private fun <T : IEditable<T>> ChildrenBuilder.Button(props: ButtonProps<T>) {
     button {
-        attrs {
-            text(props.text)
-            value = props.body.id.toString()
-            name = "edit"
-            type = props.type ?: ButtonType.button
-            onClickFunction = { props.onClick?.invoke(props.body) }
-        }
+        +props.text
+        value = props.body.id.toString()
+        name = "edit"
+        type = props.type ?: ButtonType.button
+        onClick = { props.onClick?.invoke(props.body) }
     }
 }
 
-private val Button: FC<ButtonProps<*>> = fc { Button(it) }
+private val Button: FC<ButtonProps<*>> = FC {
+    this.Button(it)
+}
 
-fun <T : IEditable<T>> RBuilder.Button(block: ButtonProps<T>.() -> Unit) {
-    child(type = Button, props = jsObject(block))
+fun <T : IEditable<T>> ChildrenBuilder.Button(block: ButtonProps<T>.() -> Unit) {
+    child(type = Button, props = jso(block))
 }

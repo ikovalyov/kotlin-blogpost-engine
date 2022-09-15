@@ -1,14 +1,15 @@
 package com.github.ikovalyov.extenstion
 
-import kotlinext.js.Object
+import kotlinx.js.Object
+import org.w3c.dom.Element
 import react.Props
-import react.dom.RDOMBuilder
-import react.dom.setProp
+import react.dom.html.HTMLAttributes
 
-var RDOMBuilder<*>.extraAttrs: Props
-    @Deprecated(level = DeprecationLevel.HIDDEN, message = "write only") get() = error("write only")
+var <T : Element>HTMLAttributes<T>.extraAttrs: Props
+    @Deprecated(level = DeprecationLevel.HIDDEN, message = "write only")
+    get() = error("write only")
     set(value) {
         for (key in Object.keys(value)) {
-            setProp(key, value.asDynamic()[key])
+            asDynamic()[key] = value.asDynamic()[key]
         }
     }

@@ -63,7 +63,7 @@ data class Item(
                 copy(lastModified = it)
             },
             get = { lastModified }
-        ),
+        )
     )
 
     override fun serialize(): String {

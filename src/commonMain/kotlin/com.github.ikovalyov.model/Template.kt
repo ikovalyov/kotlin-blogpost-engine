@@ -86,7 +86,7 @@ data class Template(
                 copy(lastModified = it)
             },
             get = { lastModified }
-        ),
+        )
     )
 
     override fun serialize(): String {

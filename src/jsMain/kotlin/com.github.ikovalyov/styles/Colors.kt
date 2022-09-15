@@ -1,6 +1,6 @@
 package com.github.ikovalyov.styles
 
-import kotlinx.css.Color
+import csstype.Color
 
 object Colors {
     object Text {

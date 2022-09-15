@@ -64,7 +64,7 @@ data class User(
                 deserialize = { Password(ShortString(it)) },
                 get = { password },
                 update = { copy(password = it) }
-            ),
+            )
         )
     }
 

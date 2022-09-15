@@ -2,18 +2,17 @@ package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.react.components.template.table.Table
-import kotlinext.js.jsObject
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.html.ButtonType
-import kotlinx.html.js.onClickFunction
-import react.FC
+import react.Component
+import react.Fragment
 import react.PropsWithChildren
-import react.RBuilder
-import react.dom.attrs
-import react.dom.button
-import react.fc
+import react.ReactNode
+import react.create
+import react.dom.html.ButtonType
+import react.dom.html.ReactHTML
+import kotlin.coroutines.CoroutineContext
 
 external interface ItemListProps<T : Any> : PropsWithChildren {
     var switchToViewState: (T) -> Unit
@@ -23,30 +22,29 @@ external interface ItemListProps<T : Any> : PropsWithChildren {
     var items: List<T>?
 }
 
-@DelicateCoroutinesApi
-private fun <T : IEditable<T>> RBuilder.ItemList(props: ItemListProps<T>) {
-    Table<T> {
-        items = props.items?.toTypedArray()
-        onViewClick = { props.switchToViewState(it) }
-        onEditClick = { props.switchToEditState(it) }
-        onDeleteClick = { GlobalScope.launch { props.deleteItem(it) } }
-    }
+class ItemList<T : IEditable<T>>(props: ItemListProps<T>) :
+    Component<ItemListProps<T>, CrudComponentState<T>>(props),
+    CoroutineScope {
 
-    button {
-        attrs {
-            text("Add new")
-            name = "new"
-            type = ButtonType.button
-            onClickFunction = { props.switchToInsertState() }
+    private var job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job
+
+    override fun render(): ReactNode? {
+        return Fragment.create {
+            Table<T> {
+                items = props.items?.toTypedArray()
+                onViewClick = { props.switchToViewState(it) }
+                onEditClick = { props.switchToEditState(it) }
+                onDeleteClick = { launch { props.deleteItem(it) } }
+            }
+
+            ReactHTML.button {
+                +"Add new"
+                name = "new"
+                type = ButtonType.button
+                onClick = { props.switchToInsertState() }
+            }
         }
     }
-}
-
-@DelicateCoroutinesApi
-@Suppress("TYPE_MISMATCH_WARNING")
-private val ItemList: FC<ItemListProps<IEditable<*>>> = fc { ItemList(it) }
-
-@DelicateCoroutinesApi
-fun <T : IEditable<T>> RBuilder.ItemList(block: ItemListProps<T>.() -> Unit) {
-    child(type = ItemList, props = jsObject(block))
 }

@@ -1,27 +1,25 @@
 package com.github.ikovalyov.react.components.bootstrap.nav
 
-import kotlinx.html.A
-import react.RBuilder
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledA
+import csstype.ClassName
+import org.w3c.dom.HTMLAnchorElement
+import react.ChildrenBuilder
+import react.dom.html.AnchorHTMLAttributes
+import react.dom.html.ReactHTML.a
 
-fun RBuilder.Anchor(
-    href: String,
-    active: Boolean,
-    disabled: Boolean,
-    block: StyledDOMBuilder<A>.() -> Unit
-) {
-    styledA(href = href) {
-        css {
-            +"nav-link"
+fun ChildrenBuilder.Anchor(hrefString: String, active: Boolean, disabled: Boolean, block: AnchorHTMLAttributes<HTMLAnchorElement>.() -> Unit) {
+    a {
+        this.href = hrefString
+        val classes = buildList {
+            add("nav-link")
             if (active) {
-                +"active"
+                add("active")
             }
+
             if (disabled) {
-                +"disabled"
+                add("disabled")
             }
         }
+        className = ClassName(classes.joinToString { " " })
         apply(block)
     }
 }

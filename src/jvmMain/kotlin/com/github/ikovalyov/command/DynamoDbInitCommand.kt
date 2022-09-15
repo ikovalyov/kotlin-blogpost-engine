@@ -25,7 +25,8 @@ open class DynamoDbInitCommand : Runnable {
         @Throws(Exception::class)
         @JvmStatic
         fun main(args: Array<String>) {
-            @Suppress("SpreadOperator") PicocliRunner.run(DynamoDbInitCommand::class.java, *args)
+            @Suppress("SpreadOperator")
+            PicocliRunner.run(DynamoDbInitCommand::class.java, *args)
         }
     }
 
