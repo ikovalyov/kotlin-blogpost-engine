@@ -10,6 +10,7 @@ import com.github.ikovalyov.model.security.UserRole
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
 import com.github.ikovalyov.react.components.template.CrudComponent
+import com.github.ikovalyov.react.components.template.CrudComponentProps
 import csstype.ClassName
 import kotlinx.browser.document
 import kotlinx.datetime.Clock
@@ -27,13 +28,13 @@ import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
 
 @OptIn(ExperimentalSerializationApi::class)
-suspend fun main() {
+fun main() {
     val container = document.getElementById("root")!!
     val root = createRoot(container)
     root.render(
         Fragment.create {
-            App()
-            FC<Props> {
+            child(App.create())
+            child(FC<Props> {
                 div {
                     className = ClassName("container")
                     div {
@@ -59,52 +60,53 @@ suspend fun main() {
                         }
                         div {
                             className = ClassName("col-auto")
-                            CrudComponent<Template>(
-                                props = jso {
-                                    decodeItem = {
-                                        Json.decodeFromString(Template.serializer(), it)
-                                    }
-                                    decodeItems = {
-                                        Json.decodeFromString(ListSerializer(Template.serializer()), it)
-                                    }
-                                    apiUri = Api.templateUrl
-                                    factory = {
-                                        Template(id = uuid4(), "", "")
-                                    }
+                            CrudComponent {
+                                decodeItem = {
+                                    Json.decodeFromString(Template.serializer(), it)
                                 }
-                            )
-                            CrudComponent<UserRole>(
-                                jso {
-                                    decodeItem = {
-                                        Json.decodeFromString(UserRole.serializer(), it)
-                                    }
-                                    decodeItems = {
-                                        Json.decodeFromString(ListSerializer(UserRole.serializer()), it)
-                                    }
-                                    apiUri = Api.userRoleUrl
-                                    factory = {
-                                        UserRole(uuid4(), Clock.System.now(), "")
-                                    }
+                                decodeItems = {
+                                    Json.decodeFromString(ListSerializer(Template.serializer()), it)
                                 }
-                            )
-                            CrudComponent<User>(
-                                jso {
-                                    decodeItem = {
-                                        Json.decodeFromString(User.serializer(), it)
-                                    }
-                                    decodeItems = {
-                                        Json.decodeFromString(ListSerializer(User.serializer()), it)
-                                    }
-                                    apiUri = Api.userUrl
-                                    factory = {
-                                        User(uuid4(), Email(ShortString("")), false, "", emptyList(), Password(ShortString("")))
-                                    }
+                                apiUri = Api.templateUrl
+                                factory = {
+                                    Template(id = uuid4(), "", "")
                                 }
-                            )
+                            }
+                            CrudComponent {
+                                decodeItem = {
+                                    Json.decodeFromString(UserRole.serializer(), it)
+                                }
+                                decodeItems = {
+                                    Json.decodeFromString(ListSerializer(UserRole.serializer()), it)
+                                }
+                                apiUri = Api.userRoleUrl
+                                factory = {
+                                    UserRole(uuid4(), Clock.System.now(), "")
+                                }
+                            }
+                            CrudComponent {
+                                decodeItem = {
+                                    Json.decodeFromString(User.serializer(), it)
+                                }
+                                decodeItems = {
+                                    Json.decodeFromString(ListSerializer(User.serializer()), it)
+                                }
+                                apiUri = Api.userUrl
+                                factory = {
+                                    User(
+                                        uuid4(),
+                                        Email(ShortString("")),
+                                        false,
+                                        "",
+                                        emptyList(),
+                                        Password(ShortString(""))
+                                    )
+                                }
+                            }
                         }
                     }
                 }
-            }
+            }.create())
         }
     )
 }

@@ -17,7 +17,7 @@ data class Item(
     override val id: Uuid,
     val lastModified: Instant,
     val body: String
-) : IEditable<Item> {
+) : IEditable {
 
     companion object {
         const val id = "id"

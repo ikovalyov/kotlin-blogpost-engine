@@ -22,7 +22,7 @@ data class User(
     val nickname: String,
     val roles: List<Uuid>,
     val password: Password
-) : IEditable<User> {
+) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, User>> {
         return listOf(
             IEditable.EditableMetadata(

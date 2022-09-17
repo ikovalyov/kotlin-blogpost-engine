@@ -22,8 +22,8 @@ external interface ItemListProps<T : Any> : PropsWithChildren {
     var items: List<T>?
 }
 
-class ItemList<T : IEditable<T>>(props: ItemListProps<T>) :
-    Component<ItemListProps<T>, CrudComponentState<T>>(props),
+class ItemList<I : IEditable>(props: ItemListProps<I>) :
+    Component<ItemListProps<I>, CrudComponentState<I>>(props),
     CoroutineScope {
 
     private var job = Job()
@@ -32,7 +32,7 @@ class ItemList<T : IEditable<T>>(props: ItemListProps<T>) :
 
     override fun render(): ReactNode? {
         return Fragment.create {
-            Table<T> {
+            Table<I> {
                 items = props.items?.toTypedArray()
                 onViewClick = { props.switchToViewState(it) }
                 onEditClick = { props.switchToEditState(it) }

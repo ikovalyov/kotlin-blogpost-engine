@@ -1,6 +1,8 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.markers.getFieldValueAsString
+import com.github.ikovalyov.model.markers.updateField
 import csstype.Color
 import csstype.Content
 import csstype.Display
@@ -27,20 +29,20 @@ import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
 import kotlin.coroutines.CoroutineContext
 
-external interface TemplateInsertProps<T> : PropsWithChildren {
+external interface TemplateInsertProps<I: IEditable> : PropsWithChildren {
     var switchToListState: suspend () -> Unit
-    var submitForm: suspend (t: T) -> Unit
-    var item: T
+    var submitForm: suspend (t: I) -> Unit
+    var item: I
 }
 
-external interface TemplateInsertState<T> : State {
-    var currentItem: T?
+external interface TemplateInsertState<I: IEditable> : State {
+    var currentItem: I?
 }
 
-class TemplateInsert<T : IEditable<T>>(
-    props: TemplateInsertProps<T>,
-    state: TemplateInsertState<T>
-) : Component<TemplateInsertProps<T>, TemplateInsertState<T>>(props), CoroutineScope {
+class TemplateInsert<I : IEditable>(
+    props: TemplateInsertProps<I>,
+    state: TemplateInsertState<I>
+) : Component<TemplateInsertProps<I>, TemplateInsertState<I>>(props), CoroutineScope {
 
     init {
         setState(state)
@@ -62,7 +64,7 @@ class TemplateInsert<T : IEditable<T>>(
                         }
                     }
                     fieldset {
-                        val metadata = currentItem.getMetadata()
+                        val metadata = currentItem.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
 
                         metadata.forEach {
                             p {

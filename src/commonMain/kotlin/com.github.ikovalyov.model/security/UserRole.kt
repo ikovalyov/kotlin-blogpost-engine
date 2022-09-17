@@ -19,7 +19,7 @@ data class UserRole(
     override val id: Uuid,
     val lastModified: Instant,
     val name: String
-) : IEditable<UserRole> {
+) : IEditable {
     companion object {
         const val id = "id"
         const val name = "name"

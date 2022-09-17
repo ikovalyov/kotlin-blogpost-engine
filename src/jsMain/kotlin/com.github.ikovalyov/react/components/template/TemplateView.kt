@@ -1,6 +1,7 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.react.components.template.table.Button
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -17,18 +18,18 @@ import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.section
 import kotlin.coroutines.CoroutineContext
 
-external interface TemplateViewProps<T> : PropsWithChildren {
+external interface TemplateViewProps<I> : PropsWithChildren {
     var switchToListState: suspend () -> Unit
 }
 
-external interface TemplateViewState<T> : State {
-    var item: T
+external interface TemplateViewState<I> : State {
+    var item: I
 }
 
-class TemplateView<T : IEditable<T>>(
-    props: TemplateViewProps<T>,
-    state: TemplateViewState<T>
-) : Component<TemplateViewProps<T>, TemplateViewState<T>>(props), CoroutineScope {
+class TemplateView<I : IEditable>(
+    props: TemplateViewProps<I>,
+    state: TemplateViewState<I>
+) : Component<TemplateViewProps<I>, TemplateViewState<I>>(props), CoroutineScope {
 
     init {
         setState(state)
@@ -41,14 +42,14 @@ class TemplateView<T : IEditable<T>>(
     override fun render(): ReactNode {
         return Fragment.create {
             div {
-                val fields = state.item.getMetadata()
+                val fields = state.item.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
                 fields.forEach {
                     section {
                         h1 { +it.fieldType::class.simpleName!! }
                         p { +state.item.getFieldValueAsString(it) }
                     }
                 }
-                Button<T> {
+                Button<I> {
                     onClick = {
                         launch { props.switchToListState() }
                     }

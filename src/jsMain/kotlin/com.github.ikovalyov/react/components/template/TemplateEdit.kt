@@ -1,6 +1,8 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.markers.getFieldValueAsString
+import com.github.ikovalyov.model.markers.updateField
 import com.github.ikovalyov.react.components.template.table.Button
 import csstype.Color
 import csstype.Content
@@ -37,10 +39,10 @@ external interface TemplateEditState<T> : State {
     var item: T
 }
 
-class TemplateEdit<T : IEditable<T>>(
-    props: ItemEditProps<T>,
-    state: TemplateEditState<T>
-) : Component<ItemEditProps<T>, TemplateEditState<T>>(props),
+class TemplateEdit<I : IEditable>(
+    props: ItemEditProps<I>,
+    state: TemplateEditState<I>
+) : Component<ItemEditProps<I>, TemplateEditState<I>>(props),
     CoroutineScope {
     init {
         setState(state)
@@ -50,7 +52,7 @@ class TemplateEdit<T : IEditable<T>>(
     override val coroutineContext: CoroutineContext
         get() = job
 
-    private val updateState = useState<TemplateEditState<T>>(state).component2()
+    private val updateState = useState<TemplateEditState<I>>(state).component2()
 
     override fun render(): ReactNode {
         return Fragment.create {
@@ -64,7 +66,7 @@ class TemplateEdit<T : IEditable<T>>(
                     }
             }
             fieldset {
-                val fields = state.item.getMetadata()
+                val fields = state.item.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
                 fields.let {
                     it.forEach {
                         p {
@@ -103,12 +105,12 @@ class TemplateEdit<T : IEditable<T>>(
                     }
                 }
             }
-            Button<T> {
+            Button<I> {
                 body = state.item
                 text = "Update"
                 type = ButtonType.submit
             }
-            Button<T> {
+            Button<I> {
                 onClick = {
                     launch { props.switchToListState() }
                 }

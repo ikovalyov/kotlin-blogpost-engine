@@ -20,7 +20,7 @@ data class Template(
     val name: String,
     val body: String,
     val lastModified: Instant = Clock.System.now()
-) : IEditable<Template> {
+) : IEditable {
     companion object {
         const val id = "id"
         const val name = "name"
