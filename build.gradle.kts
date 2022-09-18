@@ -71,7 +71,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:2.1.23")
+                implementation("io.github.microutils:kotlin-logging:3.0.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
                 implementation("com.benasher44:uuid:0.5.0")
@@ -89,7 +89,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.385"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.387"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -130,8 +130,8 @@ kotlin {
                 implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.18.0")
-                implementation("org.apache.logging.log4j:log4j-core:2.18.0")
+                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
+                implementation("org.apache.logging.log4j:log4j-core:2.19.0")
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
@@ -162,7 +162,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.303") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.305") // testcontainers need it
             }
         }
     }
