@@ -9,24 +9,13 @@ import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
 import csstype.ClassName
 import csstype.px
 import emotion.react.css
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import react.Component
 import react.FC
-import react.Fragment
 import react.Props
-import react.ReactNode
-import react.State
-import react.create
 import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
-import kotlin.coroutines.CoroutineContext
-import org.w3c.dom.HTMLAnchorElement
-import react.ChildrenBuilder
-import react.dom.html.AnchorHTMLAttributes
 
 const val navbarTogglerId = "navbarTogglerDemo01"
 val App = FC<Props> {
@@ -56,7 +45,7 @@ val App = FC<Props> {
                     css {
                         marginBlockEnd = 0.px
                     }
-                    this.className = ClassName( "${this.className} d-flex")
+                    this.className = ClassName("${this.className} d-flex")
                     Input.SearchInput(name = "Search", this)
                     Button.ButtonOutlineSuccess(this) {
                         +"Search"

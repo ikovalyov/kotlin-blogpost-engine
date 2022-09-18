@@ -4,7 +4,6 @@ import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.model.markers.updateField
 import csstype.Color
-import csstype.Content
 import csstype.Display
 import csstype.Float
 import csstype.FontWeight
@@ -13,7 +12,6 @@ import emotion.react.css
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.js.jso
 import react.Component
 import react.Fragment
 import react.PropsWithChildren
@@ -29,13 +27,13 @@ import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
 import kotlin.coroutines.CoroutineContext
 
-external interface TemplateInsertProps<I: IEditable> : PropsWithChildren {
+external interface TemplateInsertProps<I : IEditable> : PropsWithChildren {
     var switchToListState: suspend () -> Unit
     var submitForm: suspend (t: I) -> Unit
     var item: I
 }
 
-external interface TemplateInsertState<I: IEditable> : State {
+external interface TemplateInsertState<I : IEditable> : State {
     var currentItem: I
 }
 

@@ -4,26 +4,16 @@ import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.coroutines.SimpleCoroutineScope
 import com.github.ikovalyov.model.markers.IEditable
 import kotlinx.browser.window
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
 import kotlinx.js.jso
 import org.w3c.fetch.Headers
 import org.w3c.fetch.RequestInit
-import react.Component
-import react.Fragment
-import react.PropsWithChildren
-import react.ReactNode
-import react.State
-import react.create
-import react.useState
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.asPromise
-import kotlinx.coroutines.async
 import react.ChildrenBuilder
 import react.FC
-import react.useEffect
+import react.PropsWithChildren
+import react.State
+import react.useState
 
 external interface CrudComponentProps<T> : PropsWithChildren {
     var decodeItem: (String) -> T
@@ -50,8 +40,7 @@ enum class CrudState {
 private val coroutineScope = SimpleCoroutineScope()
 
 private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentProps<I>) {
-
-    val stateInstance = useState<CrudComponentState<I>>{
+    val stateInstance = useState<CrudComponentState<I>> {
         jso {
             currentState = CrudState.INIT
         }
@@ -177,13 +166,17 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
 
         CrudState.LIST -> {
             console.log("Loading ItemList")
-            child(ItemList(jso<ItemListProps<I>> {
-                switchToEditState = ::switchToEditStateFuncVar
-                switchToViewState = ::switchToViewStateFunc
-                switchToInsertState = ::switchToInsertStateFunc
-                deleteItem = ::deleteItem
-                items = componentState.itemsList
-            }).render())
+            child(
+                ItemList(
+                    jso<ItemListProps<I>> {
+                        switchToEditState = ::switchToEditStateFuncVar
+                        switchToViewState = ::switchToViewStateFunc
+                        switchToInsertState = ::switchToInsertStateFunc
+                        deleteItem = ::deleteItem
+                        items = componentState.itemsList
+                    }
+                ).render()
+            )
         }
 
         CrudState.EDIT -> {

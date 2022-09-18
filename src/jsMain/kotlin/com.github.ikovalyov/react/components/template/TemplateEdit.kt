@@ -5,7 +5,6 @@ import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.model.markers.updateField
 import com.github.ikovalyov.react.components.template.table.Button
 import csstype.Color
-import csstype.Content
 import csstype.Display
 import csstype.Float
 import csstype.FontWeight
@@ -14,7 +13,6 @@ import emotion.react.css
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.js.jso
 import react.Component
 import react.Fragment
 import react.PropsWithChildren
@@ -27,7 +25,6 @@ import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
-import react.useState
 import kotlin.coroutines.CoroutineContext
 
 external interface ItemEditProps<T> : PropsWithChildren {

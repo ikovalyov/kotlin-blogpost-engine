@@ -39,7 +39,7 @@ class ItemList<I : IEditable>(props: ItemListProps<I>) :
                     props.switchToViewState(it)
                 }
                 onEditClick = {
-                console.log("switch to edit state")
+                    console.log("switch to edit state")
                     props.switchToEditState(it)
                 }
                 onDeleteClick = {

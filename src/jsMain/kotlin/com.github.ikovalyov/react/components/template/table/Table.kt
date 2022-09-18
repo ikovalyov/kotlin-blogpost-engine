@@ -21,7 +21,6 @@ import react.FC
 import react.Fragment
 import react.PropsWithChildren
 import react.create
-import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.table
 import react.dom.html.ReactHTML.tbody
