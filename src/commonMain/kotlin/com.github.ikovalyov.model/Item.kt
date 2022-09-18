@@ -1,3 +1,4 @@
+@file:OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
 @file:UseSerializers(UuidSerializer::class)
 
 package com.github.ikovalyov.model

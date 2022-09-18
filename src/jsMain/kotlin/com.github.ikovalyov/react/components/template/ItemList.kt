@@ -34,9 +34,18 @@ class ItemList<I : IEditable>(props: ItemListProps<I>) :
         return Fragment.create {
             Table<I> {
                 items = props.items?.toTypedArray()
-                onViewClick = { props.switchToViewState(it) }
-                onEditClick = { props.switchToEditState(it) }
-                onDeleteClick = { launch { props.deleteItem(it) } }
+                onViewClick = {
+                    console.log("switch to view state")
+                    props.switchToViewState(it)
+                }
+                onEditClick = {
+                console.log("switch to edit state")
+                    props.switchToEditState(it)
+                }
+                onDeleteClick = {
+                    console.log("delete")
+                    launch { props.deleteItem(it) }
+                }
             }
 
             ReactHTML.button {

@@ -98,20 +98,11 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
         coroutineScope.launch {
             val template = loadItem(t.id)
             updateState {
-                it.currentItem = template
-                it.currentState = CrudState.VIEW
-                it.itemsList = componentState.itemsList
-                it
-            }
-        }
-    }
-
-    fun switchToAddStateFunc() {
-        coroutineScope.launch {
-            updateState {
-                it.currentState = CrudState.ADD
-                it.currentItem = null
-                it
+                jso {
+                    currentItem = template
+                    currentState = CrudState.VIEW
+                    itemsList = componentState.itemsList
+                }
             }
         }
     }
@@ -132,9 +123,11 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
 
     fun switchToInsertStateFunc() {
         updateState {
-            it.currentItem = null
-            it.currentState = CrudState.ADD
-            it
+            jso {
+                currentItem = null
+                currentState = CrudState.ADD
+                itemsList = componentState.itemsList
+            }
         }
     }
 
@@ -163,9 +156,11 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
         coroutineScope.launch {
             val template = loadItem(t.id)
             updateState {
-                it.currentItem = template
-                it.currentState = CrudState.EDIT
-                it
+                jso {
+                    currentItem = template
+                    currentState = CrudState.EDIT
+                    itemsList = it.itemsList
+                }
             }
         }
     }
@@ -193,40 +188,46 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
 
         CrudState.EDIT -> {
             console.log("Loading TemplateEdit")
-            TemplateEdit(
-                jso {
-                    switchToListState = ::switchToListViewStateFunc
-                    submitForm = ::submitEditItemForm
-                },
-                jso<TemplateEditState<I>> {
-                    item = componentState.currentItem!!
-                }
+            child(
+                TemplateEdit(
+                    jso {
+                        switchToListState = ::switchToListViewStateFunc
+                        submitForm = ::submitEditItemForm
+                    },
+                    jso<TemplateEditState<I>> {
+                        item = componentState.currentItem!!
+                    }
+                ).render()
             )
         }
 
         CrudState.VIEW -> {
             console.log("Loading TemplateView")
-            TemplateView(
-                jso<TemplateViewProps<I>> {
-                    switchToListState = ::switchToListViewStateFunc
-                },
-                jso {
-                    item = componentState.currentItem!!
-                }
+            child(
+                TemplateView(
+                    jso<TemplateViewProps<I>> {
+                        switchToListState = ::switchToListViewStateFunc
+                    },
+                    jso {
+                        item = componentState.currentItem!!
+                    }
+                ).render()
             )
         }
 
         CrudState.ADD -> {
             console.log("Loading TemplateInsert")
-            TemplateInsert(
-                jso<TemplateInsertProps<I>> {
-                    this.item = props.factory()
-                    this.submitForm = ::submitInsertItemForm
-                    this.switchToListState = ::switchToListViewStateFunc
-                },
-                jso {
-                    this.currentItem = props.factory()
-                }
+            child(
+                TemplateInsert(
+                    jso<TemplateInsertProps<I>> {
+                        this.item = props.factory()
+                        this.submitForm = ::submitInsertItemForm
+                        this.switchToListState = ::switchToListViewStateFunc
+                    },
+                    jso {
+                        this.currentItem = props.factory()
+                    }
+                ).render()
             )
         }
     }

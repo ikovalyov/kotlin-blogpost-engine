@@ -41,18 +41,22 @@ external interface TemplateEditState<T> : State {
 
 class TemplateEdit<I : IEditable>(
     props: ItemEditProps<I>,
-    state: TemplateEditState<I>
+    private val initialState: TemplateEditState<I>
 ) : Component<ItemEditProps<I>, TemplateEditState<I>>(props),
     CoroutineScope {
+
     init {
-        setState(state)
+        this.state = initialState
     }
 
     private var job = Job()
     override val coroutineContext: CoroutineContext
         get() = job
 
-    private val updateState = useState<TemplateEditState<I>>(state).component2()
+    override fun componentDidMount() {
+        super.componentDidMount()
+        setState(initialState)
+    }
 
     override fun render(): ReactNode {
         return Fragment.create {
@@ -78,7 +82,7 @@ class TemplateEdit<I : IEditable>(
                                     display = Display.block
                                     width = 150.px
                                     float = Float.left
-                                    after { content = Content.openQuote }
+                                    after { content = "\":\"".asDynamic() }
                                 }
                                 htmlFor = "id"
                             }
@@ -90,12 +94,7 @@ class TemplateEdit<I : IEditable>(
                                     onChange =
                                         { event ->
                                             val stringValue = event.target.asDynamic().value.toString()
-                                            updateState { state ->
-                                                jso {
-                                                    item =
-                                                        state.item.updateField(field = it, serializedData = stringValue)
-                                                }
-                                            }
+                                            state.item = state.item.updateField(field = it, serializedData = stringValue)
                                         }
                                 } else {
                                     value = state.item.getFieldValueAsString(it)
