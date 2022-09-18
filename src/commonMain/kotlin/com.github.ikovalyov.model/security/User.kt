@@ -1,3 +1,4 @@
+@file:OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
 @file:UseSerializers(UuidSerializer::class)
 
 package com.github.ikovalyov.model.security
@@ -17,12 +18,12 @@ import kotlinx.serialization.json.Json
 @Serializable
 data class User(
     override val id: Uuid,
-    val email: Email,
+    var email: Email,
     val loggedIn: Boolean,
     val nickname: String,
     val roles: List<Uuid>,
     val password: Password
-) : IEditable<User> {
+) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, User>> {
         return listOf(
             IEditable.EditableMetadata(
@@ -31,7 +32,9 @@ data class User(
                 serialize = { id.toString() },
                 deserialize = { uuidFrom(it) },
                 get = { id },
-                update = { copy(id = it) }
+                update = {
+                    copy(id = it)
+                }
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Email,
@@ -39,7 +42,9 @@ data class User(
                 serialize = { it.value.value },
                 deserialize = { Email(ShortString(it)) },
                 get = { email },
-                update = { copy(email = it) }
+                update = {
+                    copy(email = it)
+                }
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Nickname,
@@ -47,7 +52,9 @@ data class User(
                 serialize = { it },
                 deserialize = { it },
                 get = { nickname },
-                update = { copy(nickname = it) }
+                update = {
+                    copy(nickname = it)
+                }
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.UserRoles,
@@ -55,7 +62,9 @@ data class User(
                 serialize = { Json.encodeToString(ListSerializer(UuidSerializer), it) },
                 deserialize = { Json.decodeFromString(ListSerializer(UuidSerializer), it) },
                 get = { roles },
-                update = { copy(roles = it) }
+                update = {
+                    copy(roles = it)
+                }
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Password,
@@ -63,7 +72,9 @@ data class User(
                 serialize = { it.value.value },
                 deserialize = { Password(ShortString(it)) },
                 get = { password },
-                update = { copy(password = it) }
+                update = {
+                    copy(password = it)
+                }
             )
         )
     }

@@ -8,7 +8,7 @@ import mu.KotlinLogging
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-abstract class CrudRepository<T : IEditable<T>>(dynamoDbClient: DynamoDbAsyncClient) :
+abstract class CrudRepository<T : IEditable>(dynamoDbClient: DynamoDbAsyncClient) :
     AbstractKeyValueRepository(dynamoDbClient) {
 
     private val logger = KotlinLogging.logger {}

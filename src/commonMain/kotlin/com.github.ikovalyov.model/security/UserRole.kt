@@ -1,3 +1,4 @@
+@file:OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
 @file:UseSerializers(UuidSerializer::class)
 
 package com.github.ikovalyov.model.security
@@ -19,7 +20,7 @@ data class UserRole(
     override val id: Uuid,
     val lastModified: Instant,
     val name: String
-) : IEditable<UserRole> {
+) : IEditable {
     companion object {
         const val id = "id"
         const val name = "name"

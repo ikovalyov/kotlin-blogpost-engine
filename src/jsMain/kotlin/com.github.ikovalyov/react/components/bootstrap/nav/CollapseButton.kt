@@ -31,7 +31,7 @@ var HTMLAttributes<*>.ariaExpanded: String?
 var HTMLAttributes<*>.ariaLabel: String?
     get() = asDynamic()["aria-label"]
     set(value) {
-        asDynamic()["aria-lable"] = value
+        asDynamic()["aria-label"] = value
     }
 
 fun ChildrenBuilder.CollapseButton(target: String) = ReactHTML.button {

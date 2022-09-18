@@ -1,9 +1,10 @@
 package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.markers.getFieldValueAsString
+import com.github.ikovalyov.model.markers.updateField
 import com.github.ikovalyov.react.components.template.table.Button
 import csstype.Color
-import csstype.Content
 import csstype.Display
 import csstype.Float
 import csstype.FontWeight
@@ -12,7 +13,6 @@ import emotion.react.css
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.js.jso
 import react.Component
 import react.Fragment
 import react.PropsWithChildren
@@ -25,7 +25,6 @@ import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
-import react.useState
 import kotlin.coroutines.CoroutineContext
 
 external interface ItemEditProps<T> : PropsWithChildren {
@@ -37,20 +36,24 @@ external interface TemplateEditState<T> : State {
     var item: T
 }
 
-class TemplateEdit<T : IEditable<T>>(
-    props: ItemEditProps<T>,
-    state: TemplateEditState<T>
-) : Component<ItemEditProps<T>, TemplateEditState<T>>(props),
+class TemplateEdit<I : IEditable>(
+    props: ItemEditProps<I>,
+    private val initialState: TemplateEditState<I>
+) : Component<ItemEditProps<I>, TemplateEditState<I>>(props),
     CoroutineScope {
+
     init {
-        setState(state)
+        this.state = initialState
     }
 
     private var job = Job()
     override val coroutineContext: CoroutineContext
         get() = job
 
-    private val updateState = useState<TemplateEditState<T>>(state).component2()
+    override fun componentDidMount() {
+        super.componentDidMount()
+        setState(initialState)
+    }
 
     override fun render(): ReactNode {
         return Fragment.create {
@@ -64,7 +67,7 @@ class TemplateEdit<T : IEditable<T>>(
                     }
             }
             fieldset {
-                val fields = state.item.getMetadata()
+                val fields = state.item.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
                 fields.let {
                     it.forEach {
                         p {
@@ -76,7 +79,7 @@ class TemplateEdit<T : IEditable<T>>(
                                     display = Display.block
                                     width = 150.px
                                     float = Float.left
-                                    after { content = Content.openQuote }
+                                    after { content = "\":\"".asDynamic() }
                                 }
                                 htmlFor = "id"
                             }
@@ -88,12 +91,7 @@ class TemplateEdit<T : IEditable<T>>(
                                     onChange =
                                         { event ->
                                             val stringValue = event.target.asDynamic().value.toString()
-                                            updateState { state ->
-                                                jso {
-                                                    item =
-                                                        state.item.updateField(field = it, serializedData = stringValue)
-                                                }
-                                            }
+                                            state.item = state.item.updateField(field = it, serializedData = stringValue)
                                         }
                                 } else {
                                     value = state.item.getFieldValueAsString(it)
@@ -103,12 +101,12 @@ class TemplateEdit<T : IEditable<T>>(
                     }
                 }
             }
-            Button<T> {
+            Button<I> {
                 body = state.item
                 text = "Update"
                 type = ButtonType.submit
             }
-            Button<T> {
+            Button<I> {
                 onClick = {
                     launch { props.switchToListState() }
                 }
