@@ -16,6 +16,7 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
+import react.router.dom.Link
 
 const val navbarTogglerId = "navbarTogglerDemo01"
 val App = FC<Props> {
@@ -26,8 +27,9 @@ val App = FC<Props> {
             div {
                 className = ClassName("collapse navbar-collapse")
                 id = navbarTogglerId
-                a {
-                    href = "#"
+                Link {
+                    to = "/"
+//                    href = "#"
                     className = ClassName("navbar-brand")
                     +"Hidden brand"
                 }
@@ -38,6 +40,7 @@ val App = FC<Props> {
                         +"Home "
                         ScreenReaderSpan("(current)")
                     }
+                    menuItem(href = "/login", active = false, disabled = false) { +"Login" }
                     menuItem(href = "#", active = false, disabled = false) { +"Link" }
                     menuItem(href = "#", active = false, disabled = true) { +"Disabled" }
                 }

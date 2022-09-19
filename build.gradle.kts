@@ -96,6 +96,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom")
                 implementation(npm("react", "18.2.0"))
                 implementation(npm("react-dom", "18.2.0"))
                 implementation(npm("react-is", "18.2.0"))
