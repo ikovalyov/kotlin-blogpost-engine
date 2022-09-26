@@ -124,6 +124,8 @@ kotlin {
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("io.micronaut.picocli:micronaut-picocli")
                 implementation("io.micronaut:micronaut-inject-java")
+                implementation("io.micronaut.security:micronaut-security-oauth2")
+                implementation("io.micronaut.security:micronaut-security-jwt")
                 implementation("software.amazon.awssdk:dynamodb") {
                     exclude(group = "software.amazon.awssdk", module = "apache-client")
                     exclude(group = "software.amazon.awssdk", module = "url-connection-client")

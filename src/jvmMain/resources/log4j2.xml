@@ -6,7 +6,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="${env:LOG4J_LEVEL:-INFO}">
+        <Root level="${env:LOG4J_LEVEL:-TRACE}">
             <AppenderRef ref="Console"/>
         </Root>
         <logger name="org.testcontainers" level="INFO"/>

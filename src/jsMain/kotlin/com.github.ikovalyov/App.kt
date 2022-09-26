@@ -9,6 +9,8 @@ import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
 import csstype.ClassName
 import csstype.px
 import emotion.react.css
+import kotlinx.browser.document
+import kotlinx.js.URLSearchParams
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.a
@@ -40,8 +42,8 @@ val App = FC<Props> {
                         +"Home "
                         ScreenReaderSpan("(current)")
                     }
-                    menuItem(href = "/login", active = false, disabled = false) { +"Login" }
-                    menuItem(href = "#", active = false, disabled = false) { +"Link" }
+                    menuItem(href = "${Api.backendEndpoint}/oauth/login/google", active = false, disabled = false, reactLink = false) { +"Login" }
+                    menuItem(href = "${Api.backendEndpoint}/logout", active = false, disabled = false, reactLink = false) { +"Logout" }
                     menuItem(href = "#", active = false, disabled = true) { +"Disabled" }
                 }
                 form {

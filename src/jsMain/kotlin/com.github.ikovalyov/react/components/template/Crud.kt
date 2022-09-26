@@ -1,6 +1,7 @@
 package com.github.ikovalyov.react.components.template
 
 import com.benasher44.uuid.Uuid
+import com.github.ikovalyov.Api.backendEndpoint
 import com.github.ikovalyov.coroutines.SimpleCoroutineScope
 import com.github.ikovalyov.model.markers.IEditable
 import kotlinx.browser.window
@@ -8,6 +9,8 @@ import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
 import kotlinx.js.jso
 import org.w3c.fetch.Headers
+import org.w3c.fetch.INCLUDE
+import org.w3c.fetch.RequestCredentials
 import org.w3c.fetch.RequestInit
 import react.ChildrenBuilder
 import react.FC
@@ -20,7 +23,6 @@ external interface CrudComponentProps<T> : PropsWithChildren {
     var decodeItems: (String) -> List<T>
     var apiUri: String
     var factory: () -> T
-    var initialState: CrudState
 }
 
 external interface CrudComponentState<T> : State {
@@ -50,7 +52,12 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
 
     suspend fun loadItem(itemId: Uuid): I {
         val result = window
-            .fetch("http://localhost:8082" + props.apiUri + "/$itemId")
+            .fetch(
+                backendEndpoint + props.apiUri + "/$itemId",
+                RequestInit(
+                    credentials = RequestCredentials.INCLUDE
+                )
+            )
             .await()
             .text()
             .await()
@@ -63,8 +70,13 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
         headers.append("Content-Type", "application/json")
         val fetchResult =
             window.fetch(
-                "http://localhost:8082" + props.apiUri,
-                RequestInit(method = "PATCH", headers = headers, body = body)
+                backendEndpoint + props.apiUri,
+                RequestInit(
+                    method = "PATCH",
+                    headers = headers,
+                    body = body,
+                    credentials = RequestCredentials.INCLUDE
+                )
             )
         val response = fetchResult.await()
         response.text().await()
@@ -76,8 +88,13 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
         headers.append("Content-Type", "application/json")
         val fetchResult =
             window.fetch(
-                "http://localhost:8082" + props.apiUri,
-                RequestInit(method = "POST", headers = headers, body = body)
+                backendEndpoint + props.apiUri,
+                RequestInit(
+                    method = "POST",
+                    headers = headers,
+                    body = body,
+                    credentials = RequestCredentials.INCLUDE
+                )
             )
         val response = fetchResult.await()
         response.text().await()
@@ -98,7 +115,12 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
 
     suspend fun switchToListViewStateFunc() {
         coroutineScope.launch {
-            val result = window.fetch("http://localhost:8082" + props.apiUri).await().text().await()
+            val result = window.fetch(
+                backendEndpoint + props.apiUri,
+                RequestInit(
+                    credentials = RequestCredentials.INCLUDE
+                )
+            ).await().text().await()
             val templatesList = props.decodeItems(result)
             updateState {
                 jso {
@@ -122,11 +144,14 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
 
     suspend fun deleteItem(t: I) {
         if (window.confirm("Are you sure you want to delete this item?")) {
+            val headers = Headers()
+            headers.append("Content-Type", "application/json")
             window.fetch(
-                "http://localhost:8082" + props.apiUri + "/${t.id}",
-                RequestInit(method = "DELETE")
-            )
-                .await()
+                backendEndpoint + props.apiUri + "/${t.id}",
+                RequestInit(
+                    method = "DELETE",
+                    credentials = RequestCredentials.INCLUDE)
+            ).await()
             switchToListViewStateFunc()
         }
     }
