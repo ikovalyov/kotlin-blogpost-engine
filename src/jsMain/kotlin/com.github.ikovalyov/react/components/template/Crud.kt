@@ -150,7 +150,8 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
                 backendEndpoint + props.apiUri + "/${t.id}",
                 RequestInit(
                     method = "DELETE",
-                    credentials = RequestCredentials.INCLUDE)
+                    credentials = RequestCredentials.INCLUDE
+                )
             ).await()
             switchToListViewStateFunc()
         }

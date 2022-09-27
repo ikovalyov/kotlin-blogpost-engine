@@ -3,7 +3,6 @@ package com.github.ikovalyov.react.components.bootstrap.nav
 import csstype.ClassName
 import kotlinx.browser.window
 import react.ChildrenBuilder
-import react.dom.html.ReactHTML.a
 import react.router.dom.Link
 
 fun ChildrenBuilder.ReactAnchor(hrefString: String, active: Boolean, disabled: Boolean, block: ChildrenBuilder.() -> Unit) {

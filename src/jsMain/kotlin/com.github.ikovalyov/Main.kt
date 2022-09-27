@@ -3,7 +3,6 @@ package com.github.ikovalyov
 import com.github.ikovalyov.routes.Index
 import csstype.ClassName
 import kotlinx.browser.document
-import kotlinx.js.URLSearchParams
 import react.Fragment
 import react.create
 import react.dom.client.createRoot

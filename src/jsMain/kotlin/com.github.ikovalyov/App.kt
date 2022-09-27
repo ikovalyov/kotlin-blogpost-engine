@@ -9,11 +9,8 @@ import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
 import csstype.ClassName
 import csstype.px
 import emotion.react.css
-import kotlinx.browser.document
-import kotlinx.js.URLSearchParams
 import react.FC
 import react.Props
-import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.nav

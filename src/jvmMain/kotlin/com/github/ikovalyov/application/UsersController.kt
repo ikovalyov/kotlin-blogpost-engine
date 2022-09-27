@@ -14,7 +14,7 @@ import io.micronaut.security.rules.SecurityRule
 class UsersController {
 
     @Get("/")
-    fun userInfo() : Security {
+    fun userInfo(): Security {
         val requestOpt = ServerRequestContext.currentRequest<Any>()
         if (requestOpt.isEmpty) {
             throw IllegalStateException("Request not found")
