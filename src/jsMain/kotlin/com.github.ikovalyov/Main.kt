@@ -1,7 +1,6 @@
 package com.github.ikovalyov
 
 import com.github.ikovalyov.routes.Index
-import com.github.ikovalyov.routes.Login
 import csstype.ClassName
 import kotlinx.browser.document
 import kotlinx.js.URLSearchParams
@@ -21,7 +20,7 @@ fun main() {
             BrowserRouter {
                 App { }
                 ReactHTML.div {
-                    className = ClassName("container")
+                    className = ClassName("container-fluid")
                     Routes {
                         Route {
                             index = true
