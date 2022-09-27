@@ -50,6 +50,7 @@ kotlin {
                     events("passed", "skipped", "failed")
                     showStackTraces = true
                     exceptionFormat = TestExceptionFormat.FULL
+//                    showStandardStreams = true
                 }
             }
             tasks.named<Jar>("jvmJar") {
@@ -96,6 +97,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom")
                 implementation(npm("react", "18.2.0"))
                 implementation(npm("react-dom", "18.2.0"))
                 implementation(npm("react-is", "18.2.0"))
@@ -123,6 +125,8 @@ kotlin {
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("io.micronaut.picocli:micronaut-picocli")
                 implementation("io.micronaut:micronaut-inject-java")
+                implementation("io.micronaut.security:micronaut-security-oauth2")
+                implementation("io.micronaut.security:micronaut-security-jwt")
                 implementation("software.amazon.awssdk:dynamodb") {
                     exclude(group = "software.amazon.awssdk", module = "apache-client")
                     exclude(group = "software.amazon.awssdk", module = "url-connection-client")

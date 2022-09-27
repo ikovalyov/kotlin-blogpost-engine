@@ -11,11 +11,11 @@ import csstype.px
 import emotion.react.css
 import react.FC
 import react.Props
-import react.dom.html.ReactHTML.a
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
+import react.router.dom.Link
 
 const val navbarTogglerId = "navbarTogglerDemo01"
 val App = FC<Props> {
@@ -26,8 +26,9 @@ val App = FC<Props> {
             div {
                 className = ClassName("collapse navbar-collapse")
                 id = navbarTogglerId
-                a {
-                    href = "#"
+                Link {
+                    to = "/"
+//                    href = "#"
                     className = ClassName("navbar-brand")
                     +"Hidden brand"
                 }
@@ -38,7 +39,8 @@ val App = FC<Props> {
                         +"Home "
                         ScreenReaderSpan("(current)")
                     }
-                    menuItem(href = "#", active = false, disabled = false) { +"Link" }
+                    menuItem(href = "${Api.backendEndpoint}/oauth/login/google", active = false, disabled = false, reactLink = false) { +"Login" }
+                    menuItem(href = "${Api.backendEndpoint}/logout", active = false, disabled = false, reactLink = false) { +"Logout" }
                     menuItem(href = "#", active = false, disabled = true) { +"Disabled" }
                 }
                 form {

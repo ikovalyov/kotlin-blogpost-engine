@@ -11,13 +11,16 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 @ExperimentalSerializationApi
-@Controller(Api.userUrl)
+@Controller(Api.userApiUrl)
+@Secured(SecurityRule.IS_AUTHENTICATED)
 class UsersController(private val userRepository: UserRepository) {
     private val logger = KotlinLogging.logger {}
 

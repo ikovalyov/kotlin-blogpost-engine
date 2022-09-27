@@ -20,6 +20,28 @@ micronaut:
         enabled: true
         mapping: "/static/**"
         paths: "classpath:data"
+  security:
+    authentication: idtoken
+    oauth2:
+      clients:
+        google:
+          client-id: ${GOOGLE_CLIENT_ID}
+          client-secret: ${GOOGLE_CLIENT_SECRET}
+          openid:
+            issuer: "https://accounts.google.com"
+          client-credentials:
+            additional-request-params:
+              prompt: consent
+    endpoints:
+      logout:
+        get-allowed: true
+    redirect:
+      login-success:
+        /auth/login
+      login-failure:
+        /auth/login
+      logout:
+        /auth/login
 jackson:
   serialization:
     writeDatesAsTimestamps: false

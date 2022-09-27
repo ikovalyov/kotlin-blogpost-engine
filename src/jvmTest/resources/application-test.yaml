@@ -1,0 +1,7 @@
+micronaut:
+  security:
+    oauth2:
+      clients:
+        google:
+          client-id: client-id
+          client-secret: client-secret

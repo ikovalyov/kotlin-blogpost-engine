@@ -11,11 +11,14 @@ import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
-@Controller(Api.userRoleUrl)
+@Controller(Api.userRoleApiUrl)
+@Secured(SecurityRule.IS_AUTHENTICATED)
 class UserRolesController(private val userRolesRepository: UserRoleRepository) {
     private val logger = KotlinLogging.logger {}
 

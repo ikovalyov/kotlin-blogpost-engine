@@ -1,6 +1,7 @@
-package com.github.ikovalyov
+package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.uuidFrom
+import com.github.ikovalyov.Api
 import com.github.ikovalyov.model.Item
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -10,13 +11,16 @@ import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import kotlinx.datetime.Clock
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
 
-@Controller("/")
+@Controller(Api.recordsApiUrl)
+@Secured(SecurityRule.IS_AUTHENTICATED)
 class RecordsController(private val client: DynamoDbAsyncClient) {
     @Get
     fun get(): String {
