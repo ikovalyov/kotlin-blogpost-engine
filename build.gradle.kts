@@ -89,7 +89,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.387"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.391"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -115,7 +115,7 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.6.3"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.7.0"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -138,7 +138,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.6.3"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.0"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
@@ -153,7 +153,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.6.3"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.0"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
@@ -161,11 +161,11 @@ kotlin {
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.305") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.311") // testcontainers need it
             }
         }
     }
