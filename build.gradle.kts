@@ -50,6 +50,7 @@ kotlin {
                     events("passed", "skipped", "failed")
                     showStackTraces = true
                     exceptionFormat = TestExceptionFormat.FULL
+//                    showStandardStreams = true
                 }
             }
             tasks.named<Jar>("jvmJar") {
