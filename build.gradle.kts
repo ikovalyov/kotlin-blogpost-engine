@@ -116,7 +116,7 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.7.1"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.7.2"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
