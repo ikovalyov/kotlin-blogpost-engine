@@ -20,10 +20,14 @@ interface IEditable {
         object LastModified : FieldType<Instant>()
         object Body : FieldType<String>()
         object Name : FieldType<String>()
+        object Abstract : FieldType<String>()
         object Email : FieldType<com.github.ikovalyov.model.security.Email>()
         object Nickname : FieldType<String>()
         object UserRoles : FieldType<List<Uuid>>()
         object Password : FieldType<com.github.ikovalyov.model.security.Password>()
+        object StringListFiledType : FieldType<List<String>>()
+        object Tags : FieldType<List<String>>()
+        object Metadata : FieldType<List<String>>()
     }
 
     val id: Uuid

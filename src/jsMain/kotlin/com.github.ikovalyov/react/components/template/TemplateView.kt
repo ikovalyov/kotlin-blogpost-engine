@@ -32,7 +32,7 @@ class TemplateView<I : IEditable>(
 ) : Component<TemplateViewProps<I>, TemplateViewState<I>>(props), CoroutineScope {
 
     init {
-        setState(state)
+        this.state = state
     }
 
     private var job = Job()
