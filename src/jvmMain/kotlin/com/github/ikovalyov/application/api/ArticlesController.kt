@@ -1,15 +1,10 @@
 package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.Uuid
-import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.infrastructure.dynamodb.repository.ArticleRepository
 import com.github.ikovalyov.model.Article
-import com.github.ikovalyov.model.Item
-import com.github.ikovalyov.model.security.User
-import com.github.ikovalyov.model.security.UserRole
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Consumes
@@ -20,13 +15,8 @@ import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import kotlinx.datetime.Clock
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
 
 @Controller(Api.articleApiUrl)
 @Secured(SecurityRule.IS_AUTHENTICATED)

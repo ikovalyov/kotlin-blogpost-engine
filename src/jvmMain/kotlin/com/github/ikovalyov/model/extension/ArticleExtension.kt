@@ -2,13 +2,6 @@ package com.github.ikovalyov.model.extension
 
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.Article
-import com.github.ikovalyov.model.security.Email
-import com.github.ikovalyov.model.security.Password
-import com.github.ikovalyov.model.security.ShortString
-import com.github.ikovalyov.model.security.User
-import com.github.ikovalyov.model.serializer.UuidSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.json.Json
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 object ArticleExtension {

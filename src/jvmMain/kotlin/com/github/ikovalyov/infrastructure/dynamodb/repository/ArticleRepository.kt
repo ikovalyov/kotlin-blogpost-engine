@@ -1,16 +1,13 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import com.benasher44.uuid.Uuid
-import com.benasher44.uuid.uuid4
 import com.github.ikovalyov.model.Article
-import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.extension.ArticleExtension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.ArticleExtension.toDynamoDbMap
 import com.github.ikovalyov.model.extension.UserExtension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.UserExtension.toDynamoDbMap
 import com.github.ikovalyov.model.extension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.toDynamoDbMap
-import com.github.ikovalyov.model.security.User
 import jakarta.inject.Singleton
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
