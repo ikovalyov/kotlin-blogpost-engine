@@ -46,7 +46,7 @@ class TemplateView<I : IEditable>(
                 fields.forEach {
                     section {
                         h1 { +it.fieldType::class.simpleName!! }
-                        p { +state.item.getFieldValueAsString(it) }
+                        p { +(state.item.getFieldValueAsString(it) ?: "") }
                     }
                 }
                 Button<I> {

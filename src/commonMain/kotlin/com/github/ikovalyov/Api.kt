@@ -1,6 +1,7 @@
 package com.github.ikovalyov
 
 object Api {
+    const val articleApiUrl = "/application/api/article"
     const val templateApiUrl = "/application/api/template"
     const val recordsApiUrl = "/application/api/records"
     const val viewsApiUrl = "/application/api/views"

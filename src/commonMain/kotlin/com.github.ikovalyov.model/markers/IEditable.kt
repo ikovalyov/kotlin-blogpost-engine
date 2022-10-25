@@ -12,7 +12,7 @@ interface IEditable {
         val serialize: (F) -> String,
         val deserialize: (String) -> F,
         val update: I.(F) -> I,
-        val get: () -> F
+        val get: () -> F?
     )
 
     sealed class FieldType<T : Any> {
@@ -40,9 +40,11 @@ fun <T : IEditable, F : Any> T.updateField(field: IEditable.EditableMetadata<F, 
     return field.update(this, data)
 }
 
-fun <T : IEditable, F : Any> T.getFieldValueAsString(field: IEditable.EditableMetadata<F, T>): String {
+fun <T : IEditable, F : Any> T.getFieldValueAsString(field: IEditable.EditableMetadata<F, T>): String? {
     val fieldValue = field.get()
-    return field.serialize(fieldValue)
+    return fieldValue?.let {
+        field.serialize(it)
+    }
 }
 
 /**

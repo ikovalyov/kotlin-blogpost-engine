@@ -1,20 +1,28 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+@file:UseSerializers(UuidSerializer::class)
+
 package com.github.ikovalyov.model
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.serializer.UuidSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+@Serializable
 data class Article(
     override val id: Uuid,
     val name: String,
     val abstract: String,
     val body: String,
-    val author: Uuid,
+    val author: Uuid?,
     val tags: List<String>,
     val meta: List<String>,
-    val template: Uuid // Template uuid
+    val template: Uuid? // Template uuid
 ) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
         return listOf(
