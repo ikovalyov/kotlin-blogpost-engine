@@ -3,11 +3,10 @@ package com.github.ikovalyov.model
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
-import com.github.ikovalyov.model.markers.updateField
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-data class Article (
+data class Article(
     override val id: Uuid,
     val name: String,
     val abstract: String,
@@ -18,7 +17,7 @@ data class Article (
     val template: Uuid // Template uuid
 ) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
-        return listOf (
+        return listOf(
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Id,
                 readOnly = true,
@@ -146,7 +145,7 @@ data class Article (
                 get = {
                     template
                 }
-            ),
+            )
         )
     }
 
