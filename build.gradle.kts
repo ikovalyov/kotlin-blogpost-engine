@@ -136,7 +136,7 @@ kotlin {
 
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
                 implementation("org.apache.logging.log4j:log4j-core:2.19.0")
-                implementation("org.freemarker:freemarker:2.3.31")
+                implementation("org.freemarker:freemarker:2.3.32")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.5"),
