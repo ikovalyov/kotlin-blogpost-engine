@@ -72,7 +72,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:3.0.2")
+                implementation("io.github.microutils:kotlin-logging:3.0.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
                 implementation("com.benasher44:uuid:0.6.0")
@@ -136,7 +136,7 @@ kotlin {
 
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
                 implementation("org.apache.logging.log4j:log4j-core:2.19.0")
-                implementation("org.freemarker:freemarker:2.3.31")
+                implementation("org.freemarker:freemarker:2.3.32")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.5"),
@@ -158,7 +158,7 @@ kotlin {
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.17.5"))
+                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.17.6"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
