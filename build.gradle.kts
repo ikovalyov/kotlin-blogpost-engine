@@ -3,12 +3,12 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.7.20"
-    kotlin("kapt") version "1.7.20"
-    kotlin("plugin.allopen") version "1.7.20"
-    kotlin("plugin.serialization") version "1.7.20"
+    kotlin("multiplatform") version "1.7.22"
+    kotlin("kapt") version "1.7.22"
+    kotlin("plugin.allopen") version "1.7.22"
+    kotlin("plugin.serialization") version "1.7.22"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("com.diffplug.spotless") version "6.11.0"
+    id("com.diffplug.spotless") version "6.12.0"
     id("idea")
 }
 
@@ -75,7 +75,7 @@ kotlin {
                 implementation("io.github.microutils:kotlin-logging:3.0.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-                implementation("com.benasher44:uuid:0.5.0")
+                implementation("com.benasher44:uuid:0.6.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             }
         }
@@ -90,7 +90,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.413"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.476"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -116,7 +116,7 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.7.2"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.7.5"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -139,7 +139,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.31")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.2"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.5"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
@@ -154,7 +154,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.2"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.5"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
@@ -166,7 +166,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.327") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.385") // testcontainers need it
             }
         }
     }
