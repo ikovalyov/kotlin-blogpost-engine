@@ -3,7 +3,9 @@ package com.github.ikovalyov.model.markers
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.model.security.Email
 import com.github.ikovalyov.model.security.Password
+import com.github.ikovalyov.model.security.User
 import kotlinx.datetime.Instant
+import kotlinx.serialization.ExperimentalSerializationApi
 
 interface IEditable {
     data class EditableMetadata<F : Any, I : IEditable>(
@@ -17,6 +19,8 @@ interface IEditable {
 
     sealed class FieldType<T : Any> {
         object Id : FieldType<Uuid>()
+        @OptIn(ExperimentalSerializationApi::class)
+        object Author : FieldType<User>()
         object LastModified : FieldType<Instant>()
         object Body : FieldType<String>()
         object Name : FieldType<String>()

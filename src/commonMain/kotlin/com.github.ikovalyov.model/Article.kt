@@ -20,8 +20,8 @@ data class Article(
     val abstract: String,
     val body: String,
     val author: Uuid?,
-    val tags: List<String>,
-    val meta: List<String>,
+    val tags: List<String>?,
+    val meta: List<String>?,
     val template: Uuid? // Template uuid
 ) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
@@ -91,7 +91,7 @@ data class Article(
                 }
             ),
             IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Id,
+                fieldType = IEditable.FieldType.Author,
                 readOnly = false,
                 serialize = {
                     it.toString()
