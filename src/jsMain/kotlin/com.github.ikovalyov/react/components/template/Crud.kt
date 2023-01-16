@@ -4,10 +4,10 @@ import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api.backendEndpoint
 import com.github.ikovalyov.coroutines.SimpleCoroutineScope
 import com.github.ikovalyov.model.markers.IEditable
+import js.core.jso
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
-import kotlinx.js.jso
 import org.w3c.fetch.Headers
 import org.w3c.fetch.INCLUDE
 import org.w3c.fetch.RequestCredentials

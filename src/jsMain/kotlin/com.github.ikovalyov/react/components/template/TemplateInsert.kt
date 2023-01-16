@@ -85,11 +85,13 @@ class TemplateInsert<I : IEditable>(
                                 if (!it.readOnly) {
                                     defaultValue = ""
                                     onChange = { event ->
-                                        val value = event.target.value
-                                        ref.state.currentItem = ref.state.currentItem.updateField(
-                                            field = it,
-                                            serializedData = value
-                                        )
+                                        launch {
+                                            val value = event.target.value
+                                            ref.state.currentItem = ref.state.currentItem.updateField(
+                                                field = it,
+                                                serializedData = value
+                                            )
+                                        }
                                     }
                                 } else {
                                     value = state.currentItem.getFieldValueAsString(it)

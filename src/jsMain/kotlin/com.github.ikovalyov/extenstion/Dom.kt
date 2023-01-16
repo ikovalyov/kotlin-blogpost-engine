@@ -1,7 +1,7 @@
 package com.github.ikovalyov.extenstion
 
-import kotlinx.js.Object
-import org.w3c.dom.Element
+import js.core.Object
+import web.dom.Element
 import react.Props
 import react.dom.html.HTMLAttributes
 

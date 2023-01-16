@@ -1,7 +1,10 @@
 package com.github.ikovalyov.model.extension
 
+import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.Article
+import com.github.ikovalyov.model.security.User
+import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 object ArticleExtension {
@@ -27,7 +30,11 @@ object ArticleExtension {
         return mutableMap
     }
 
-    fun Article.Companion.fromDynamoDbMap(map: Map<String, AttributeValue>): Article {
+    @OptIn(ExperimentalSerializationApi::class)
+    fun Article.Companion.fromDynamoDbMap(
+        map: Map<String, AttributeValue>,
+        usersList: Map<Uuid, User>
+    ): Article {
         val tags = map["tags"]?.ss()
         val author = map["author"]?.let {
             uuidFrom(it.s())
@@ -40,10 +47,12 @@ object ArticleExtension {
             name = map["name"]!!.s(),
             abstract = map["abstract"]!!.s(),
             body = map["body"]!!.s(),
-            author = author,
+            author = usersList[author]!!,
             tags = map["tags"]?.ss(),
             meta = map["meta"]?.ss(),
             template = template
-        )
+        ) {
+            usersList[it]!!
+        }
     }
 }

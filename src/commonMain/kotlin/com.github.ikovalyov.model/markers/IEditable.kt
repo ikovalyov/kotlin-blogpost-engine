@@ -12,7 +12,7 @@ interface IEditable {
         val fieldType: FieldType<F>,
         val readOnly: Boolean,
         val serialize: (F) -> String,
-        val deserialize: (String) -> F,
+        val deserialize: suspend (String) -> F,
         val update: I.(F) -> I,
         val get: () -> F?
     )
@@ -39,7 +39,7 @@ interface IEditable {
     fun serialize(): String
 }
 
-fun <T : IEditable, F : Any> T.updateField(field: IEditable.EditableMetadata<F, T>, serializedData: String): T {
+suspend fun <T : IEditable, F : Any> T.updateField(field: IEditable.EditableMetadata<F, T>, serializedData: String): T {
     val data = field.deserialize(serializedData)
     return field.update(this, data)
 }

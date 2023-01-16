@@ -9,6 +9,8 @@ import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.security.UserRole
+import com.github.ikovalyov.model.security.service.SecurityService
+import com.github.ikovalyov.model.service.UserService
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
 import com.github.ikovalyov.react.components.template.CrudComponent
@@ -24,7 +26,13 @@ import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
 
 @OptIn(ExperimentalSerializationApi::class)
-val Index = FC<Props> {
+external interface IndexProps: Props {
+    var currentUser: User
+    var userService: UserService
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+val Index = FC<IndexProps> {
     div {
         className = ClassName("row flex-nowrap")
         div {
@@ -100,7 +108,9 @@ val Index = FC<Props> {
                 }
                 apiUri = Api.articleApiUrl
                 factory = {
-                    Article(uuid4(), "", "", "", null, emptyList(), emptyList(), null)
+                    Article(uuid4(), "", "", "", it.currentUser, emptyList(), emptyList(), null) { uuid ->
+                        it.userService.getUser(uuid)
+                    }
                 }
             }
         }

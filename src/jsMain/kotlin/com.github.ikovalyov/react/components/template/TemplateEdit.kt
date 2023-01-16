@@ -90,8 +90,10 @@ class TemplateEdit<I : IEditable>(
                                     defaultValue = state.item.getFieldValueAsString(it)
                                     onChange =
                                         { event ->
-                                            val stringValue = event.target.asDynamic().value.toString()
-                                            state.item = state.item.updateField(field = it, serializedData = stringValue)
+                                            launch {
+                                                val stringValue = event.target.asDynamic().value.toString()
+                                                state.item = state.item.updateField(field = it, serializedData = stringValue)
+                                            }
                                         }
                                 } else {
                                     value = state.item.getFieldValueAsString(it)

@@ -28,7 +28,6 @@ val App = FC<Props> {
                 id = navbarTogglerId
                 Link {
                     to = "/"
-//                    href = "#"
                     className = ClassName("navbar-brand")
                     +"Hidden brand"
                 }

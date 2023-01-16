@@ -11,8 +11,8 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@ExperimentalSerializationApi
-@Serializer(forClass = Uuid::class)
+//@ExperimentalSerializationApi
+//@Serializer(forClass = Uuid::class)
 object UuidSerializer : KSerializer<Uuid> {
     override fun serialize(encoder: Encoder, value: Uuid) {
         encoder.encodeString(value = value.toString())

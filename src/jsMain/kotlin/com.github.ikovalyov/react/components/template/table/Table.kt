@@ -1,6 +1,5 @@
 package com.github.ikovalyov.react.components.template.table
 
-import com.github.ikovalyov.extenstion.extraAttrs
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.styles.Colors
@@ -15,7 +14,7 @@ import csstype.TextAlign
 import csstype.WhiteSpace
 import csstype.px
 import emotion.react.css
-import kotlinx.js.jso
+import js.core.jso
 import react.ChildrenBuilder
 import react.FC
 import react.Fragment
@@ -28,12 +27,13 @@ import react.dom.html.ReactHTML.td
 import react.dom.html.ReactHTML.th
 import react.dom.html.ReactHTML.thead
 import react.dom.html.ReactHTML.tr
-import react.table.Column
-import react.table.RenderType
-import react.table.TableInstance
-import react.table.columns
-import react.table.useTable
-import react.useMemo
+import tanstack.react.table.renderCell
+import tanstack.react.table.renderHeader
+import tanstack.react.table.useReactTable
+import tanstack.table.core.ColumnDef
+import tanstack.table.core.ColumnDefTemplate
+import tanstack.table.core.StringOrTemplateHeader
+import tanstack.table.core.Table
 
 external interface TableProps<T : IEditable> : PropsWithChildren {
     var items: Array<T>?
@@ -46,7 +46,7 @@ private fun <T : IEditable> ChildrenBuilder.Table(props: TableProps<T>) {
     val items = props.items
     if (!items.isNullOrEmpty()) {
         val tableColumns = buildTableColumns(props, items.first())
-        val table = useTable<T>(
+        val table =  useReactTable<T>(
             options = jso {
                 this.data = items
                 this.columns = tableColumns
@@ -56,60 +56,58 @@ private fun <T : IEditable> ChildrenBuilder.Table(props: TableProps<T>) {
     }
 }
 
-private fun <T : IEditable> buildTableColumns(componentProps: TableProps<T>, item: T): Array<out Column<T, *>> {
-    return useMemo {
-        columns {
-            val metadataList = item.getMetadata()
-            metadataList.filterIsInstance<IEditable.EditableMetadata<*, T>>().forEachIndexed { counter, metadata ->
-                column {
-                    header = metadata.fieldType::class.simpleName!!
-                    accessorFunction = {
-                        val itemMetadata = it.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, T>>()[counter]
-                        val str = it.getFieldValueAsString(itemMetadata) ?: ""
-                        if (str.length > 128) {
-                            str.substring(0, 128)
-                        } else {
-                            str
+private fun <T : IEditable> buildTableColumns(componentProps: TableProps<T>, item: T): Array<ColumnDef<T, *>> {
+    val metadataList = item.getMetadata()
+
+    val columns = metadataList.filterIsInstance<IEditable.EditableMetadata<*, T>>().mapIndexed { counter, metadata ->
+            jso<ColumnDef<T, String>> {
+                header = StringOrTemplateHeader(metadata.fieldType::class.simpleName!!)
+
+                accessorFn = { row, _ ->
+                    val itemMetadata = row.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, T>>()[counter]
+                    val str = row.getFieldValueAsString(itemMetadata) ?: ""
+                    if (str.length > 128) {
+                        str.substring(0, 128)
+                    } else {
+                        str
+                    }
+                }
+            }
+        }.toMutableList()
+    columns.add(
+        jso<ColumnDef<T, String>> {
+            id = "Action"
+            header = StringOrTemplateHeader("Action")
+            accessorKey = "id"
+            cell = ColumnDefTemplate() { props ->
+                Fragment.create {
+                    div {
+                        Button<T> {
+                            onClick = componentProps.onViewClick
+                            body = props.row.original
+                            text = "view"
+                        }
+                        Button<T> {
+                            onClick = componentProps.onEditClick
+                            body = props.row.original
+                            text = "update"
+                        }
+                        Button<T> {
+                            onClick = componentProps.onDeleteClick
+                            body = props.row.original
+                            text = "delete"
                         }
                     }
                 }
             }
-            column<T> {
-                id = "Action"
-                header = "Action"
-                accessor = "id"
-                cellFunction =
-                    { props ->
-                        Fragment.create {
-                            div {
-                                Button<T> {
-                                    onClick = componentProps.onViewClick
-                                    body = props.row.original
-                                    text = "view"
-                                }
-                                Button<T> {
-                                    onClick = componentProps.onEditClick
-                                    body = props.row.original
-                                    text = "update"
-                                }
-                                Button<T> {
-                                    onClick = componentProps.onDeleteClick
-                                    body = props.row.original
-                                    text = "delete"
-                                }
-                            }
-                        }
-                    }
-            }
         }
-    }
+    )
+    return columns.toTypedArray()
 }
 
-private fun <T : IEditable> ChildrenBuilder.buildTableBody(table: TableInstance<T>) {
+private fun <T : IEditable> ChildrenBuilder.buildTableBody(table: Table<T>) {
     div {
         table {
-            extraAttrs = table.getTableProps()
-
             css {
                 width = 400.px
                 borderSpacing = 0.px
@@ -127,27 +125,20 @@ private fun <T : IEditable> ChildrenBuilder.buildTableBody(table: TableInstance<
                     fontSize = 18.px
                     backgroundColor = Colors.Background.Gray
                 }
-                for (headerGroup in table.headerGroups) {
+                for (headerGroup in table.getHeaderGroups()) {
                     tr {
-                        extraAttrs = headerGroup.getHeaderGroupProps()
                         for (h in headerGroup.headers) {
-                            val originalHeader = h.placeholderOf
-                            val header = originalHeader ?: h
-
                             th {
-                                extraAttrs = header.getHeaderProps()
                                 css {
                                     fontWeight = FontWeight.normal
                                     padding = Padding(4.px, 12.px)
                                     borderRightColor = Colors.Stroke.Gray
                                     borderRight = LineStyle.solid
-                                    if (header.columns != null) {
-                                        borderBottomColor = Colors.Stroke.Gray
-                                        borderBottom = LineStyle.solid
-                                    }
+                                    borderBottomColor = Colors.Stroke.Gray
+                                    borderBottom = LineStyle.solid
                                     lastChild { borderRight = LineStyle.hidden }
                                 }
-                                +header.render(RenderType.Header)
+                                +renderHeader(h)
                             }
                         }
                     }
@@ -155,18 +146,13 @@ private fun <T : IEditable> ChildrenBuilder.buildTableBody(table: TableInstance<
             }
 
             tbody {
-                extraAttrs = table.getTableBodyProps()
-
                 css {
                     color = Colors.Text.Black
                     backgroundColor = Colors.Background.White
                     textAlign = TextAlign.start
                 }
-                for (row in table.rows) {
-                    table.prepareRow(row)
-
+                for (row in table.getRowModel().rows) {
                     tr {
-                        extraAttrs = row.getRowProps()
                         css {
                             fontSize = 16.px
                             cursor = Cursor.pointer
@@ -174,13 +160,12 @@ private fun <T : IEditable> ChildrenBuilder.buildTableBody(table: TableInstance<
                             borderBottom = LineStyle.solid
                             hover { backgroundColor = Colors.Background.Gray }
                         }
-                        for (cell in row.cells) {
+                        for (cell in row.getVisibleCells()) {
                             td {
-                                extraAttrs = cell.getCellProps()
                                 css {
                                     padding = Padding(10.px, 12.px)
                                 }
-                                +cell.render(RenderType.Cell)
+                                +renderCell(cell)
                             }
                         }
                     }

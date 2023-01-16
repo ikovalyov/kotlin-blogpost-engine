@@ -6,6 +6,7 @@ package com.github.ikovalyov.model
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -19,10 +20,11 @@ data class Article(
     val name: String,
     val abstract: String,
     val body: String,
-    val author: Uuid?,
+    val author: User,
     val tags: List<String>?,
     val meta: List<String>?,
-    val template: Uuid? // Template uuid
+    val template: Uuid?, // Template uuid
+    val getUserCallBack: suspend (Uuid) -> User
 ) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
         return listOf(
@@ -97,7 +99,7 @@ data class Article(
                     it.toString()
                 },
                 deserialize = {
-                    uuidFrom(it)
+                    getUserCallBack(uuidFrom(it))
                 },
                 update = {
                     copy(author = it)
