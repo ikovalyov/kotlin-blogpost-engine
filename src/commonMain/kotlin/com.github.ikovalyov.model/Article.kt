@@ -25,7 +25,7 @@ data class Article(
     val meta: List<String>?,
     val template: Template?, // Template uuid
     val userList: List<User>,
-    val templateList: List<Template>,
+    val templateList: List<Template>
 ) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
         println("Creating article object")
@@ -165,7 +165,7 @@ data class Article(
                 serialize = {
                     it.toString()
                 },
-                deserialize = {uuid ->
+                deserialize = { uuid ->
                     templateList.first {
                         it.id.toString() == uuid
                     }

@@ -3,8 +3,6 @@ package com.github.ikovalyov.model.security
 import com.github.ikovalyov.model.validator.EmailValidator
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Transient
 
 @Serializable
 @JvmInline

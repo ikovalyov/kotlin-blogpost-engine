@@ -7,7 +7,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
-import org.w3c.dom.Attr
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
@@ -67,11 +66,7 @@ abstract class CrudRepository<T : IEditable>(dynamoDbClient: DynamoDbAsyncClient
         return response.sdkHttpResponse().isSuccessful
     }
 
-    protected suspend fun find(
-        expressionAttributeValues: Map<String, AttributeValue>,
-        filterExpression: String,
-        convert: (Map<String, AttributeValue>) -> T
-    ): List<T> {
+    protected suspend fun find(expressionAttributeValues: Map<String, AttributeValue>, filterExpression: String, convert: (Map<String, AttributeValue>) -> T): List<T> {
         val response = dynamoDbClient.scan {
             it.tableName(tableName)
                 .expressionAttributeValues(expressionAttributeValues)

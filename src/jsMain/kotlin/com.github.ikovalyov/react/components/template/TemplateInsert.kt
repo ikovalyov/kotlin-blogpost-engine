@@ -20,15 +20,15 @@ import react.ReactNode
 import react.State
 import react.create
 import react.dom.html.ButtonType
+import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.fieldset
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
-import kotlin.coroutines.CoroutineContext
-import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.select
+import kotlin.coroutines.CoroutineContext
 
 external interface TemplateInsertProps<I : IEditable> : PropsWithChildren {
     var switchToListState: suspend () -> Unit

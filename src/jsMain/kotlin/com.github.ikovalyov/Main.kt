@@ -4,7 +4,6 @@ import com.github.ikovalyov.model.security.service.SecurityService
 import com.github.ikovalyov.model.service.UserService
 import com.github.ikovalyov.routes.Index
 import csstype.ClassName
-import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.ExperimentalSerializationApi
 import react.Fragment
 import react.create

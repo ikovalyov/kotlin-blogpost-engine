@@ -1,7 +1,6 @@
 package com.github.ikovalyov.model.security.service
 
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.security.User
 import kotlinx.browser.window
 import kotlinx.coroutines.await

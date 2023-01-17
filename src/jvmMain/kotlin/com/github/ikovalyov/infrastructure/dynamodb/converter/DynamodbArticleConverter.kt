@@ -10,11 +10,11 @@ import jakarta.inject.Singleton
 import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-
 @OptIn(ExperimentalSerializationApi::class)
 @Singleton
-class DynamodbArticleConverter: DynamodbConverterInterface<Article> {
+class DynamodbArticleConverter : DynamodbConverterInterface<Article> {
     @Inject lateinit var userService: UserService
+
     @Inject lateinit var templateService: TemplateService
 
     override suspend fun fromDynamoDB(map: Map<String, AttributeValue>): Article {
@@ -51,7 +51,7 @@ class DynamodbArticleConverter: DynamodbConverterInterface<Article> {
             "id" to AttributeValue.builder().s(item.id.toString()).build(),
             "name" to AttributeValue.builder().s(item.name).build(),
             "abstract" to AttributeValue.builder().s(item.abstract).build(),
-            "body" to AttributeValue.builder().s(item.body).build(),
+            "body" to AttributeValue.builder().s(item.body).build()
         )
         if (item.meta !== null && item.meta.isNotEmpty()) {
             mutableMap["meta"] = AttributeValue.builder().ss(item.meta).build()

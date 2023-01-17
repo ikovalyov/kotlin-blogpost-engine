@@ -25,10 +25,10 @@ import react.dom.html.ReactHTML.fieldset
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
-import react.dom.html.ReactHTML.p
-import kotlin.coroutines.CoroutineContext
 import react.dom.html.ReactHTML.option
+import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.select
+import kotlin.coroutines.CoroutineContext
 
 external interface ItemEditProps<T> : PropsWithChildren {
     var switchToListState: suspend () -> Unit
@@ -122,7 +122,7 @@ class TemplateEdit<I : IEditable>(
                                         val optionsList = state.item.getPredefinedValuesAsStrings(it)
                                         optionsList.forEach {
                                             option {
-                                                value =it.key
+                                                value = it.key
                                                 +it.value
                                             }
                                         }

@@ -9,7 +9,6 @@ import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.encodeToString

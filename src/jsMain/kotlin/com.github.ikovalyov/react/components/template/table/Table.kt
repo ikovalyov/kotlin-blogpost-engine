@@ -47,7 +47,7 @@ private fun <T : IEditable> ChildrenBuilder.Table(props: TableProps<T>) {
     val items = props.items
     if (!items.isNullOrEmpty()) {
         val tableColumns = buildTableColumns(props, items.first())
-        val table =  useReactTable<T>(
+        val table = useReactTable<T>(
             options = jso {
                 this.data = items
                 this.columns = tableColumns
@@ -62,26 +62,26 @@ private fun <T : IEditable> buildTableColumns(componentProps: TableProps<T>, ite
     val metadataList = item.getMetadata()
 
     val columns = metadataList.filterIsInstance<IEditable.EditableMetadata<*, T>>().mapIndexed { counter, metadata ->
-            jso<ColumnDef<T, String>> {
-                header = StringOrTemplateHeader(metadata.fieldType::class.simpleName!!)
+        jso<ColumnDef<T, String>> {
+            header = StringOrTemplateHeader(metadata.fieldType::class.simpleName!!)
 
-                accessorFn = { row, _ ->
-                    val itemMetadata = row.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, T>>()[counter]
-                    val str = row.getFieldValueAsString(itemMetadata) ?: ""
-                    if (str.length > 128) {
-                        str.substring(0, 128)
-                    } else {
-                        str
-                    }
+            accessorFn = { row, _ ->
+                val itemMetadata = row.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, T>>()[counter]
+                val str = row.getFieldValueAsString(itemMetadata) ?: ""
+                if (str.length > 128) {
+                    str.substring(0, 128)
+                } else {
+                    str
                 }
             }
-        }.toMutableList()
+        }
+    }.toMutableList()
     columns.add(
         jso<ColumnDef<T, String>> {
             id = "Action"
             header = StringOrTemplateHeader("Action")
             accessorKey = "id"
-            cell = ColumnDefTemplate() { props ->
+            cell = ColumnDefTemplate { props ->
                 Fragment.create {
                     div {
                         Button<T> {

@@ -1,6 +1,5 @@
 package com.github.ikovalyov.routes
 
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.model.Article
@@ -10,8 +9,6 @@ import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.security.UserRole
-import com.github.ikovalyov.model.security.service.SecurityService
-import com.github.ikovalyov.model.service.UserService
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
 import com.github.ikovalyov.react.components.template.CrudComponent
@@ -23,12 +20,11 @@ import kotlinx.serialization.json.Json
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.div
-import react.dom.html.ReactHTML.h2
 import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
 
 @OptIn(ExperimentalSerializationApi::class)
-external interface IndexProps: Props {
+external interface IndexProps : Props {
     var currentUser: User?
     var userList: List<User>
     var templateList: List<Template>

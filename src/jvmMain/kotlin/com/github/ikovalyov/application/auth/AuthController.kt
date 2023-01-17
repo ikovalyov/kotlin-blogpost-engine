@@ -15,8 +15,8 @@ import io.micronaut.security.annotation.Secured
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.rules.SecurityRule
 import jakarta.inject.Inject
-import java.net.URI
 import kotlinx.serialization.ExperimentalSerializationApi
+import java.net.URI
 
 @Controller("/auth")
 @OptIn(ExperimentalSerializationApi::class)
@@ -27,7 +27,6 @@ class AuthController {
     @Secured(SecurityRule.IS_AUTHENTICATED)
     @Get("/login")
     suspend fun login(): HttpResponse<Any> {
-
         val requestOpt = ServerRequestContext.currentRequest<Any>()
         if (requestOpt.isEmpty) {
             throw IllegalStateException("Request not found")
@@ -38,14 +37,16 @@ class AuthController {
         val userEmail = Email(ShortString(userEmailString))
         val user = userRepository.getUserByEmail(userEmail)
         if (user == null) {
-            userRepository.insert(User(
-                id = Uuid.randomUUID(),
-                email = userEmail,
-                loggedIn = true,
-                nickname = "",
-                roles = emptyList(),
-                password = Password(ShortString(""))
-            ))
+            userRepository.insert(
+                User(
+                    id = Uuid.randomUUID(),
+                    email = userEmail,
+                    loggedIn = true,
+                    nickname = "",
+                    roles = emptyList(),
+                    password = Password(ShortString(""))
+                )
+            )
         }
 
         val location = URI(Api.frontendEndpoint)

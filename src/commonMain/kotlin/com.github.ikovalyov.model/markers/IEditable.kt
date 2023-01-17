@@ -22,6 +22,7 @@ interface IEditable {
 
     sealed class FieldType<T : Any> {
         object Id : FieldType<Uuid>()
+
         @OptIn(ExperimentalSerializationApi::class)
         object Author : FieldType<User>()
         object LastModified : FieldType<Instant>()
@@ -35,6 +36,7 @@ interface IEditable {
         object StringListFiledType : FieldType<List<String>>()
         object Tags : FieldType<List<String>>()
         object Metadata : FieldType<List<String>>()
+
         @OptIn(ExperimentalSerializationApi::class)
         object Template : FieldType<com.github.ikovalyov.model.Template>()
     }
