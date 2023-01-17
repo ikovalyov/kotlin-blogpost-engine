@@ -21,6 +21,9 @@ suspend fun main() {
     val root = createRoot(container)
     val securityService = SecurityService()
     val currentUser = securityService.getCurrentUser()
+    val userService = UserService()
+    val allUsers = userService.getAllUsers()
+    println(currentUser)
     root.render(
         Fragment.create {
             BrowserRouter {
@@ -31,8 +34,9 @@ suspend fun main() {
                         Route {
                             index = true
                             element = Index.create {
-                                this.userService = UserService()
                                 this.currentUser = currentUser
+                                this.userList = allUsers
+                                this.templateList = emptyList()
                             }
                             path = "/"
                         }

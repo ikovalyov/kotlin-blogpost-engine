@@ -9,6 +9,7 @@ import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.encodeToString
@@ -34,7 +35,9 @@ data class User(
                 get = { id },
                 update = {
                     copy(id = it)
-                }
+                },
+                fieldName = "Id",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Email,
@@ -44,7 +47,9 @@ data class User(
                 get = { email },
                 update = {
                     copy(email = it)
-                }
+                },
+                fieldName = "Email",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Nickname,
@@ -54,7 +59,9 @@ data class User(
                 get = { nickname },
                 update = {
                     copy(nickname = it)
-                }
+                },
+                fieldName = "Nickname",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.UserRoles,
@@ -64,7 +71,9 @@ data class User(
                 get = { roles },
                 update = {
                     copy(roles = it)
-                }
+                },
+                fieldName = "User Roles",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Password,
@@ -74,7 +83,9 @@ data class User(
                 get = { password },
                 update = {
                     copy(password = it)
-                }
+                },
+                fieldName = "Password",
+                predefinedList = null
             )
         )
     }

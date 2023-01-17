@@ -2,6 +2,7 @@ package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
+import com.github.ikovalyov.model.markers.getPredefinedValuesAsStrings
 import com.github.ikovalyov.model.markers.updateField
 import csstype.Color
 import csstype.Display
@@ -26,6 +27,8 @@ import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
 import kotlin.coroutines.CoroutineContext
+import react.dom.html.ReactHTML
+import react.dom.html.ReactHTML.select
 
 external interface TemplateInsertProps<I : IEditable> : PropsWithChildren {
     var switchToListState: suspend () -> Unit
@@ -66,7 +69,7 @@ class TemplateInsert<I : IEditable>(
                     metadata.forEach {
                         p {
                             label {
-                                +it.fieldType::class.simpleName!!
+                                +it.fieldName
                                 css {
                                     color = csstype.Color("B4886B")
                                     fontWeight = csstype.FontWeight.bold
@@ -79,22 +82,51 @@ class TemplateInsert<I : IEditable>(
                                 }
                                 htmlFor = it.hashCode().toString()
                             }
-                            input {
-                                name = it.hashCode().toString()
-                                readOnly = it.readOnly
-                                if (!it.readOnly) {
-                                    defaultValue = ""
-                                    onChange = { event ->
-                                        launch {
-                                            val value = event.target.value
-                                            ref.state.currentItem = ref.state.currentItem.updateField(
-                                                field = it,
-                                                serializedData = value
-                                            )
+                            if (it.predefinedList.isNullOrEmpty()) {
+                                input {
+                                    name = it.hashCode().toString()
+                                    readOnly = it.readOnly
+                                    if (!it.readOnly) {
+                                        defaultValue = ""
+                                        onChange = { event ->
+                                            launch {
+                                                val value = event.target.value
+                                                ref.state.currentItem = ref.state.currentItem.updateField(
+                                                    field = it,
+                                                    serializedData = value
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        value = state.currentItem.getFieldValueAsString(it)
+                                    }
+                                }
+                            } else {
+                                println(it.predefinedList?.count())
+                                select {
+                                    name = it.hashCode().toString()
+                                    disabled = it.readOnly
+                                    if (!it.readOnly) {
+                                        defaultValue = state.currentItem.getFieldValueAsString(it)
+                                        onChange =
+                                            { event ->
+                                                launch {
+                                                    val stringValue = event.target.asDynamic().value.toString()
+                                                    state.currentItem =
+                                                        state.currentItem.updateField(
+                                                            field = it,
+                                                            serializedData = stringValue
+                                                        )
+                                                }
+                                            }
+                                        val optionsList = state.currentItem.getPredefinedValuesAsStrings(it)
+                                        optionsList.forEach {
+                                            ReactHTML.option {
+                                                value = it.key
+                                                +it.value
+                                            }
                                         }
                                     }
-                                } else {
-                                    value = state.currentItem.getFieldValueAsString(it)
                                 }
                             }
                         }

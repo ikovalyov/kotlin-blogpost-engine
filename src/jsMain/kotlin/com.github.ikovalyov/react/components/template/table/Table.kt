@@ -34,6 +34,7 @@ import tanstack.table.core.ColumnDef
 import tanstack.table.core.ColumnDefTemplate
 import tanstack.table.core.StringOrTemplateHeader
 import tanstack.table.core.Table
+import tanstack.table.core.getCoreRowModel
 
 external interface TableProps<T : IEditable> : PropsWithChildren {
     var items: Array<T>?
@@ -50,6 +51,7 @@ private fun <T : IEditable> ChildrenBuilder.Table(props: TableProps<T>) {
             options = jso {
                 this.data = items
                 this.columns = tableColumns
+                this.getCoreRowModel = getCoreRowModel()
             }
         )
         buildTableBody(table)

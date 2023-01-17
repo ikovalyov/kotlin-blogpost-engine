@@ -16,13 +16,19 @@ import org.w3c.fetch.RequestInit
 @OptIn(ExperimentalSerializationApi::class)
 class UserService {
     suspend fun getAllUsers(): List<User> {
-        val result = window.fetch(
-            Api.backendEndpoint + Api.userApiUrl,
-            RequestInit(
-                credentials = RequestCredentials.INCLUDE
-            )
-        ).await().text().await()
-        return Json.decodeFromString(ListSerializer(User.serializer()), result)
+        val result = kotlin.runCatching {
+            val result = window.fetch(
+                Api.backendEndpoint + Api.userApiUrl,
+                RequestInit(
+                    credentials = RequestCredentials.INCLUDE
+                )
+            ).await().text().await()
+            Json.decodeFromString(ListSerializer(User.serializer()), result)
+        }
+        if (result.isFailure) {
+            println(result.exceptionOrNull())
+        }
+        return result.getOrNull() ?: emptyList()
     }
 
     suspend fun getUser(userId: Uuid): User {

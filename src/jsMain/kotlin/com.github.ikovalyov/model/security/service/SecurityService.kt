@@ -13,17 +13,21 @@ import org.w3c.fetch.RequestInit
 
 actual class SecurityService {
     @OptIn(ExperimentalSerializationApi::class)
-    actual suspend fun getCurrentUser(): User {
-        val result = window
-            .fetch(
-                Api.backendEndpoint + Api.userUrl,
-                RequestInit(
-                    credentials = RequestCredentials.INCLUDE
+    actual suspend fun getCurrentUser(): User? {
+        val user = kotlin.runCatching {
+            val result = window
+                .fetch(
+                    Api.backendEndpoint + Api.userUrl,
+                    RequestInit(
+                        credentials = RequestCredentials.INCLUDE
+                    )
                 )
-            )
-            .await()
-            .text()
-            .await()
-        return Json.decodeFromString(User.serializer(), result)
+                .await()
+                .text()
+                .await()
+            Json.decodeFromString(User.serializer(), result)
+        }
+        println(user.exceptionOrNull())
+        return user.getOrNull()
     }
 }

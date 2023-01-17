@@ -1,6 +1,7 @@
 package com.github.ikovalyov.model.markers
 
 import com.benasher44.uuid.Uuid
+import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.security.Email
 import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.User
@@ -14,7 +15,9 @@ interface IEditable {
         val serialize: (F) -> String,
         val deserialize: suspend (String) -> F,
         val update: I.(F) -> I,
-        val get: () -> F?
+        val get: () -> F?,
+        val fieldName: String,
+        val predefinedList: List<F>?
     )
 
     sealed class FieldType<T : Any> {
@@ -32,6 +35,8 @@ interface IEditable {
         object StringListFiledType : FieldType<List<String>>()
         object Tags : FieldType<List<String>>()
         object Metadata : FieldType<List<String>>()
+        @OptIn(ExperimentalSerializationApi::class)
+        object Template : FieldType<com.github.ikovalyov.model.Template>()
     }
 
     val id: Uuid
@@ -49,6 +54,13 @@ fun <T : IEditable, F : Any> T.getFieldValueAsString(field: IEditable.EditableMe
     return fieldValue?.let {
         field.serialize(it)
     }
+}
+
+fun <T : IEditable, F : Any> T.getPredefinedValuesAsStrings(field: IEditable.EditableMetadata<F, T>): Map<String, String> {
+    val fieldValues = field.predefinedList
+    return fieldValues?.associate {
+        it.hashCode().toString() to field.serialize(it)
+    } ?: emptyMap()
 }
 
 /**

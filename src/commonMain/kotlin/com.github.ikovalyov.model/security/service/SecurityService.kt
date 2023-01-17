@@ -5,5 +5,5 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 @OptIn(ExperimentalSerializationApi::class)
 expect class SecurityService {
-    suspend fun getCurrentUser() : User
+    suspend fun getCurrentUser() : User?
 }

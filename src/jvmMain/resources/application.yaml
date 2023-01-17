@@ -42,6 +42,9 @@ micronaut:
         /auth/login
       logout:
         /auth/login
+      unauthorized:
+        url: /auth/login
+        enabled: true
 jackson:
   serialization:
     writeDatesAsTimestamps: false

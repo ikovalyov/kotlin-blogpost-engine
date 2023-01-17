@@ -23,10 +23,13 @@ data class Article(
     val author: User,
     val tags: List<String>?,
     val meta: List<String>?,
-    val template: Uuid?, // Template uuid
-    val getUserCallBack: suspend (Uuid) -> User
+    val template: Template?, // Template uuid
+    val userList: List<User>,
+    val templateList: List<Template>,
 ) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
+        println("Creating article object")
+        println("userList has ${userList.count()} elements")
         return listOf(
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Id,
@@ -42,7 +45,9 @@ data class Article(
                 },
                 get = {
                     id
-                }
+                },
+                fieldName = "Id",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Name,
@@ -58,7 +63,9 @@ data class Article(
                 },
                 get = {
                     name
-                }
+                },
+                fieldName = "Name",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Abstract,
@@ -74,7 +81,9 @@ data class Article(
                 },
                 get = {
                     abstract
-                }
+                },
+                fieldName = "Abstract",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Body,
@@ -90,7 +99,9 @@ data class Article(
                 },
                 get = {
                     body
-                }
+                },
+                fieldName = "Body",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Author,
@@ -98,15 +109,19 @@ data class Article(
                 serialize = {
                     it.toString()
                 },
-                deserialize = {
-                    getUserCallBack(uuidFrom(it))
+                deserialize = { uuid ->
+                    userList.first {
+                        it.id.toString() == uuid
+                    }
                 },
                 update = {
                     copy(author = it)
                 },
                 get = {
                     author
-                }
+                },
+                fieldName = "Author",
+                predefinedList = userList
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Tags,
@@ -122,7 +137,9 @@ data class Article(
                 },
                 get = {
                     tags
-                }
+                },
+                fieldName = "Tags",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.StringListFiledType,
@@ -138,23 +155,29 @@ data class Article(
                 },
                 get = {
                     meta
-                }
+                },
+                fieldName = "Meta",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Id,
+                fieldType = IEditable.FieldType.Template,
                 readOnly = false,
                 serialize = {
                     it.toString()
                 },
-                deserialize = {
-                    uuidFrom(it)
+                deserialize = {uuid ->
+                    templateList.first {
+                        it.id.toString() == uuid
+                    }
                 },
                 update = {
                     copy(template = it)
                 },
                 get = {
                     template
-                }
+                },
+                fieldName = "Template",
+                predefinedList = templateList
             )
         )
     }

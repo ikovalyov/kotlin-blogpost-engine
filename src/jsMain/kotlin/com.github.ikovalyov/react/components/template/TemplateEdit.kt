@@ -2,6 +2,7 @@ package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
+import com.github.ikovalyov.model.markers.getPredefinedValuesAsStrings
 import com.github.ikovalyov.model.markers.updateField
 import com.github.ikovalyov.react.components.template.table.Button
 import csstype.Color
@@ -26,6 +27,8 @@ import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
 import kotlin.coroutines.CoroutineContext
+import react.dom.html.ReactHTML.option
+import react.dom.html.ReactHTML.select
 
 external interface ItemEditProps<T> : PropsWithChildren {
     var switchToListState: suspend () -> Unit
@@ -72,7 +75,7 @@ class TemplateEdit<I : IEditable>(
                     it.forEach {
                         p {
                             label {
-                                +it.fieldType::class.simpleName!!
+                                +it.fieldName
                                 css {
                                     color = Color("B4886B")
                                     fontWeight = FontWeight.bold
@@ -81,22 +84,49 @@ class TemplateEdit<I : IEditable>(
                                     float = Float.left
                                     after { content = "\":\"".asDynamic() }
                                 }
-                                htmlFor = "id"
+                                htmlFor = it.hashCode().toString()
                             }
-                            input {
-                                name = it.hashCode().toString()
-                                readOnly = it.readOnly
-                                if (!it.readOnly) {
-                                    defaultValue = state.item.getFieldValueAsString(it)
-                                    onChange =
-                                        { event ->
-                                            launch {
-                                                val stringValue = event.target.asDynamic().value.toString()
-                                                state.item = state.item.updateField(field = it, serializedData = stringValue)
+                            if (it.predefinedList.isNullOrEmpty()) {
+                                input {
+                                    name = it.hashCode().toString()
+                                    readOnly = it.readOnly
+                                    if (!it.readOnly) {
+                                        defaultValue = state.item.getFieldValueAsString(it)
+                                        onChange =
+                                            { event ->
+                                                launch {
+                                                    val stringValue = event.target.asDynamic().value.toString()
+                                                    state.item =
+                                                        state.item.updateField(field = it, serializedData = stringValue)
+                                                }
+                                            }
+                                    } else {
+                                        value = state.item.getFieldValueAsString(it)
+                                    }
+                                }
+                            } else {
+                                select {
+                                    name = it.hashCode().toString()
+                                    disabled = it.readOnly
+                                    if (!it.readOnly) {
+                                        defaultValue = state.item.getFieldValueAsString(it)
+                                        onChange =
+                                            {
+                                                    event ->
+                                                launch {
+                                                    val stringValue = event.target.asDynamic().value.toString()
+                                                    state.item =
+                                                        state.item.updateField(field = it, serializedData = stringValue)
+                                                }
+                                            }
+                                        val optionsList = state.item.getPredefinedValuesAsStrings(it)
+                                        optionsList.forEach {
+                                            option {
+                                                value =it.key
+                                                +it.value
                                             }
                                         }
-                                } else {
-                                    value = state.item.getFieldValueAsString(it)
+                                    }
                                 }
                             }
                         }

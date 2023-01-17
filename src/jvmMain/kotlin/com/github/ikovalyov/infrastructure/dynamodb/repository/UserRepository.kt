@@ -12,6 +12,7 @@ import jakarta.inject.Singleton
 import kotlinx.coroutines.delay
 import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 @ExperimentalSerializationApi
 @Singleton
@@ -65,5 +66,24 @@ class UserRepository(
         return get(id) {
             User.fromDynamoDbMap(it)
         }
+    }
+
+    suspend fun getUserByEmail(email: Email): User? {
+        val users = list()
+        println(users[0].email)
+
+        val emails = find(
+            mapOf(":email" to AttributeValue.fromS(email.toString())),
+            filterExpression = "email = :email"
+        ) {
+            User.fromDynamoDbMap(it)
+        }
+        if (emails.count() > 1) {
+            throw IllegalStateException("More than 1 user with email $email in db")
+        }
+        if (emails.isEmpty()) {
+            return null
+        }
+        return emails.first()
     }
 }
