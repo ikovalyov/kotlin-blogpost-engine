@@ -92,7 +92,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.476"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.477"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -118,7 +118,7 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.7.5"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.8.1"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -141,7 +141,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.32")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.5"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.1"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
@@ -156,7 +156,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.7.5"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.1"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
