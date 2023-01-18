@@ -90,7 +90,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.476"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.477"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
