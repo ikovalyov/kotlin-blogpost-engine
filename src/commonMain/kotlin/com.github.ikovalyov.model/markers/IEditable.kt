@@ -1,9 +1,12 @@
 package com.github.ikovalyov.model.markers
 
 import com.benasher44.uuid.Uuid
+import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.security.Email
 import com.github.ikovalyov.model.security.Password
+import com.github.ikovalyov.model.security.User
 import kotlinx.datetime.Instant
+import kotlinx.serialization.ExperimentalSerializationApi
 
 interface IEditable {
     data class EditableMetadata<F : Any, I : IEditable>(
@@ -12,11 +15,16 @@ interface IEditable {
         val serialize: (F) -> String,
         val deserialize: (String) -> F,
         val update: I.(F) -> I,
-        val get: () -> F
+        val get: () -> F?,
+        val fieldName: String,
+        val predefinedList: List<F>?
     )
 
     sealed class FieldType<T : Any> {
         object Id : FieldType<Uuid>()
+
+        @OptIn(ExperimentalSerializationApi::class)
+        object Author : FieldType<User>()
         object LastModified : FieldType<Instant>()
         object Body : FieldType<String>()
         object Name : FieldType<String>()
@@ -28,6 +36,9 @@ interface IEditable {
         object StringListFiledType : FieldType<List<String>>()
         object Tags : FieldType<List<String>>()
         object Metadata : FieldType<List<String>>()
+
+        @OptIn(ExperimentalSerializationApi::class)
+        object Template : FieldType<com.github.ikovalyov.model.Template>()
     }
 
     val id: Uuid
@@ -40,9 +51,18 @@ fun <T : IEditable, F : Any> T.updateField(field: IEditable.EditableMetadata<F, 
     return field.update(this, data)
 }
 
-fun <T : IEditable, F : Any> T.getFieldValueAsString(field: IEditable.EditableMetadata<F, T>): String {
+fun <T : IEditable, F : Any> T.getFieldValueAsString(field: IEditable.EditableMetadata<F, T>): String? {
     val fieldValue = field.get()
-    return field.serialize(fieldValue)
+    return fieldValue?.let {
+        field.serialize(it)
+    }
+}
+
+fun <T : IEditable, F : Any> T.getPredefinedValuesAsStrings(field: IEditable.EditableMetadata<F, T>): Map<String, String> {
+    val fieldValues = field.predefinedList
+    return fieldValues?.associate {
+        it.hashCode().toString() to field.serialize(it)
+    } ?: emptyMap()
 }
 
 /**

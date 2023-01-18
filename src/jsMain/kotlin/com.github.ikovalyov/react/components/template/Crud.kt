@@ -4,10 +4,10 @@ import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api.backendEndpoint
 import com.github.ikovalyov.coroutines.SimpleCoroutineScope
 import com.github.ikovalyov.model.markers.IEditable
+import js.core.jso
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
-import kotlinx.js.jso
 import org.w3c.fetch.Headers
 import org.w3c.fetch.INCLUDE
 import org.w3c.fetch.RequestCredentials
@@ -16,6 +16,7 @@ import react.ChildrenBuilder
 import react.FC
 import react.PropsWithChildren
 import react.State
+import react.dom.html.ReactHTML.h2
 import react.useState
 
 external interface CrudComponentProps<T> : PropsWithChildren {
@@ -23,6 +24,7 @@ external interface CrudComponentProps<T> : PropsWithChildren {
     var decodeItems: (String) -> List<T>
     var apiUri: String
     var factory: () -> T
+    var header: String
 }
 
 external interface CrudComponentState<T> : State {
@@ -181,6 +183,9 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
     }
 
     console.log("Displaying component, current state is ${componentState.currentState.name}")
+    h2 {
+        +props.header
+    }
 
     when (componentState.currentState) {
         CrudState.INIT -> {

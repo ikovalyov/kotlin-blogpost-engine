@@ -42,7 +42,9 @@ data class UserRole(
             },
             update = {
                 copy(id = it)
-            }
+            },
+            fieldName = "Id",
+            predefinedList = null
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Name,
@@ -54,7 +56,9 @@ data class UserRole(
             },
             update = {
                 copy(name = it)
-            }
+            },
+            fieldName = "Name",
+            predefinedList = null
         ),
 
         IEditable.EditableMetadata(
@@ -75,7 +79,9 @@ data class UserRole(
             },
             update = {
                 copy(lastModified = it)
-            }
+            },
+            fieldName = "Last Modified",
+            predefinedList = null
         )
     )
 

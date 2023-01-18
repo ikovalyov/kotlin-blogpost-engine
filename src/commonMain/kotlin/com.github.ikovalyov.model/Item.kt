@@ -39,7 +39,9 @@ data class Item(
             update = {
                 copy(id = it)
             },
-            get = { id }
+            get = { id },
+            fieldName = "Id",
+            predefinedList = null
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Body,
@@ -49,7 +51,9 @@ data class Item(
             update = {
                 copy(body = it)
             },
-            get = { body }
+            get = { body },
+            fieldName = "Body",
+            predefinedList = null
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.LastModified,
@@ -63,7 +67,9 @@ data class Item(
             update = {
                 copy(lastModified = it)
             },
-            get = { lastModified }
+            get = { lastModified },
+            fieldName = "Last Modified",
+            predefinedList = null
         )
     )
 

@@ -1,7 +1,7 @@
 package com.github.ikovalyov.react.components.template.table
 
 import com.github.ikovalyov.model.markers.IEditable
-import kotlinx.js.jso
+import js.core.jso
 import react.ChildrenBuilder
 import react.FC
 import react.PropsWithChildren

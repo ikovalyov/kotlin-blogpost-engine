@@ -3,10 +3,10 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.7.22"
-    kotlin("kapt") version "1.7.22"
-    kotlin("plugin.allopen") version "1.7.22"
-    kotlin("plugin.serialization") version "1.7.22"
+    kotlin("multiplatform") version "1.8.0"
+    kotlin("kapt") version "1.8.0"
+    kotlin("plugin.allopen") version "1.8.0"
+    kotlin("plugin.serialization") version "1.8.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.diffplug.spotless") version "6.12.0"
     id("idea")
@@ -63,7 +63,9 @@ kotlin {
     js(IR) {
         browser {
             commonWebpackConfig {
-                cssSupport.enabled = true
+                cssSupport {
+                    enabled.set(true)
+                }
             }
         }
         binaries.executable()
@@ -95,7 +97,7 @@ kotlin {
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-table")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-tanstack-react-table")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom")
                 implementation(npm("react", "18.2.0"))

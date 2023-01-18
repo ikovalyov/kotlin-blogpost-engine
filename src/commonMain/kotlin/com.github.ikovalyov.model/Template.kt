@@ -44,7 +44,9 @@ data class Template(
             update = {
                 copy(id = it)
             },
-            get = { id }
+            get = { id },
+            fieldName = "Id",
+            predefinedList = null
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Name,
@@ -58,7 +60,9 @@ data class Template(
             update = {
                 copy(name = it)
             },
-            get = { name }
+            get = { name },
+            fieldName = "Name",
+            predefinedList = null
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Body,
@@ -68,7 +72,9 @@ data class Template(
             update = {
                 copy(body = it)
             },
-            get = { body }
+            get = { body },
+            fieldName = "Body",
+            predefinedList = null
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.LastModified,
@@ -86,7 +92,9 @@ data class Template(
             update = {
                 copy(lastModified = it)
             },
-            get = { lastModified }
+            get = { lastModified },
+            fieldName = "Last Modified",
+            predefinedList = null
         )
     )
 

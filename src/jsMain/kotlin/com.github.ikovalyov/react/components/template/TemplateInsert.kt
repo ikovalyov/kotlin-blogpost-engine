@@ -2,6 +2,7 @@ package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
+import com.github.ikovalyov.model.markers.getPredefinedValuesAsStrings
 import com.github.ikovalyov.model.markers.updateField
 import csstype.Color
 import csstype.Display
@@ -19,12 +20,14 @@ import react.ReactNode
 import react.State
 import react.create
 import react.dom.html.ButtonType
+import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.fieldset
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
+import react.dom.html.ReactHTML.select
 import kotlin.coroutines.CoroutineContext
 
 external interface TemplateInsertProps<I : IEditable> : PropsWithChildren {
@@ -51,7 +54,6 @@ class TemplateInsert<I : IEditable>(
         get() = job
 
     override fun render(): ReactNode {
-        val ref = this
         return Fragment.create {
             form {
                 onSubmit = {
@@ -66,7 +68,7 @@ class TemplateInsert<I : IEditable>(
                     metadata.forEach {
                         p {
                             label {
-                                +it.fieldType::class.simpleName!!
+                                +it.fieldName
                                 css {
                                     color = csstype.Color("B4886B")
                                     fontWeight = csstype.FontWeight.bold
@@ -79,20 +81,61 @@ class TemplateInsert<I : IEditable>(
                                 }
                                 htmlFor = it.hashCode().toString()
                             }
-                            input {
-                                name = it.hashCode().toString()
-                                readOnly = it.readOnly
-                                if (!it.readOnly) {
-                                    defaultValue = ""
-                                    onChange = { event ->
-                                        val value = event.target.value
-                                        ref.state.currentItem = ref.state.currentItem.updateField(
-                                            field = it,
-                                            serializedData = value
-                                        )
+                            if (it.predefinedList.isNullOrEmpty()) {
+                                input {
+                                    name = it.hashCode().toString()
+                                    readOnly = it.readOnly
+                                    if (!it.readOnly) {
+                                        defaultValue = ""
+                                        onChange = { event ->
+                                            launch {
+                                                val value = event.target.value
+                                                state.currentItem = state.currentItem.updateField(
+                                                    field = it,
+                                                    serializedData = value
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        value = state.currentItem.getFieldValueAsString(it)
                                     }
-                                } else {
-                                    value = state.currentItem.getFieldValueAsString(it)
+                                }
+                            } else {
+                                select {
+                                    name = it.hashCode().toString()
+                                    disabled = it.readOnly
+                                    if (!it.readOnly) {
+                                        val storedObject = it.get()
+                                        if (storedObject != null) {
+                                            defaultValue = state.currentItem.getFieldValueAsString(it)
+                                        }
+                                        onChange =
+                                            { event ->
+                                                launch {
+                                                    val stringValue = event.target.options.item(event.target.selectedIndex)!!.text
+                                                    state.currentItem =
+                                                        state.currentItem.updateField(
+                                                            field = it,
+                                                            serializedData = stringValue
+                                                        )
+                                                }
+                                            }
+                                        val optionsList = state.currentItem.getPredefinedValuesAsStrings(it)
+                                        optionsList.forEach {
+                                            ReactHTML.option {
+                                                value = it.key
+                                                +it.value
+                                            }
+                                        }
+                                        if (optionsList.isNotEmpty() && storedObject == null) {
+                                            val stringValue = optionsList.values.first()
+                                            state.currentItem =
+                                                state.currentItem.updateField(
+                                                    field = it,
+                                                    serializedData = stringValue
+                                                )
+                                        }
+                                    }
                                 }
                             }
                         }

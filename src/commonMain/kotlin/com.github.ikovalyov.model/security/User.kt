@@ -34,7 +34,9 @@ data class User(
                 get = { id },
                 update = {
                     copy(id = it)
-                }
+                },
+                fieldName = "Id",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Email,
@@ -44,7 +46,9 @@ data class User(
                 get = { email },
                 update = {
                     copy(email = it)
-                }
+                },
+                fieldName = "Email",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Nickname,
@@ -54,7 +58,9 @@ data class User(
                 get = { nickname },
                 update = {
                     copy(nickname = it)
-                }
+                },
+                fieldName = "Nickname",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.UserRoles,
@@ -64,7 +70,9 @@ data class User(
                 get = { roles },
                 update = {
                     copy(roles = it)
-                }
+                },
+                fieldName = "User Roles",
+                predefinedList = null
             ),
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Password,
@@ -74,7 +82,9 @@ data class User(
                 get = { password },
                 update = {
                     copy(password = it)
-                }
+                },
+                fieldName = "Password",
+                predefinedList = null
             )
         )
     }

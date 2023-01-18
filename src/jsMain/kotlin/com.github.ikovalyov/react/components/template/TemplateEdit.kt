@@ -2,6 +2,7 @@ package com.github.ikovalyov.react.components.template
 
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
+import com.github.ikovalyov.model.markers.getPredefinedValuesAsStrings
 import com.github.ikovalyov.model.markers.updateField
 import com.github.ikovalyov.react.components.template.table.Button
 import csstype.Color
@@ -24,7 +25,9 @@ import react.dom.html.ReactHTML.fieldset
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
+import react.dom.html.ReactHTML.option
 import react.dom.html.ReactHTML.p
+import react.dom.html.ReactHTML.select
 import kotlin.coroutines.CoroutineContext
 
 external interface ItemEditProps<T> : PropsWithChildren {
@@ -65,53 +68,88 @@ class TemplateEdit<I : IEditable>(
                             props.submitForm(state.item)
                         }
                     }
-            }
-            fieldset {
-                val fields = state.item.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
-                fields.let {
-                    it.forEach {
-                        p {
-                            label {
-                                +it.fieldType::class.simpleName!!
-                                css {
-                                    color = Color("B4886B")
-                                    fontWeight = FontWeight.bold
-                                    display = Display.block
-                                    width = 150.px
-                                    float = Float.left
-                                    after { content = "\":\"".asDynamic() }
+                fieldset {
+                    val fields = state.item.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
+                    fields.let {
+                        it.forEach {
+                            p {
+                                label {
+                                    +it.fieldName
+                                    css {
+                                        color = Color("B4886B")
+                                        fontWeight = FontWeight.bold
+                                        display = Display.block
+                                        width = 150.px
+                                        float = Float.left
+                                        after { content = "\":\"".asDynamic() }
+                                    }
+                                    htmlFor = it.hashCode().toString()
                                 }
-                                htmlFor = "id"
-                            }
-                            input {
-                                name = it.hashCode().toString()
-                                readOnly = it.readOnly
-                                if (!it.readOnly) {
-                                    defaultValue = state.item.getFieldValueAsString(it)
-                                    onChange =
-                                        { event ->
-                                            val stringValue = event.target.asDynamic().value.toString()
-                                            state.item = state.item.updateField(field = it, serializedData = stringValue)
+                                if (it.predefinedList.isNullOrEmpty()) {
+                                    input {
+                                        name = it.hashCode().toString()
+                                        readOnly = it.readOnly
+                                        if (!it.readOnly) {
+                                            defaultValue = state.item.getFieldValueAsString(it)
+                                            onChange =
+                                                { event ->
+                                                    launch {
+                                                        val stringValue = event.target.asDynamic().value.toString()
+                                                        state.item =
+                                                            state.item.updateField(
+                                                                field = it,
+                                                                serializedData = stringValue
+                                                            )
+                                                    }
+                                                }
+                                        } else {
+                                            value = state.item.getFieldValueAsString(it)
                                         }
+                                    }
                                 } else {
-                                    value = state.item.getFieldValueAsString(it)
+                                    select {
+                                        name = it.hashCode().toString()
+                                        disabled = it.readOnly
+                                        if (!it.readOnly) {
+                                            val storedObject = it.get()
+                                            if (storedObject != null) {
+                                                defaultValue = state.item.getFieldValueAsString(it)
+                                            }
+                                            onChange =
+                                                { event ->
+                                                    val stringValue = event.target.asDynamic().value.toString()
+                                                    state.item =
+                                                        state.item.updateField(field = it, serializedData = stringValue)
+                                                }
+                                            val optionsList = state.item.getPredefinedValuesAsStrings(it)
+                                            optionsList.forEach {
+                                                option {
+                                                    value = it.key
+                                                    +it.value
+                                                }
+                                            }
+                                            if (optionsList.isNotEmpty() && storedObject == null) {
+                                                state.item = state.item.updateField(field = it, serializedData = optionsList.entries.first().value)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            Button<I> {
-                body = state.item
-                text = "Update"
-                type = ButtonType.submit
-            }
-            Button<I> {
-                onClick = {
-                    launch { props.switchToListState() }
+                Button<I> {
+                    body = state.item
+                    text = "Update"
+                    type = ButtonType.submit
                 }
-                body = state.item
-                text = "Cancel"
+                Button<I> {
+                    onClick = {
+                        launch { props.switchToListState() }
+                    }
+                    body = state.item
+                    text = "Cancel"
+                }
             }
         }
     }

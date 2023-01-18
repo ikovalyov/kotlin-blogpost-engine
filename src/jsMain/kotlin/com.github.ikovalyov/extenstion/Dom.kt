@@ -1,9 +1,9 @@
 package com.github.ikovalyov.extenstion
 
-import kotlinx.js.Object
-import org.w3c.dom.Element
+import js.core.Object
 import react.Props
 import react.dom.html.HTMLAttributes
+import web.dom.Element
 
 var <T : Element>HTMLAttributes<T>.extraAttrs: Props
     @Deprecated(level = DeprecationLevel.HIDDEN, message = "write only")
