@@ -15,6 +15,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 data class Article(
     override val id: Uuid,
     val name: String,
@@ -27,7 +28,7 @@ data class Article(
     val userList: List<User>,
     val templateList: List<Template>
 ) : IEditable {
-    override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
+    override fun getMetadata(): List<IEditable.EditableMetadata<*, Article>> {
         println("Creating article object")
         println("userList has ${userList.count()} elements")
         return listOf(
@@ -107,7 +108,7 @@ data class Article(
                 fieldType = IEditable.FieldType.Author,
                 readOnly = false,
                 serialize = {
-                    it.toString()
+                    it.id.toString()
                 },
                 deserialize = { uuid ->
                     userList.first {
@@ -163,7 +164,7 @@ data class Article(
                 fieldType = IEditable.FieldType.Template,
                 readOnly = false,
                 serialize = {
-                    it.toString()
+                    it.id.toString()
                 },
                 deserialize = { uuid ->
                     templateList.first {

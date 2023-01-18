@@ -1,6 +1,7 @@
 package com.github.ikovalyov
 
 import com.github.ikovalyov.model.security.service.SecurityService
+import com.github.ikovalyov.model.service.TemplateService
 import com.github.ikovalyov.model.service.UserService
 import com.github.ikovalyov.routes.Index
 import csstype.ClassName
@@ -22,7 +23,8 @@ suspend fun main() {
     val currentUser = securityService.getCurrentUser()
     val userService = UserService()
     val allUsers = userService.getAllUsers()
-    println(currentUser)
+    val templateService = TemplateService()
+    val allTemplates = templateService.getAllTemplates()
     root.render(
         Fragment.create {
             BrowserRouter {
@@ -35,7 +37,7 @@ suspend fun main() {
                             element = Index.create {
                                 this.currentUser = currentUser
                                 this.userList = allUsers
-                                this.templateList = emptyList()
+                                this.templateList = allTemplates
                             }
                             path = "/"
                         }

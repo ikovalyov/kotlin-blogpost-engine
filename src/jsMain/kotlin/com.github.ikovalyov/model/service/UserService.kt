@@ -9,12 +9,15 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import mu.KotlinLogging
 import org.w3c.fetch.INCLUDE
 import org.w3c.fetch.RequestCredentials
 import org.w3c.fetch.RequestInit
 
 @OptIn(ExperimentalSerializationApi::class)
 class UserService {
+    private val logger = KotlinLogging.logger {}
+
     suspend fun getAllUsers(): List<User> {
         val result = kotlin.runCatching {
             val result = window.fetch(
@@ -25,8 +28,11 @@ class UserService {
             ).await().text().await()
             Json.decodeFromString(ListSerializer(User.serializer()), result)
         }
+
         if (result.isFailure) {
-            println(result.exceptionOrNull())
+            logger.error(result.exceptionOrNull()) {
+                "Error while getting list of users"
+            }
         }
         return result.getOrNull() ?: emptyList()
     }

@@ -68,62 +68,68 @@ class TemplateEdit<I : IEditable>(
                             props.submitForm(state.item)
                         }
                     }
-            }
-            fieldset {
-                val fields = state.item.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
-                fields.let {
-                    it.forEach {
-                        p {
-                            label {
-                                +it.fieldName
-                                css {
-                                    color = Color("B4886B")
-                                    fontWeight = FontWeight.bold
-                                    display = Display.block
-                                    width = 150.px
-                                    float = Float.left
-                                    after { content = "\":\"".asDynamic() }
-                                }
-                                htmlFor = it.hashCode().toString()
-                            }
-                            if (it.predefinedList.isNullOrEmpty()) {
-                                input {
-                                    name = it.hashCode().toString()
-                                    readOnly = it.readOnly
-                                    if (!it.readOnly) {
-                                        defaultValue = state.item.getFieldValueAsString(it)
-                                        onChange =
-                                            { event ->
-                                                launch {
-                                                    val stringValue = event.target.asDynamic().value.toString()
-                                                    state.item =
-                                                        state.item.updateField(field = it, serializedData = stringValue)
-                                                }
-                                            }
-                                    } else {
-                                        value = state.item.getFieldValueAsString(it)
+                fieldset {
+                    val fields = state.item.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, I>>()
+                    fields.let {
+                        it.forEach {
+                            p {
+                                label {
+                                    +it.fieldName
+                                    css {
+                                        color = Color("B4886B")
+                                        fontWeight = FontWeight.bold
+                                        display = Display.block
+                                        width = 150.px
+                                        float = Float.left
+                                        after { content = "\":\"".asDynamic() }
                                     }
+                                    htmlFor = it.hashCode().toString()
                                 }
-                            } else {
-                                select {
-                                    name = it.hashCode().toString()
-                                    disabled = it.readOnly
-                                    if (!it.readOnly) {
-                                        defaultValue = state.item.getFieldValueAsString(it)
-                                        onChange =
-                                            {
-                                                    event ->
-                                                launch {
+                                if (it.predefinedList.isNullOrEmpty()) {
+                                    input {
+                                        name = it.hashCode().toString()
+                                        readOnly = it.readOnly
+                                        if (!it.readOnly) {
+                                            defaultValue = state.item.getFieldValueAsString(it)
+                                            onChange =
+                                                { event ->
+                                                    launch {
+                                                        val stringValue = event.target.asDynamic().value.toString()
+                                                        state.item =
+                                                            state.item.updateField(
+                                                                field = it,
+                                                                serializedData = stringValue
+                                                            )
+                                                    }
+                                                }
+                                        } else {
+                                            value = state.item.getFieldValueAsString(it)
+                                        }
+                                    }
+                                } else {
+                                    select {
+                                        name = it.hashCode().toString()
+                                        disabled = it.readOnly
+                                        if (!it.readOnly) {
+                                            val storedObject = it.get()
+                                            if (storedObject != null) {
+                                                defaultValue = state.item.getFieldValueAsString(it)
+                                            }
+                                            onChange =
+                                                { event ->
                                                     val stringValue = event.target.asDynamic().value.toString()
                                                     state.item =
                                                         state.item.updateField(field = it, serializedData = stringValue)
                                                 }
+                                            val optionsList = state.item.getPredefinedValuesAsStrings(it)
+                                            optionsList.forEach {
+                                                option {
+                                                    value = it.key
+                                                    +it.value
+                                                }
                                             }
-                                        val optionsList = state.item.getPredefinedValuesAsStrings(it)
-                                        optionsList.forEach {
-                                            option {
-                                                value = it.key
-                                                +it.value
+                                            if (optionsList.isNotEmpty() && storedObject == null) {
+                                                state.item = state.item.updateField(field = it, serializedData = optionsList.entries.first().value)
                                             }
                                         }
                                     }
@@ -132,18 +138,18 @@ class TemplateEdit<I : IEditable>(
                         }
                     }
                 }
-            }
-            Button<I> {
-                body = state.item
-                text = "Update"
-                type = ButtonType.submit
-            }
-            Button<I> {
-                onClick = {
-                    launch { props.switchToListState() }
+                Button<I> {
+                    body = state.item
+                    text = "Update"
+                    type = ButtonType.submit
                 }
-                body = state.item
-                text = "Cancel"
+                Button<I> {
+                    onClick = {
+                        launch { props.switchToListState() }
+                    }
+                    body = state.item
+                    text = "Cancel"
+                }
             }
         }
     }

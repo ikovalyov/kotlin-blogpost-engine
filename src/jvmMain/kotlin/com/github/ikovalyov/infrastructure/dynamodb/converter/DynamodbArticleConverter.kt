@@ -22,25 +22,31 @@ class DynamodbArticleConverter : DynamodbConverterInterface<Article> {
         val templates = templateService.getAllTemplates()
 
         val tags = map["tags"]?.ss()
-        val author = map["author"]?.let {
+        val authorUuid = map["author"]?.let {
             uuidFrom(it.s())
         }
-        val template = map["template"]?.let {
+        val author = users.first {
+            it.id.toString() == authorUuid.toString()
+        }
+        val templateUuid = map["template"]?.let {
             uuidFrom(it.s())
+        }
+        val template = if (templateUuid != null) {
+            templates.first {
+                it.id.toString() == templateUuid.toString()
+            }
+        } else {
+            null
         }
         return Article(
             id = uuidFrom(map["id"]!!.s()),
             name = map["name"]!!.s(),
             abstract = map["abstract"]!!.s(),
             body = map["body"]!!.s(),
-            author = users.first {
-                it.id.toString() == author.toString()
-            },
+            author = author,
             tags = map["tags"]?.ss(),
             meta = map["meta"]?.ss(),
-            template = templates.first {
-                it.id.toString() == template.toString()
-            },
+            template,
             userList = users,
             templateList = templates
         )
@@ -61,7 +67,7 @@ class DynamodbArticleConverter : DynamodbConverterInterface<Article> {
         }
         mutableMap["author"] = AttributeValue.builder().s(item.author.id.toString()).build()
         if (item.template !== null) {
-            mutableMap["template"] = AttributeValue.builder().s(item.template.toString()).build()
+            mutableMap["template"] = AttributeValue.builder().s(item.template.id.toString()).build()
         }
         return mutableMap
     }

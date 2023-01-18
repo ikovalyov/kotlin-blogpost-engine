@@ -54,7 +54,6 @@ class TemplateInsert<I : IEditable>(
         get() = job
 
     override fun render(): ReactNode {
-        val ref = this
         return Fragment.create {
             form {
                 onSubmit = {
@@ -91,7 +90,7 @@ class TemplateInsert<I : IEditable>(
                                         onChange = { event ->
                                             launch {
                                                 val value = event.target.value
-                                                ref.state.currentItem = ref.state.currentItem.updateField(
+                                                state.currentItem = state.currentItem.updateField(
                                                     field = it,
                                                     serializedData = value
                                                 )
@@ -102,16 +101,18 @@ class TemplateInsert<I : IEditable>(
                                     }
                                 }
                             } else {
-                                println(it.predefinedList?.count())
                                 select {
                                     name = it.hashCode().toString()
                                     disabled = it.readOnly
                                     if (!it.readOnly) {
-                                        defaultValue = state.currentItem.getFieldValueAsString(it)
+                                        val storedObject = it.get()
+                                        if (storedObject != null) {
+                                            defaultValue = state.currentItem.getFieldValueAsString(it)
+                                        }
                                         onChange =
                                             { event ->
                                                 launch {
-                                                    val stringValue = event.target.asDynamic().value.toString()
+                                                    val stringValue = event.target.options.item(event.target.selectedIndex)!!.text
                                                     state.currentItem =
                                                         state.currentItem.updateField(
                                                             field = it,
@@ -125,6 +126,14 @@ class TemplateInsert<I : IEditable>(
                                                 value = it.key
                                                 +it.value
                                             }
+                                        }
+                                        if (optionsList.isNotEmpty() && storedObject == null) {
+                                            val stringValue = optionsList.values.first()
+                                            state.currentItem =
+                                                state.currentItem.updateField(
+                                                    field = it,
+                                                    serializedData = stringValue
+                                                )
                                         }
                                     }
                                 }
