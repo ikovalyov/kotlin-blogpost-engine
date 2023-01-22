@@ -29,8 +29,6 @@ data class Article(
     val templateList: List<Template>
 ) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, Article>> {
-        println("Creating article object")
-        println("userList has ${userList.count()} elements")
         return listOf(
             IEditable.EditableMetadata(
                 fieldType = IEditable.FieldType.Id,

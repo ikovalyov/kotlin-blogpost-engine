@@ -2,7 +2,6 @@ package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.infrastructure.dynamodb.converter.DynamodbArticleConverter
-import com.github.ikovalyov.infrastructure.service.UserService
 import com.github.ikovalyov.model.Article
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
@@ -14,8 +13,6 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 class ArticleRepository(dynamoDbClient: DynamoDbAsyncClient) :
     CrudRepository<Article>(dynamoDbClient) {
 
-    @Inject private lateinit var userService: UserService
-
     @Inject private lateinit var articleConverter: DynamodbArticleConverter
 
     companion object {
@@ -26,7 +23,6 @@ class ArticleRepository(dynamoDbClient: DynamoDbAsyncClient) :
 
     @OptIn(ExperimentalSerializationApi::class)
     suspend fun list(): List<Article> {
-        val users = userService.getAllUsers()
         return list {
             articleConverter.fromDynamoDB(it)
         }
@@ -45,7 +41,6 @@ class ArticleRepository(dynamoDbClient: DynamoDbAsyncClient) :
     }
 
     suspend fun get(id: Uuid): Article? {
-        val users = userService.getAllUsers()
         return get(id) {
             articleConverter.fromDynamoDB(it)
         }
