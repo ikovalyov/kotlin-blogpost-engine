@@ -3,6 +3,8 @@ package com.github.ikovalyov.model
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 data class Tag(
     override val id: Uuid,
@@ -50,7 +52,6 @@ data class Tag(
     }
 
     override fun serialize(): String {
-        TODO("Not yet implemented")
+        return Json.encodeToString(this)
     }
-
 }

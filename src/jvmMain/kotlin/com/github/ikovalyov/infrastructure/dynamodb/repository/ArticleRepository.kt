@@ -2,7 +2,6 @@ package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.infrastructure.dynamodb.converter.DynamodbArticleConverter
-import com.github.ikovalyov.infrastructure.service.UserService
 import com.github.ikovalyov.model.Article
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
