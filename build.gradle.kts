@@ -141,7 +141,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.32")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.2"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
@@ -156,7 +156,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.2"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
