@@ -142,7 +142,7 @@ kotlin {
                 configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.5")
                     )
                 )
                 if (System.getProperty("os.name").toLowerCase().contains("mac")) {
@@ -157,7 +157,7 @@ kotlin {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.5")
                     )
                 )
                 implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.17.6"))
