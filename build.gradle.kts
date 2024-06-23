@@ -118,7 +118,7 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.8.7"))
+                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.10.4"))
 
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
@@ -141,7 +141,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.32")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
@@ -156,7 +156,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
