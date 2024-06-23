@@ -77,7 +77,7 @@ kotlin {
                 implementation("io.github.microutils:kotlin-logging:3.0.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-                implementation("com.benasher44:uuid:0.7.0")
+                implementation("com.benasher44:uuid:0.8.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
             }
         }
@@ -138,7 +138,7 @@ kotlin {
 
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
                 implementation("org.apache.logging.log4j:log4j-core:2.20.0")
-                implementation("org.freemarker:freemarker:2.3.32")
+                implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
@@ -160,7 +160,7 @@ kotlin {
                         project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.17.6"))
+                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.19.8"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
