@@ -3,10 +3,10 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.8.10"
-    kotlin("kapt") version "1.8.10"
-    kotlin("plugin.allopen") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
+    kotlin("multiplatform") version "2.0.0"
+    kotlin("kapt") version "2.0.0"
+    kotlin("plugin.allopen") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.diffplug.spotless") version "6.17.0"
     id("idea")
