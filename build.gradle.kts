@@ -76,7 +76,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:3.0.5")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
                 implementation("com.benasher44:uuid:0.8.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
@@ -137,8 +137,8 @@ kotlin {
                 implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
-                implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.23.1")
+                implementation("org.apache.logging.log4j:log4j-core:2.23.1")
                 implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
