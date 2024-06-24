@@ -7,7 +7,7 @@ plugins {
     kotlin("kapt") version "2.0.0"
     kotlin("plugin.allopen") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.diffplug.spotless") version "6.17.0"
     id("idea")
 }
