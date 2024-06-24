@@ -1,6 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.*
 
 plugins {
     kotlin("multiplatform") version "1.8.10"
@@ -145,7 +146,7 @@ kotlin {
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
                     )
                 )
-                if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                if (System.getProperty("os.name").lowercase(Locale.getDefault()).contains("mac")) {
                     implementation("io.micronaut:micronaut-runtime-osx")
                     implementation("net.java.dev.jna:jna")
                     implementation("io.methvin:directory-watcher")
@@ -160,7 +161,6 @@ kotlin {
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.19.8"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
@@ -198,31 +198,31 @@ tasks {
         group = "Execution"
         description = "Run the main class with JavaExecTask"
         classpath = sourceSets.findByName("main")!!.runtimeClasspath
-        main = "com.github.ikovalyov.MyApp"
+        mainClass.set("com.github.ikovalyov.MyApp")
 
         jvmArgs("-XX:TieredStopAtLevel=1", "-Dcom.sun.management.jmxremote")
     }
 
     create("copyJvmToLib", Copy::class.java) {
         dependsOn(shadowCreate)
-        from(layout.buildDirectory.dir("$buildDir/libs"))
-        into(layout.buildDirectory.dir("$buildDir/lib"))
+        from(layout.buildDirectory.dir("${layout.buildDirectory}/libs"))
+        into(layout.buildDirectory.dir("${layout.buildDirectory}/lib"))
     }
 
     create("initDynamoDbScript", CreateStartScripts::class.java) {
         group = "Execution"
         description = "This command generates tables in the dynamo db required for app to operate"
         applicationName = "dynamo-db-init-command"
-        mainClassName = "com.github.ikovalyov.command.DynamoDbInitCommand"
-        classpath = files("$buildDir/libs/blog-0.0.1-all.jar")
-        outputDir = file("$buildDir/scripts")
+        mainClass.set("com.github.ikovalyov.command.DynamoDbInitCommand")
+        classpath = files("${layout.buildDirectory}/libs/blog-0.0.1-all.jar")
+        outputDir = file("${layout.buildDirectory}/scripts")
         defaultJvmOpts = listOf()
         this.dependsOn("copyJvmToLib")
     }
 
     create("execDynamoDbScript", Exec::class.java) {
         group = "Execution"
-        this.executable = "$buildDir/scripts/dynamo-db-init-command"
+        this.executable = "${layout.buildDirectory}/scripts/dynamo-db-init-command"
         dependsOn("initDynamoDbScript")
     }
 }
