@@ -1,6 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.*
 
 plugins {
@@ -39,12 +38,6 @@ kotlin {
         }
 
         compilations.all {
-            tasks.named<KotlinCompile>(compileKotlinTaskName) {
-                kotlinOptions {
-                    jvmTarget = "11"
-                    freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
-                }
-            }
             tasks.named<Test>("${target.name}Test") {
                 useJUnitPlatform()
                 testLogging {
@@ -54,14 +47,9 @@ kotlin {
 //                    showStandardStreams = true
                 }
             }
-            tasks.named<Jar>("jvmJar") {
-                manifest {
-                    attributes("Automatic-Module-Name" to moduleName)
-                }
-            }
         }
     }
-    js(IR) {
+    js {
         browser {
             commonWebpackConfig {
                 cssSupport {
@@ -176,8 +164,6 @@ kotlin {
 
 tasks {
     val shadowCreate by creating(ShadowJar::class) {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
-        mergeServiceFiles()
         manifest {
             attributes["Main-Class"] = "com.github.ikovalyov.MyApp"
         }
@@ -194,36 +180,20 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     }
 
-    create("jvmRun", JavaExec::class.java) {
+    val jvmRun by creating(JavaExec::class) {
         group = "Execution"
         description = "Run the main class with JavaExecTask"
         classpath = sourceSets.findByName("main")!!.runtimeClasspath
         mainClass.set("com.github.ikovalyov.MyApp")
-
         jvmArgs("-XX:TieredStopAtLevel=1", "-Dcom.sun.management.jmxremote")
     }
 
-    create("copyJvmToLib", Copy::class.java) {
-        dependsOn(shadowCreate)
-        from(layout.buildDirectory.dir("${layout.buildDirectory}/libs"))
-        into(layout.buildDirectory.dir("${layout.buildDirectory}/lib"))
-    }
-
-    create("initDynamoDbScript", CreateStartScripts::class.java) {
+    val execDynamoDbScript by creating(JavaExec::class) {
         group = "Execution"
-        description = "This command generates tables in the dynamo db required for app to operate"
-        applicationName = "dynamo-db-init-command"
+        description = "Run the main class with JavaExecTask"
+        classpath = sourceSets.findByName("main")!!.runtimeClasspath
         mainClass.set("com.github.ikovalyov.command.DynamoDbInitCommand")
-        classpath = files("${layout.buildDirectory}/libs/blog-0.0.1-all.jar")
-        outputDir = file("${layout.buildDirectory}/scripts")
-        defaultJvmOpts = listOf()
-        this.dependsOn("copyJvmToLib")
-    }
-
-    create("execDynamoDbScript", Exec::class.java) {
-        group = "Execution"
-        this.executable = "${layout.buildDirectory}/scripts/dynamo-db-init-command"
-        dependsOn("initDynamoDbScript")
+        jvmArgs("-XX:TieredStopAtLevel=1", "-Dcom.sun.management.jmxremote")
     }
 }
 
