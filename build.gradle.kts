@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.*
 
 plugins {
-    kotlin("multiplatform") version "1.8.10"
-    kotlin("kapt") version "1.8.10"
-    kotlin("plugin.allopen") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
+    kotlin("multiplatform") version "1.9.24"
+    kotlin("kapt") version "1.9.24"
+    kotlin("plugin.allopen") version "1.9.24"
+    kotlin("plugin.serialization") version "1.9.24"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.diffplug.spotless") version "6.17.0"
     id("idea")
