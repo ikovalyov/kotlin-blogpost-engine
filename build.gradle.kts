@@ -1,13 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.*
 
 plugins {
-    kotlin("multiplatform") version "1.8.10"
-    kotlin("kapt") version "1.8.10"
-    kotlin("plugin.allopen") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("multiplatform") version "2.0.0"
+    kotlin("kapt") version "2.0.0"
+    kotlin("plugin.allopen") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.diffplug.spotless") version "6.25.0"
     id("idea")
 }
@@ -38,12 +38,6 @@ kotlin {
         }
 
         compilations.all {
-            tasks.named<KotlinCompile>(compileKotlinTaskName) {
-                kotlinOptions {
-                    jvmTarget = "11"
-                    freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
-                }
-            }
             tasks.named<Test>("${target.name}Test") {
                 useJUnitPlatform()
                 testLogging {
@@ -53,14 +47,9 @@ kotlin {
 //                    showStandardStreams = true
                 }
             }
-            tasks.named<Jar>("jvmJar") {
-                manifest {
-                    attributes("Automatic-Module-Name" to moduleName)
-                }
-            }
         }
     }
-    js(IR) {
+    js {
         browser {
             commonWebpackConfig {
                 cssSupport {
@@ -75,10 +64,10 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:3.0.5")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-                implementation("com.benasher44:uuid:0.7.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+                implementation("com.benasher44:uuid:0.8.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
             }
         }
         val commonTest by getting {
@@ -92,7 +81,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.761"
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.763"
                     )
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -104,7 +93,7 @@ kotlin {
                 implementation(npm("react-dom", "18.2.0"))
                 implementation(npm("react-is", "18.2.0"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
             }
         }
         val jsTest by getting {
@@ -116,8 +105,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1")
                 implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.10.4"))
 
                 implementation("io.micronaut:micronaut-http-client")
@@ -136,16 +125,16 @@ kotlin {
                 implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
-                implementation("org.apache.logging.log4j:log4j-core:2.20.0")
-                implementation("org.freemarker:freemarker:2.3.32")
+                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.23.1")
+                implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+                implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
                     )
                 )
-                if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                if (System.getProperty("os.name").lowercase(Locale.getDefault()).contains("mac")) {
                     implementation("io.micronaut:micronaut-runtime-osx")
                     implementation("net.java.dev.jna:jna")
                     implementation("io.methvin:directory-watcher")
@@ -156,19 +145,18 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.8.7"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.6.3")
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
                     )
                 )
-                implementation(project.dependencies.enforcedPlatform("org.testcontainers:testcontainers-bom:1.17.6"))
 
                 implementation(kotlin("test-junit5"))
                 implementation("io.micronaut.test:micronaut-test-junit5")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.748") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.750") // testcontainers need it
             }
         }
     }
@@ -176,8 +164,6 @@ kotlin {
 
 tasks {
     val shadowCreate by creating(ShadowJar::class) {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
-        mergeServiceFiles()
         manifest {
             attributes["Main-Class"] = "com.github.ikovalyov.MyApp"
         }
@@ -194,36 +180,20 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     }
 
-    create("jvmRun", JavaExec::class.java) {
+    val jvmRun by creating(JavaExec::class) {
         group = "Execution"
         description = "Run the main class with JavaExecTask"
         classpath = sourceSets.findByName("main")!!.runtimeClasspath
-        main = "com.github.ikovalyov.MyApp"
-
+        mainClass.set("com.github.ikovalyov.MyApp")
         jvmArgs("-XX:TieredStopAtLevel=1", "-Dcom.sun.management.jmxremote")
     }
 
-    create("copyJvmToLib", Copy::class.java) {
-        dependsOn(shadowCreate)
-        from(layout.buildDirectory.dir("$buildDir/libs"))
-        into(layout.buildDirectory.dir("$buildDir/lib"))
-    }
-
-    create("initDynamoDbScript", CreateStartScripts::class.java) {
+    val execDynamoDbScript by creating(JavaExec::class) {
         group = "Execution"
-        description = "This command generates tables in the dynamo db required for app to operate"
-        applicationName = "dynamo-db-init-command"
-        mainClassName = "com.github.ikovalyov.command.DynamoDbInitCommand"
-        classpath = files("$buildDir/libs/blog-0.0.1-all.jar")
-        outputDir = file("$buildDir/scripts")
-        defaultJvmOpts = listOf()
-        this.dependsOn("copyJvmToLib")
-    }
-
-    create("execDynamoDbScript", Exec::class.java) {
-        group = "Execution"
-        this.executable = "$buildDir/scripts/dynamo-db-init-command"
-        dependsOn("initDynamoDbScript")
+        description = "Run the main class with JavaExecTask"
+        classpath = sourceSets.findByName("main")!!.runtimeClasspath
+        mainClass.set("com.github.ikovalyov.command.DynamoDbInitCommand")
+        jvmArgs("-XX:TieredStopAtLevel=1", "-Dcom.sun.management.jmxremote")
     }
 }
 
