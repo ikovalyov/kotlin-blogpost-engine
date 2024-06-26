@@ -10,8 +10,8 @@ import react.Fragment
 import react.PropsWithChildren
 import react.ReactNode
 import react.create
-import react.dom.html.ButtonType
 import react.dom.html.ReactHTML
+import web.html.ButtonType
 import kotlin.coroutines.CoroutineContext
 
 external interface ItemListProps<T : Any> : PropsWithChildren {
@@ -30,7 +30,7 @@ class ItemList<I : IEditable>(props: ItemListProps<I>) :
     override val coroutineContext: CoroutineContext
         get() = job
 
-    override fun render(): ReactNode? {
+    override fun render(): ReactNode {
         return Fragment.create {
             Table<I> {
                 items = props.items?.toTypedArray()

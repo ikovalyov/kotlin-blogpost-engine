@@ -1,12 +1,12 @@
 package com.github.ikovalyov.react.components.template.table
 
 import com.github.ikovalyov.model.markers.IEditable
-import js.core.jso
+import js.objects.jso
 import react.ChildrenBuilder
 import react.FC
 import react.PropsWithChildren
-import react.dom.html.ButtonType
 import react.dom.html.ReactHTML.button
+import web.html.ButtonType
 
 external interface ButtonProps<T : IEditable> : PropsWithChildren {
     var body: T
@@ -25,8 +25,8 @@ private fun <T : IEditable> ChildrenBuilder.Button(props: ButtonProps<T>) {
     }
 }
 
-private val Button: FC<ButtonProps<*>> = FC {
-    this.Button(it)
+private val Button: FC<ButtonProps<*>> = FC { props ->
+    Button(props)
 }
 
 fun <T : IEditable> ChildrenBuilder.Button(block: ButtonProps<T>.() -> Unit) {

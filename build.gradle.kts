@@ -49,7 +49,7 @@ kotlin {
             }
         }
     }
-    js {
+    js(IR) {
         browser {
             commonWebpackConfig {
                 cssSupport {
@@ -208,8 +208,7 @@ spotless {
         val files = project.fileTree(rootDir)
         files.include("**/*.kt")
         target(files)
-        ktlint("0.47.1")
-            .setUseExperimental(true)
+        ktlint("1.3.0")
             .editorConfigOverride(
                 mapOf(
                     "max_line_length" to "256",
@@ -218,8 +217,7 @@ spotless {
             )
     }
     kotlinGradle {
-        ktlint("0.47.1")
-            .setUseExperimental(true)
+        ktlint("1.3.0")
             .editorConfigOverride(
                 mapOf(
                     "max_line_length" to "256",

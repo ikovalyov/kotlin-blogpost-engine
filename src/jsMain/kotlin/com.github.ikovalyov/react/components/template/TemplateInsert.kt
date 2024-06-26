@@ -4,11 +4,6 @@ import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.model.markers.getPredefinedValuesAsStrings
 import com.github.ikovalyov.model.markers.updateField
-import csstype.Color
-import csstype.Display
-import csstype.Float
-import csstype.FontWeight
-import csstype.px
 import emotion.react.css
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -19,7 +14,6 @@ import react.PropsWithChildren
 import react.ReactNode
 import react.State
 import react.create
-import react.dom.html.ButtonType
 import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.fieldset
@@ -28,6 +22,8 @@ import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.select
+import web.cssom.*
+import web.html.ButtonType
 import kotlin.coroutines.CoroutineContext
 
 external interface TemplateInsertProps<I : IEditable> : PropsWithChildren {
@@ -42,7 +38,7 @@ external interface TemplateInsertState<I : IEditable> : State {
 
 class TemplateInsert<I : IEditable>(
     props: TemplateInsertProps<I>,
-    private val initialState: TemplateInsertState<I>
+    initialState: TemplateInsertState<I>
 ) : Component<TemplateInsertProps<I>, TemplateInsertState<I>>(props), CoroutineScope {
 
     init {
@@ -70,13 +66,13 @@ class TemplateInsert<I : IEditable>(
                             label {
                                 +it.fieldName
                                 css {
-                                    color = csstype.Color("B4886B")
-                                    fontWeight = csstype.FontWeight.bold
-                                    display = csstype.Display.block
+                                    color = Color("B4886B")
+                                    fontWeight = FontWeight.bold
+                                    display = Display.block
                                     width = 150.px
-                                    float = csstype.Float.left
+                                    float = Float.left
                                     after {
-                                        content = "\":\"".asDynamic()
+                                        content = Content("\":\"")
                                     }
                                 }
                                 htmlFor = it.hashCode().toString()

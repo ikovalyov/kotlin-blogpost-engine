@@ -12,7 +12,6 @@ import com.github.ikovalyov.model.security.UserRole
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
 import com.github.ikovalyov.react.components.template.CrudComponent
-import csstype.ClassName
 import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
@@ -22,6 +21,7 @@ import react.Props
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
+import web.cssom.ClassName
 
 @OptIn(ExperimentalSerializationApi::class)
 external interface IndexProps : Props {
@@ -33,6 +33,7 @@ external interface IndexProps : Props {
 @OptIn(ExperimentalSerializationApi::class)
 val Index = FC<IndexProps> { props ->
     val currentUser = props.currentUser
+    console.log(currentUser)
 
     if (currentUser != null) {
         div {

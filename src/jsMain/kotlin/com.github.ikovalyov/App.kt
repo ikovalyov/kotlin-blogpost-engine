@@ -6,8 +6,6 @@ import com.github.ikovalyov.react.components.bootstrap.Input
 import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
 import com.github.ikovalyov.react.components.bootstrap.nav.CollapseButton
 import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
-import csstype.ClassName
-import csstype.px
 import emotion.react.css
 import react.FC
 import react.Props
@@ -16,6 +14,8 @@ import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.ul
 import react.router.dom.Link
+import web.cssom.ClassName
+import web.cssom.px
 
 const val navbarTogglerId = "navbarTogglerDemo01"
 val App = FC<Props> {
@@ -38,8 +38,18 @@ val App = FC<Props> {
                         +"Home "
                         ScreenReaderSpan("(current)")
                     }
-                    menuItem(href = "${Api.backendEndpoint}/oauth/login/google", active = false, disabled = false, reactLink = false) { +"Login" }
-                    menuItem(href = "${Api.backendEndpoint}/logout", active = false, disabled = false, reactLink = false) { +"Logout" }
+                    menuItem(
+                        href = "${Api.backendEndpoint}/oauth/login/google",
+                        active = false,
+                        disabled = false,
+                        reactLink = false
+                    ) { +"Login" }
+                    menuItem(
+                        href = "${Api.backendEndpoint}/logout",
+                        active = false,
+                        disabled = false,
+                        reactLink = false
+                    ) { +"Logout" }
                     menuItem(href = "#", active = false, disabled = true) { +"Disabled" }
                 }
                 form {

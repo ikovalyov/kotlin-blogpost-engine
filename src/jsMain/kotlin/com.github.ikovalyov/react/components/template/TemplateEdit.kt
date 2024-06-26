@@ -5,11 +5,6 @@ import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.model.markers.getPredefinedValuesAsStrings
 import com.github.ikovalyov.model.markers.updateField
 import com.github.ikovalyov.react.components.template.table.Button
-import csstype.Color
-import csstype.Display
-import csstype.Float
-import csstype.FontWeight
-import csstype.px
 import emotion.react.css
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -20,7 +15,6 @@ import react.PropsWithChildren
 import react.ReactNode
 import react.State
 import react.create
-import react.dom.html.ButtonType
 import react.dom.html.ReactHTML.fieldset
 import react.dom.html.ReactHTML.form
 import react.dom.html.ReactHTML.input
@@ -28,6 +22,8 @@ import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.option
 import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.select
+import web.cssom.*
+import web.html.ButtonType
 import kotlin.coroutines.CoroutineContext
 
 external interface ItemEditProps<T> : PropsWithChildren {
@@ -81,7 +77,7 @@ class TemplateEdit<I : IEditable>(
                                         display = Display.block
                                         width = 150.px
                                         float = Float.left
-                                        after { content = "\":\"".asDynamic() }
+                                        after { content = Content(":") }
                                     }
                                     htmlFor = it.hashCode().toString()
                                 }

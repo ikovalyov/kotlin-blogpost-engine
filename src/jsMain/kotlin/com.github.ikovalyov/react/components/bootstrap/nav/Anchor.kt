@@ -1,9 +1,9 @@
 package com.github.ikovalyov.react.components.bootstrap.nav
 
-import csstype.ClassName
 import kotlinx.browser.window
 import react.ChildrenBuilder
 import react.router.dom.Link
+import web.cssom.ClassName
 
 fun ChildrenBuilder.ReactAnchor(hrefString: String, active: Boolean, disabled: Boolean, block: ChildrenBuilder.() -> Unit) {
     Link {

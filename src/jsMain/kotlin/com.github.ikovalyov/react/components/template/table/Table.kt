@@ -3,18 +3,8 @@ package com.github.ikovalyov.react.components.template.table
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.styles.Colors
-import csstype.Auto
-import csstype.BorderCollapse
-import csstype.Cursor
-import csstype.FontWeight
-import csstype.LineStyle
-import csstype.Margin
-import csstype.Padding
-import csstype.TextAlign
-import csstype.WhiteSpace
-import csstype.px
 import emotion.react.css
-import js.core.jso
+import js.objects.jso
 import react.ChildrenBuilder
 import react.FC
 import react.Fragment
@@ -35,6 +25,7 @@ import tanstack.table.core.ColumnDefTemplate
 import tanstack.table.core.StringOrTemplateHeader
 import tanstack.table.core.Table
 import tanstack.table.core.getCoreRowModel
+import web.cssom.*
 
 external interface TableProps<T : IEditable> : PropsWithChildren {
     var items: Array<T>?
@@ -177,7 +168,7 @@ private fun <T : IEditable> ChildrenBuilder.buildTableBody(table: Table<T>) {
     }
 }
 
-private val Table: FC<TableProps<*>> = FC { Table(it) }
+private val Table: FC<TableProps<*>> = FC { prop -> Table(prop) }
 
 fun <T : IEditable> ChildrenBuilder.Table(block: TableProps<T>.() -> Unit) {
     child(type = Table, props = jso(block))
