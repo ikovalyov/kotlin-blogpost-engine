@@ -15,7 +15,7 @@ external interface ButtonProps<T : IEditable> : PropsWithChildren {
     var type: ButtonType?
 }
 
-private fun <T : IEditable> ChildrenBuilder.Button(props: ButtonProps<T>) {
+private fun <T : IEditable> ChildrenBuilder.button(props: ButtonProps<T>) {
     button {
         +props.text
         value = props.body.id.toString()
@@ -26,9 +26,9 @@ private fun <T : IEditable> ChildrenBuilder.Button(props: ButtonProps<T>) {
 }
 
 private val Button: FC<ButtonProps<*>> = FC { props ->
-    Button(props)
+    button(props)
 }
 
-fun <T : IEditable> ChildrenBuilder.Button(block: ButtonProps<T>.() -> Unit) {
+fun <T : IEditable> ChildrenBuilder.buttonChild(block: ButtonProps<T>.() -> Unit) {
     child(type = Button, props = jso(block))
 }

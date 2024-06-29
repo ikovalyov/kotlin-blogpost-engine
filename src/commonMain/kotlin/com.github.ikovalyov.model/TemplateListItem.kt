@@ -10,13 +10,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 @Serializable
-data class TemplateListItem(
-    val id: Uuid,
-    val lastModified: Instant
-) {
+data class TemplateListItem(val id: Uuid, val lastModified: Instant) {
     companion object {
-        fun fromTemplate(template: Template): TemplateListItem {
-            return TemplateListItem(template.id, template.lastModified)
-        }
+        fun fromTemplate(template: Template): TemplateListItem = TemplateListItem(template.id, template.lastModified)
     }
 }

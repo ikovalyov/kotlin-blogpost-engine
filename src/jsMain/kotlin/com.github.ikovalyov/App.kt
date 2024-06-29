@@ -3,9 +3,9 @@ package com.github.ikovalyov
 import com.github.ikovalyov.react.components.bootstrap.Button
 import com.github.ikovalyov.react.components.bootstrap.Div
 import com.github.ikovalyov.react.components.bootstrap.Input
-import com.github.ikovalyov.react.components.bootstrap.ScreenReaderSpan
-import com.github.ikovalyov.react.components.bootstrap.nav.CollapseButton
+import com.github.ikovalyov.react.components.bootstrap.nav.collapseButton
 import com.github.ikovalyov.react.components.bootstrap.nav.menuItem
+import com.github.ikovalyov.react.components.bootstrap.screenReaderSpan
 import emotion.react.css
 import react.FC
 import react.Props
@@ -17,15 +17,15 @@ import react.router.dom.Link
 import web.cssom.ClassName
 import web.cssom.px
 
-const val navbarTogglerId = "navbarTogglerDemo01"
+const val NAVBAR_TOGGLER_ID = "navbarTogglerDemo01"
 val App = FC<Props> {
     nav {
         className = ClassName("navbar navbar-expand-lg navbar-light bg-light")
         Div.ContainerFluidDiv(this) {
-            CollapseButton(target = navbarTogglerId)
+            collapseButton(target = NAVBAR_TOGGLER_ID)
             div {
                 className = ClassName("collapse navbar-collapse")
-                id = navbarTogglerId
+                id = NAVBAR_TOGGLER_ID
                 Link {
                     to = "/"
                     className = ClassName("navbar-brand")
@@ -36,19 +36,19 @@ val App = FC<Props> {
 
                     menuItem(href = "#", active = true, disabled = false) {
                         +"Home "
-                        ScreenReaderSpan("(current)")
+                        screenReaderSpan("(current)")
                     }
                     menuItem(
-                        href = "${Api.backendEndpoint}/oauth/login/google",
+                        href = "${Api.BACKEND_ENDPOINT}/oauth/login/google",
                         active = false,
                         disabled = false,
-                        reactLink = false
+                        reactLink = false,
                     ) { +"Login" }
                     menuItem(
-                        href = "${Api.backendEndpoint}/logout",
+                        href = "${Api.BACKEND_ENDPOINT}/logout",
                         active = false,
                         disabled = false,
-                        reactLink = false
+                        reactLink = false,
                     ) { +"Logout" }
                     menuItem(href = "#", active = false, disabled = true) { +"Disabled" }
                 }

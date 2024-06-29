@@ -5,7 +5,7 @@ import react.ChildrenBuilder
 import react.router.dom.Link
 import web.cssom.ClassName
 
-fun ChildrenBuilder.ReactAnchor(hrefString: String, active: Boolean, disabled: Boolean, block: ChildrenBuilder.() -> Unit) {
+fun ChildrenBuilder.reactAnchor(hrefString: String, active: Boolean, disabled: Boolean, block: ChildrenBuilder.() -> Unit) {
     Link {
         to = hrefString
         val classes = buildList {
@@ -23,7 +23,7 @@ fun ChildrenBuilder.ReactAnchor(hrefString: String, active: Boolean, disabled: B
         this.apply(block)
     }
 }
-fun ChildrenBuilder.Anchor(hrefString: String, active: Boolean, disabled: Boolean, block: ChildrenBuilder.() -> Unit) {
+fun ChildrenBuilder.htmlAnchor(hrefString: String, active: Boolean, disabled: Boolean, block: ChildrenBuilder.() -> Unit) {
     Link {
         to = "#"
         val classes = buildList {

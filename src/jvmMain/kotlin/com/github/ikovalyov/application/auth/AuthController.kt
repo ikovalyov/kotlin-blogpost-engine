@@ -44,12 +44,12 @@ class AuthController {
                     loggedIn = true,
                     nickname = "",
                     roles = emptyList(),
-                    password = Password(ShortString(""))
-                )
+                    password = Password(ShortString("")),
+                ),
             )
         }
 
-        val location = URI(Api.frontendEndpoint)
+        val location = URI(Api.FRONTEND_ENDPOINT)
         return HttpResponse.temporaryRedirect(location)
     }
 }

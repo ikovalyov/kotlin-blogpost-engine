@@ -34,7 +34,7 @@ var HTMLAttributes<*>.ariaLabel: String?
         asDynamic()["aria-label"] = value
     }
 
-fun ChildrenBuilder.CollapseButton(target: String) = ReactHTML.button {
+fun ChildrenBuilder.collapseButton(target: String) = ReactHTML.button {
     type = ButtonType.button
     className = ClassName("navbar-toggler")
     dataBsToggle = "collapse"

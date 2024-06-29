@@ -19,13 +19,11 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
 
-@Controller(Api.recordsApiUrl)
+@Controller(Api.RECORDS_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class RecordsController(private val client: DynamoDbAsyncClient) {
     @Get
-    fun get(): String {
-        return "success"
-    }
+    fun get(): String = "success"
 
     @Get("{id}")
     fun getItem(id: Int): HttpResponse<Item> {
@@ -51,8 +49,8 @@ class RecordsController(private val client: DynamoDbAsyncClient) {
                 .item(
                     mutableMapOf(
                         "id" to AttributeValue.builder().s(item.id.toString()).build(),
-                        "body" to AttributeValue.builder().s(item.body).build()
-                    )
+                        "body" to AttributeValue.builder().s(item.body).build(),
+                    ),
                 )
                 .build()
         val response = client.putItem(request).get()

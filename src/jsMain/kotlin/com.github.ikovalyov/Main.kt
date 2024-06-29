@@ -27,7 +27,7 @@ suspend fun main() {
     val templateService = TemplateService()
     val allTemplates = templateService.getAllTemplates()
 
-    val APP_ROUTER = createBrowserRouter(
+    val appRouter = createBrowserRouter(
         arrayOf(
             RouteObject(
                 path = "/",
@@ -41,17 +41,17 @@ suspend fun main() {
                             this.templateList = allTemplates
                         }
                     }
-                }
-            )
-        )
+                },
+            ),
+        ),
     )
 
-    val ReactRouterDomApp = FC {
+    val reactRouterDomApp = FC {
         RouterProvider {
-            router = APP_ROUTER
+            router = appRouter
         }
     }
     root.render(
-        ReactRouterDomApp.create()
+        reactRouterDomApp.create(),
     )
 }

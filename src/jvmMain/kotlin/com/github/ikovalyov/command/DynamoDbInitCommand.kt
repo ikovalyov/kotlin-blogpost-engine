@@ -14,7 +14,7 @@ import picocli.CommandLine
     name = "Init dynamo db",
     description = ["This command generates tables in the dynamo db required for app to operate"],
     mixinStandardHelpOptions = true,
-    helpCommand = true
+    helpCommand = true,
 )
 @Singleton
 open class DynamoDbInitCommand : Runnable {

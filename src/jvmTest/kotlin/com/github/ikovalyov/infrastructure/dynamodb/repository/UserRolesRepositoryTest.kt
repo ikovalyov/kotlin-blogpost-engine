@@ -14,8 +14,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 @MicronautTest
 @TestInstance(Lifecycle.PER_CLASS)
 internal class UserRolesRepositoryTest : TestPropertyProvider {
-    class MyGenericContainer(dockerImageName: String) :
-        GenericContainer<MyGenericContainer>(dockerImageName)
+    class MyGenericContainer(dockerImageName: String) : GenericContainer<MyGenericContainer>(dockerImageName)
 
     private val dynamodbContainer =
         MyGenericContainer("amazon/dynamodb-local:1.13.2")

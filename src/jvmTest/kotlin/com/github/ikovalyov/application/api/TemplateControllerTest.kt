@@ -30,12 +30,10 @@ class TemplateControllerTest : TestPropertyProvider {
             it.start()
         }
 
-    override fun getProperties(): MutableMap<String, String> {
-        return mutableMapOf(
-            "micronaut.server.port" to "0",
-            "blog.aws.endpoint" to localstack.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString()
-        )
-    }
+    override fun getProperties(): MutableMap<String, String> = mutableMapOf(
+        "micronaut.server.port" to "0",
+        "blog.aws.endpoint" to localstack.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString(),
+    )
 
     private lateinit var uuid: Uuid
     private val uuid2 = uuid4()

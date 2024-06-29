@@ -8,9 +8,9 @@ fun ChildrenBuilder.menuItem(href: String, active: Boolean, disabled: Boolean, r
     div {
         className = ClassName("nav-item")
         if (reactLink) {
-            ReactAnchor(href, active, disabled, block)
+            reactAnchor(href, active, disabled, block)
         } else {
-            Anchor(href, active, disabled, block)
+            htmlAnchor(href, active, disabled, block)
         }
     }
 }

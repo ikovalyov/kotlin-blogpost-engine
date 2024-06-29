@@ -4,7 +4,7 @@ import react.ChildrenBuilder
 import react.dom.html.ReactHTML
 import web.cssom.ClassName
 
-fun ChildrenBuilder.ScreenReaderSpan(text: String) {
+fun ChildrenBuilder.screenReaderSpan(text: String) {
     ReactHTML.span {
         className = ClassName("sr-only")
         +text

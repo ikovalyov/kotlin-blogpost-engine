@@ -17,15 +17,13 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
-@Controller(Api.templateApiUrl)
+@Controller(Api.TEMPLATE_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class TemplateController(private val templateRepository: TemplateRepository) {
     private val logger = KotlinLogging.logger {}
 
     @Get
-    suspend fun list(): String {
-        return Json.encodeToString(ListSerializer(Template.serializer()), templateRepository.list())
-    }
+    suspend fun list(): String = Json.encodeToString(ListSerializer(Template.serializer()), templateRepository.list())
 
     @Get("/{itemId}")
     suspend fun get(itemId: Uuid): String? {

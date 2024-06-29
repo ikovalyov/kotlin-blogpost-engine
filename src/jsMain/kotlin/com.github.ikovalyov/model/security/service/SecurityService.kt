@@ -19,10 +19,10 @@ actual class SecurityService {
         val user = kotlin.runCatching {
             val result = window
                 .fetch(
-                    Api.backendEndpoint + Api.userUrl,
+                    Api.BACKEND_ENDPOINT + Api.USER_URL,
                     RequestInit(
-                        credentials = RequestCredentials.INCLUDE
-                    )
+                        credentials = RequestCredentials.INCLUDE,
+                    ),
                 )
                 .await()
                 .text()
