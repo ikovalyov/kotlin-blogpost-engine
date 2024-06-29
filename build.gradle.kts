@@ -2,7 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import java.util.*
 
-val micronautVersion by properties
+val micronautCoreVersion by properties
+val micronautParentVersion by properties
 
 plugins {
     kotlin("multiplatform") version "2.0.0"
@@ -106,13 +107,13 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1")
-                implementation(project.dependencies.platform("io.micronaut:micronaut-core-bom:$micronautVersion"))
+                implementation(project.dependencies.platform("io.micronaut:micronaut-core-bom:$micronautCoreVersion"))
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
                 implementation("io.micronaut:micronaut-inject-java")
                 runtimeOnly("org.yaml:snakeyaml")
 
-                implementation(project.dependencies.platform("io.micronaut.platform:micronaut-parent:$micronautVersion"))
+                implementation(project.dependencies.platform("io.micronaut.platform:micronaut-parent:$micronautParentVersion"))
                 implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
                 implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
                 implementation("io.micronaut.aws:micronaut-aws-ua")
@@ -133,7 +134,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:$micronautParentVersion"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
                     ),
                 )
@@ -149,7 +150,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:$micronautVersion"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:$micronautParentVersion"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
                     ),
                 )
