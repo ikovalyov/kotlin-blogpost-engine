@@ -2,6 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import java.util.*
 
+val micronautVersion by properties
+
 plugins {
     kotlin("multiplatform") version "2.0.0"
     kotlin("kapt") version "2.0.0"
@@ -33,9 +35,6 @@ kotlin {
 
     jvm {
         withJava()
-        attributes {
-            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)
-        }
 
         compilations.all {
             tasks.named<Test>("${target.name}Test") {
@@ -107,15 +106,18 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1")
-                implementation(project.dependencies.enforcedPlatform("io.micronaut:micronaut-bom:3.10.4"))
-
+                implementation(project.dependencies.platform("io.micronaut:micronaut-core-bom:$micronautVersion"))
                 implementation("io.micronaut:micronaut-http-client")
                 implementation("io.micronaut:micronaut-http-server-netty")
+                implementation("io.micronaut:micronaut-inject-java")
+                runtimeOnly("org.yaml:snakeyaml")
+
+                implementation(project.dependencies.platform("io.micronaut.platform:micronaut-parent:$micronautVersion"))
                 implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
                 implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
+                implementation("io.micronaut.aws:micronaut-aws-ua")
                 implementation("io.micronaut.views:micronaut-views-freemarker")
                 implementation("io.micronaut.picocli:micronaut-picocli")
-                implementation("io.micronaut:micronaut-inject-java")
                 implementation("io.micronaut.security:micronaut-security-oauth2")
                 implementation("io.micronaut.security:micronaut-security-jwt")
                 implementation("software.amazon.awssdk:dynamodb") {
@@ -124,16 +126,18 @@ kotlin {
                 }
                 implementation("software.amazon.awssdk:netty-nio-client")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+                implementation("org.freemarker:freemarker:2.3.33")
 
-                implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.23.1")
                 implementation("org.apache.logging.log4j:log4j-core:2.23.1")
+                implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
                 implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.2.1"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
                     ),
                 )
+
                 if (System.getProperty("os.name").lowercase(Locale.getDefault()).contains("mac")) {
                     implementation("io.micronaut:micronaut-runtime-osx")
                     implementation("net.java.dev.jna:jna")
@@ -145,7 +149,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:$micronautVersion"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
                     ),
                 )
