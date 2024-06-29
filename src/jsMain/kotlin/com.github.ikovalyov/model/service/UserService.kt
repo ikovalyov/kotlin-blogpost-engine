@@ -7,7 +7,6 @@ import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.w3c.fetch.INCLUDE
@@ -21,10 +20,10 @@ class UserService {
     suspend fun getAllUsers(): List<User> {
         val result = kotlin.runCatching {
             val result = window.fetch(
-                Api.backendEndpoint + Api.userApiUrl,
+                Api.BACKEND_ENDPOINT + Api.USER_API_URL,
                 RequestInit(
-                    credentials = RequestCredentials.INCLUDE
-                )
+                    credentials = RequestCredentials.INCLUDE,
+                ),
             ).await().text().await()
             Json.decodeFromString(ListSerializer(User.serializer()), result)
         }
@@ -39,10 +38,10 @@ class UserService {
 
     suspend fun getUser(userId: Uuid): User {
         val result = window.fetch(
-            Api.backendEndpoint + Api.userApiUrl + "/$userId",
+            Api.BACKEND_ENDPOINT + Api.USER_API_URL + "/$userId",
             RequestInit(
-                credentials = RequestCredentials.INCLUDE
-            )
+                credentials = RequestCredentials.INCLUDE,
+            ),
         ).await().text().await()
         return Json.decodeFromString(User.serializer(), result)
     }

@@ -15,19 +15,19 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 class UserRoleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<UserRole>(dynamoDbClient) {
 
     companion object {
-        const val tableName = "userRole"
-        const val adminRoleName = "admin"
-        const val userRoleName = "user"
-        const val guestRoleName = "guest"
-        const val fieldName = "name"
+        const val TABLE_NAME = "userRole"
+        const val ADMIN_ROLE_NAME = "admin"
+        const val USER_ROLE_NAME = "user"
+        const val GUEST_USER_ROLE_NAME = "guest"
+        const val FIELD_NAME = "name"
     }
 
-    override val tableName = UserRoleRepository.tableName
+    override val tableName = TABLE_NAME
 
     suspend fun createDefaultUserRoles(): Boolean {
-        val adminRoleFromDb = getByName(adminRoleName)
-        val userRole = UserRole(uuid4(), Clock.System.now(), userRoleName)
-        val guestRole = UserRole(uuid4(), Clock.System.now(), guestRoleName)
+        val adminRoleFromDb = getByName(ADMIN_ROLE_NAME)
+        val userRole = UserRole(uuid4(), Clock.System.now(), USER_ROLE_NAME)
+        val guestRole = UserRole(uuid4(), Clock.System.now(), GUEST_USER_ROLE_NAME)
         val adminInsertResult = if (adminRoleFromDb == null) {
             createAdmin()
         } else {
@@ -37,32 +37,24 @@ class UserRoleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<U
     }
 
     suspend fun createAdmin(): Boolean {
-        val admin = UserRole(uuid4(), Clock.System.now(), adminRoleName)
+        val admin = UserRole(uuid4(), Clock.System.now(), ADMIN_ROLE_NAME)
         return insert(admin)
     }
 
-    suspend fun list(): List<UserRole> {
-        return list {
-            UserRole.fromDynamoDbMap(it)
-        }
+    suspend fun list(): List<UserRole> = list {
+        UserRole.fromDynamoDbMap(it)
     }
 
-    suspend fun insert(item: UserRole): Boolean {
-        return insert(item) {
-            item.toDynamoDbMap()
-        }
+    suspend fun insert(item: UserRole): Boolean = insert(item) {
+        item.toDynamoDbMap()
     }
 
-    suspend fun update(item: UserRole): Boolean {
-        return update(item) {
-            item.toDynamoDbMap()
-        }
+    suspend fun update(item: UserRole): Boolean = update(item) {
+        item.toDynamoDbMap()
     }
 
-    suspend fun get(id: Uuid): UserRole? {
-        return get(id) {
-            UserRole.fromDynamoDbMap(it)
-        }
+    suspend fun get(id: Uuid): UserRole? = get(id) {
+        UserRole.fromDynamoDbMap(it)
     }
 
     suspend fun getByName(name: String): UserRole? {
@@ -72,8 +64,8 @@ class UserRoleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<U
             it.filterExpression("#keyone = :nameParam")
             it.expressionAttributeNames(
                 mutableMapOf(
-                    Pair("#keyone", fieldName)
-                )
+                    Pair("#keyone", FIELD_NAME),
+                ),
             )
         }.await()
         if (!response.hasItems() || response.items().isEmpty()) return null

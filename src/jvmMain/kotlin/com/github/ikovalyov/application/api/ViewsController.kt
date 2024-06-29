@@ -12,13 +12,11 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 
-@Controller(Api.viewsApiUrl)
+@Controller(Api.VIEWS_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class ViewsController(private val templateRepository: TemplateRepository) {
     @Get("/list-views")
-    suspend fun listViews(): List<TemplateListItem> {
-        return templateRepository.list().map(TemplateListItem::fromTemplate)
-    }
+    suspend fun listViews(): List<TemplateListItem> = templateRepository.list().map(TemplateListItem::fromTemplate)
 
     @Post("/add")
     suspend fun insertView(@Body template: Template): HttpResponse<*> {

@@ -12,10 +12,9 @@ import software.amazon.awssdk.services.dynamodb.model.ResourceInUseException
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType
 import software.amazon.awssdk.services.dynamodb.model.Tag
 
-abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDbAsyncClient) :
-    InitDynamoDbDatabaseInterface {
+abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDbAsyncClient) : InitDynamoDbDatabaseInterface {
     companion object {
-        const val primaryKey = "id"
+        const val PRIMARY_KEY = "id"
     }
 
     abstract val tableName: String
@@ -28,9 +27,9 @@ abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDb
             it.tableName(tableName)
             it.attributeDefinitions(
                 AttributeDefinition.builder()
-                    .attributeName(primaryKey)
+                    .attributeName(PRIMARY_KEY)
                     .attributeType(ScalarAttributeType.S)
-                    .build()
+                    .build(),
             )
             it.keySchema(KeySchemaElement.builder().attributeName("id").keyType(KeyType.HASH).build())
             it.provisionedThroughput { builder ->

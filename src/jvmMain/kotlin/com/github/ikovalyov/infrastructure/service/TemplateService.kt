@@ -10,7 +10,5 @@ class TemplateService {
     @Inject
     private lateinit var templateRepository: TemplateRepository
 
-    suspend fun getAllTemplates(): List<Template> {
-        return templateRepository.list()
-    }
+    suspend fun getAllTemplates(): List<Template> = templateRepository.list()
 }

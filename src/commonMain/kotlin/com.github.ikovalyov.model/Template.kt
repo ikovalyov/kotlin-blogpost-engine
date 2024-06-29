@@ -15,17 +15,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class Template(
-    override val id: Uuid,
-    val name: String,
-    val body: String,
-    val lastModified: Instant = Clock.System.now()
-) : IEditable {
+data class Template(override val id: Uuid, val name: String, val body: String, val lastModified: Instant = Clock.System.now()) : IEditable {
     companion object {
-        const val id = "id"
-        const val name = "name"
-        const val body = "body"
-        const val lastModified = "lastModified"
+        const val ID = "id"
+        const val NAME = "name"
+        const val BODY = "body"
+        const val LAST_MODIFIED = "lastModified"
 
         fun create(id: Uuid, name: String, body: String) = Template(id, name, body, Clock.System.now())
     }
@@ -44,8 +39,8 @@ data class Template(
                 copy(id = it)
             },
             get = { id },
-            fieldName = "Id",
-            predefinedList = null
+            fieldName = ID,
+            predefinedList = null,
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Name,
@@ -60,8 +55,8 @@ data class Template(
                 copy(name = it)
             },
             get = { name },
-            fieldName = "Name",
-            predefinedList = null
+            fieldName = NAME,
+            predefinedList = null,
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Body,
@@ -72,8 +67,8 @@ data class Template(
                 copy(body = it)
             },
             get = { body },
-            fieldName = "Body",
-            predefinedList = null
+            fieldName = BODY,
+            predefinedList = null,
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.LastModified,
@@ -92,12 +87,10 @@ data class Template(
                 copy(lastModified = it)
             },
             get = { lastModified },
-            fieldName = "Last Modified",
-            predefinedList = null
-        )
+            fieldName = LAST_MODIFIED,
+            predefinedList = null,
+        ),
     )
 
-    override fun serialize(): String {
-        return Json.encodeToString(this)
-    }
+    override fun serialize(): String = Json.encodeToString(this)
 }

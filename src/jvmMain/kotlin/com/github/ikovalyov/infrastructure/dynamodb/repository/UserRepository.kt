@@ -16,15 +16,12 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 @ExperimentalSerializationApi
 @Singleton
-class UserRepository(
-    dynamoDbClient: DynamoDbAsyncClient,
-    private val userRoleRepository: UserRoleRepository
-) : CrudRepository<User>(dynamoDbClient) {
+class UserRepository(dynamoDbClient: DynamoDbAsyncClient, private val userRoleRepository: UserRoleRepository) : CrudRepository<User>(dynamoDbClient) {
     companion object {
-        const val tableName = "user"
+        const val TABLE_NAME = "user"
     }
 
-    override val tableName = UserRepository.tableName
+    override val tableName = TABLE_NAME
 
     override suspend fun init(): Boolean {
         super.init()
@@ -32,40 +29,32 @@ class UserRepository(
             delay(100)
         }
         userRoleRepository.createDefaultUserRoles()
-        val adminRole = userRoleRepository.getByName(UserRoleRepository.adminRoleName)!!
+        val adminRole = userRoleRepository.getByName(UserRoleRepository.ADMIN_ROLE_NAME)!!
         val admin = User(
             id = uuid4(),
             email = Email(ShortString("test@example.com")),
             loggedIn = false,
             nickname = "admin",
             roles = listOf(adminRole.id),
-            password = Password(ShortString("password"))
+            password = Password(ShortString("password")),
         )
         return insert(admin)
     }
 
-    suspend fun list(): List<User> {
-        return list {
-            User.fromDynamoDbMap(it)
-        }
+    suspend fun list(): List<User> = list {
+        User.fromDynamoDbMap(it)
     }
 
-    suspend fun insert(item: User): Boolean {
-        return insert(item) {
-            item.toDynamoDbMap()
-        }
+    suspend fun insert(item: User): Boolean = insert(item) {
+        item.toDynamoDbMap()
     }
 
-    suspend fun update(item: User): Boolean {
-        return update(item) {
-            item.toDynamoDbMap()
-        }
+    suspend fun update(item: User): Boolean = update(item) {
+        item.toDynamoDbMap()
     }
 
-    suspend fun get(id: Uuid): User? {
-        return get(id) {
-            User.fromDynamoDbMap(it)
-        }
+    suspend fun get(id: Uuid): User? = get(id) {
+        User.fromDynamoDbMap(it)
     }
 
     suspend fun getUserByEmail(email: Email): User? {
@@ -74,7 +63,7 @@ class UserRepository(
 
         val emails = find(
             mapOf(":email" to AttributeValue.fromS(email.toString())),
-            filterExpression = "email = :email"
+            filterExpression = "email = :email",
         ) {
             User.fromDynamoDbMap(it)
         }

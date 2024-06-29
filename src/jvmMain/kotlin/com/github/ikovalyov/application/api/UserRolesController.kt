@@ -17,15 +17,13 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
-@Controller(Api.userRoleApiUrl)
+@Controller(Api.USER_ROLE_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class UserRolesController(private val userRolesRepository: UserRoleRepository) {
     private val logger = KotlinLogging.logger {}
 
     @Get
-    suspend fun list(): String {
-        return Json.encodeToString(ListSerializer(UserRole.serializer()), userRolesRepository.list())
-    }
+    suspend fun list(): String = Json.encodeToString(ListSerializer(UserRole.serializer()), userRolesRepository.list())
 
     @Get("/{itemId}")
     suspend fun get(itemId: Uuid): String? {

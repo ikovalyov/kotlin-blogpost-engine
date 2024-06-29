@@ -3,18 +3,8 @@ package com.github.ikovalyov.react.components.template.table
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.markers.getFieldValueAsString
 import com.github.ikovalyov.styles.Colors
-import csstype.Auto
-import csstype.BorderCollapse
-import csstype.Cursor
-import csstype.FontWeight
-import csstype.LineStyle
-import csstype.Margin
-import csstype.Padding
-import csstype.TextAlign
-import csstype.WhiteSpace
-import csstype.px
 import emotion.react.css
-import js.core.jso
+import js.objects.jso
 import react.ChildrenBuilder
 import react.FC
 import react.Fragment
@@ -35,6 +25,16 @@ import tanstack.table.core.ColumnDefTemplate
 import tanstack.table.core.StringOrTemplateHeader
 import tanstack.table.core.Table
 import tanstack.table.core.getCoreRowModel
+import web.cssom.Auto
+import web.cssom.BorderCollapse
+import web.cssom.Cursor
+import web.cssom.FontWeight
+import web.cssom.LineStyle
+import web.cssom.Margin
+import web.cssom.Padding
+import web.cssom.TextAlign
+import web.cssom.WhiteSpace
+import web.cssom.px
 
 external interface TableProps<T : IEditable> : PropsWithChildren {
     var items: Array<T>?
@@ -43,7 +43,7 @@ external interface TableProps<T : IEditable> : PropsWithChildren {
     var onViewClick: (T) -> Unit
 }
 
-private fun <T : IEditable> ChildrenBuilder.Table(props: TableProps<T>) {
+private fun <T : IEditable> ChildrenBuilder.table(props: TableProps<T>) {
     val items = props.items
     if (!items.isNullOrEmpty()) {
         val tableColumns = buildTableColumns(props, items.first())
@@ -52,7 +52,7 @@ private fun <T : IEditable> ChildrenBuilder.Table(props: TableProps<T>) {
                 this.data = items
                 this.columns = tableColumns
                 this.getCoreRowModel = getCoreRowModel()
-            }
+            },
         )
         buildTableBody(table)
     }
@@ -77,24 +77,24 @@ private fun <T : IEditable> buildTableColumns(componentProps: TableProps<T>, ite
         }
     }.toMutableList()
     columns.add(
-        jso<ColumnDef<T, String>> {
+        jso {
             id = "Action"
             header = StringOrTemplateHeader("Action")
             accessorKey = "id"
             cell = ColumnDefTemplate { props ->
                 Fragment.create {
                     div {
-                        Button<T> {
+                        buttonChild<T> {
                             onClick = componentProps.onViewClick
                             body = props.row.original
                             text = "view"
                         }
-                        Button<T> {
+                        buttonChild<T> {
                             onClick = componentProps.onEditClick
                             body = props.row.original
                             text = "update"
                         }
-                        Button<T> {
+                        buttonChild<T> {
                             onClick = componentProps.onDeleteClick
                             body = props.row.original
                             text = "delete"
@@ -102,7 +102,7 @@ private fun <T : IEditable> buildTableColumns(componentProps: TableProps<T>, ite
                     }
                 }
             }
-        }
+        },
     )
     return columns.toTypedArray()
 }
@@ -177,8 +177,8 @@ private fun <T : IEditable> ChildrenBuilder.buildTableBody(table: Table<T>) {
     }
 }
 
-private val Table: FC<TableProps<*>> = FC { Table(it) }
+private val Table: FC<TableProps<*>> = FC { prop -> table(prop) }
 
-fun <T : IEditable> ChildrenBuilder.Table(block: TableProps<T>.() -> Unit) {
+fun <T : IEditable> ChildrenBuilder.tableChild(block: TableProps<T>.() -> Unit) {
     child(type = Table, props = jso(block))
 }

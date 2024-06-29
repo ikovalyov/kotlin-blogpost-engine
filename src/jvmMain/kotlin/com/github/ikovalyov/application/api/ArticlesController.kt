@@ -18,13 +18,11 @@ import io.micronaut.security.rules.SecurityRule
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
-@Controller(Api.articleApiUrl)
+@Controller(Api.ARTICLE_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class ArticlesController(private val articleRepository: ArticleRepository) {
     @Get
-    suspend fun list(): String {
-        return Json.encodeToString(ListSerializer(Article.serializer()), articleRepository.list())
-    }
+    suspend fun list(): String = Json.encodeToString(ListSerializer(Article.serializer()), articleRepository.list())
 
     @Get("{id}")
     suspend fun get(id: Uuid): String? {

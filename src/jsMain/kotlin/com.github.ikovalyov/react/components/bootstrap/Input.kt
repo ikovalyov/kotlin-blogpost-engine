@@ -1,13 +1,13 @@
 package com.github.ikovalyov.react.components.bootstrap
 
 import com.github.ikovalyov.react.components.bootstrap.nav.ariaLabel
-import csstype.ClassName
 import react.ChildrenBuilder
-import react.dom.html.InputType
 import react.dom.html.ReactHTML
+import web.cssom.ClassName
+import web.html.InputType
 
 sealed class Input {
-    abstract operator fun invoke(name: String, builder: ChildrenBuilder): Unit
+    abstract operator fun invoke(name: String, builder: ChildrenBuilder)
 
     object SearchInput : Input() {
         override operator fun invoke(name: String, builder: ChildrenBuilder) {

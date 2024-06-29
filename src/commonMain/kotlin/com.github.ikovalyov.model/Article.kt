@@ -26,162 +26,158 @@ data class Article(
     val meta: List<String>?,
     val template: Template?, // Template uuid
     val userList: List<User>,
-    val templateList: List<Template>
+    val templateList: List<Template>,
 ) : IEditable {
-    override fun getMetadata(): List<IEditable.EditableMetadata<*, Article>> {
-        return listOf(
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Id,
-                readOnly = true,
-                serialize = {
-                    it.toString()
-                },
-                deserialize = {
-                    uuidFrom(it)
-                },
-                update = {
-                    copy(id = it)
-                },
-                get = {
-                    id
-                },
-                fieldName = "Id",
-                predefinedList = null
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Name,
-                readOnly = false,
-                serialize = {
-                    it
-                },
-                deserialize = {
-                    it
-                },
-                update = {
-                    copy(name = it)
-                },
-                get = {
-                    name
-                },
-                fieldName = "Name",
-                predefinedList = null
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Abstract,
-                readOnly = false,
-                serialize = {
-                    it
-                },
-                deserialize = {
-                    it
-                },
-                update = {
-                    copy(abstract = it)
-                },
-                get = {
-                    abstract
-                },
-                fieldName = "Abstract",
-                predefinedList = null
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Body,
-                readOnly = false,
-                serialize = {
-                    it
-                },
-                deserialize = {
-                    it
-                },
-                update = {
-                    copy(body = it)
-                },
-                get = {
-                    body
-                },
-                fieldName = "Body",
-                predefinedList = null
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Author,
-                readOnly = false,
-                serialize = {
-                    it.id.toString()
-                },
-                deserialize = { uuid ->
-                    userList.first {
-                        it.id.toString() == uuid
-                    }
-                },
-                update = {
-                    copy(author = it)
-                },
-                get = {
-                    author
-                },
-                fieldName = "Author",
-                predefinedList = userList
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Tags,
-                readOnly = false,
-                serialize = {
-                    it.joinToString(separator = ",")
-                },
-                deserialize = {
-                    it.split(",")
-                },
-                update = {
-                    copy(tags = it)
-                },
-                get = {
-                    tags
-                },
-                fieldName = "Tags",
-                predefinedList = null
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.StringListFiledType,
-                readOnly = false,
-                serialize = {
-                    it.joinToString(separator = ",")
-                },
-                deserialize = {
-                    it.split(",")
-                },
-                update = {
-                    copy(meta = it)
-                },
-                get = {
-                    meta
-                },
-                fieldName = "Meta",
-                predefinedList = null
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Template,
-                readOnly = false,
-                serialize = {
-                    it.id.toString()
-                },
-                deserialize = { uuid ->
-                    templateList.first {
-                        it.id.toString() == uuid
-                    }
-                },
-                update = {
-                    copy(template = it)
-                },
-                get = {
-                    template
-                },
-                fieldName = "Template",
-                predefinedList = templateList
-            )
-        )
-    }
+    override fun getMetadata(): List<IEditable.EditableMetadata<*, Article>> = listOf(
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Id,
+            readOnly = true,
+            serialize = {
+                it.toString()
+            },
+            deserialize = {
+                uuidFrom(it)
+            },
+            update = {
+                copy(id = it)
+            },
+            get = {
+                id
+            },
+            fieldName = "Id",
+            predefinedList = null,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Name,
+            readOnly = false,
+            serialize = {
+                it
+            },
+            deserialize = {
+                it
+            },
+            update = {
+                copy(name = it)
+            },
+            get = {
+                name
+            },
+            fieldName = "Name",
+            predefinedList = null,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Abstract,
+            readOnly = false,
+            serialize = {
+                it
+            },
+            deserialize = {
+                it
+            },
+            update = {
+                copy(abstract = it)
+            },
+            get = {
+                abstract
+            },
+            fieldName = "Abstract",
+            predefinedList = null,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Body,
+            readOnly = false,
+            serialize = {
+                it
+            },
+            deserialize = {
+                it
+            },
+            update = {
+                copy(body = it)
+            },
+            get = {
+                body
+            },
+            fieldName = "Body",
+            predefinedList = null,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Author,
+            readOnly = false,
+            serialize = {
+                it.id.toString()
+            },
+            deserialize = { uuid ->
+                userList.first {
+                    it.id.toString() == uuid
+                }
+            },
+            update = {
+                copy(author = it)
+            },
+            get = {
+                author
+            },
+            fieldName = "Author",
+            predefinedList = userList,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Tags,
+            readOnly = false,
+            serialize = {
+                it.joinToString(separator = ",")
+            },
+            deserialize = {
+                it.split(",")
+            },
+            update = {
+                copy(tags = it)
+            },
+            get = {
+                tags
+            },
+            fieldName = "Tags",
+            predefinedList = null,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.StringListFiledType,
+            readOnly = false,
+            serialize = {
+                it.joinToString(separator = ",")
+            },
+            deserialize = {
+                it.split(",")
+            },
+            update = {
+                copy(meta = it)
+            },
+            get = {
+                meta
+            },
+            fieldName = "Meta",
+            predefinedList = null,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Template,
+            readOnly = false,
+            serialize = {
+                it.id.toString()
+            },
+            deserialize = { uuid ->
+                templateList.first {
+                    it.id.toString() == uuid
+                }
+            },
+            update = {
+                copy(template = it)
+            },
+            get = {
+                template
+            },
+            fieldName = "Template",
+            predefinedList = templateList,
+        ),
+    )
 
-    override fun serialize(): String {
-        return Json.encodeToString(this)
-    }
+    override fun serialize(): String = Json.encodeToString(this)
 }

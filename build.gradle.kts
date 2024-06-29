@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.allopen") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("com.diffplug.spotless") version "6.17.0"
+    id("com.diffplug.spotless") version "6.25.0"
     id("idea")
 }
 
@@ -49,7 +49,7 @@ kotlin {
             }
         }
     }
-    js {
+    js(IR) {
         browser {
             commonWebpackConfig {
                 cssSupport {
@@ -81,8 +81,8 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.763"
-                    )
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.763",
+                    ),
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
@@ -131,8 +131,8 @@ kotlin {
                 configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
-                    )
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
+                    ),
                 )
                 if (System.getProperty("os.name").lowercase(Locale.getDefault()).contains("mac")) {
                     implementation("io.micronaut:micronaut-runtime-osx")
@@ -146,8 +146,8 @@ kotlin {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
-                    )
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
+                    ),
                 )
 
                 implementation(kotlin("test-junit5"))
@@ -208,23 +208,21 @@ spotless {
         val files = project.fileTree(rootDir)
         files.include("**/*.kt")
         target(files)
-        ktlint("0.47.1")
-            .setUseExperimental(true)
+        ktlint("1.3.0")
             .editorConfigOverride(
                 mapOf(
                     "max_line_length" to "256",
-                    "insert_final_newline" to "true"
-                )
+                    "insert_final_newline" to "true",
+                ),
             )
     }
     kotlinGradle {
-        ktlint("0.47.1")
-            .setUseExperimental(true)
+        ktlint("1.3.0")
             .editorConfigOverride(
                 mapOf(
                     "max_line_length" to "256",
-                    "insert_final_newline" to "true"
-                )
+                    "insert_final_newline" to "true",
+                ),
             )
     }
 }

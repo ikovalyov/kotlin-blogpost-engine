@@ -29,8 +29,8 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     companion object {
         private val uuid = uuid4()
         private val uuid2 = uuid4()
-        private const val name = "name"
-        private const val name2 = "name2"
+        private const val NAME = "name"
+        private const val NAME2 = "name2"
     }
 
     @Inject lateinit var userRolesController: UserRolesController
@@ -43,12 +43,10 @@ internal class UserRolesControllerTest : TestPropertyProvider {
             it.start()
         }
 
-    override fun getProperties(): MutableMap<String, String> {
-        return mutableMapOf(
-            "micronaut.server.port" to "0",
-            "blog.aws.endpoint" to localstack.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString()
-        )
-    }
+    override fun getProperties(): MutableMap<String, String> = mutableMapOf(
+        "micronaut.server.port" to "0",
+        "blog.aws.endpoint" to localstack.getEndpointOverride(LocalStackContainer.Service.DYNAMODB).toString(),
+    )
 
     @BeforeAll
     fun init() {
@@ -58,10 +56,10 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Test
     @Order(1)
     fun insert(): Unit = runBlocking {
-        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(), UserRole(uuid, Clock.System.now(), name)))) {
+        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(), UserRole(uuid, Clock.System.now(), NAME)))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
-        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(), UserRole(uuid2, Clock.System.now(), name2)))) {
+        with(userRolesController.insert(Json.encodeToString(UserRole.serializer(), UserRole(uuid2, Clock.System.now(), NAME2)))) {
             assert(this.status == HttpStatus.ACCEPTED)
         }
     }
@@ -79,12 +77,12 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     fun getItems() = runBlocking {
         with(userRolesController.get(uuid)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(UserRolesControllerTest.name, name)
+                assertEquals(NAME, name)
             }
         }
         with(userRolesController.get(uuid2)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(name2, name)
+                assertEquals(NAME2, name)
             }
         }
     }
@@ -102,12 +100,12 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Test
     @Order(5)
     fun update() = runBlocking {
-        val userRole = UserRole(uuid2, Clock.System.now(), name)
+        val userRole = UserRole(uuid2, Clock.System.now(), NAME)
         userRolesController.update(Json.encodeToString(UserRole.serializer(), userRole))
 
         with(userRolesController.get(uuid2)!!) {
             with(Json.decodeFromString(UserRole.serializer(), this)) {
-                assertEquals(UserRolesControllerTest.name, name)
+                assertEquals(NAME, name)
             }
         }
     }

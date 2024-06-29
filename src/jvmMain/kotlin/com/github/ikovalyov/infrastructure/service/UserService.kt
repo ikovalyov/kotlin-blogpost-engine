@@ -11,7 +11,5 @@ import kotlinx.serialization.ExperimentalSerializationApi
 class UserService {
     @Inject private lateinit var userRepository: UserRepository
 
-    suspend fun getAllUsers(): List<User> {
-        return userRepository.list()
-    }
+    suspend fun getAllUsers(): List<User> = userRepository.list()
 }
