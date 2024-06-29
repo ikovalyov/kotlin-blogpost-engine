@@ -133,7 +133,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.2.1"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
                     ),
                 )
