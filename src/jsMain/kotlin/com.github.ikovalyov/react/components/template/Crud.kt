@@ -1,10 +1,10 @@
 package com.github.ikovalyov.react.components.template
 
 import com.benasher44.uuid.Uuid
-import com.github.ikovalyov.Api.backendEndpoint
+import com.github.ikovalyov.Api.BACKEND_ENDPOINT
 import com.github.ikovalyov.coroutines.SimpleCoroutineScope
 import com.github.ikovalyov.model.markers.IEditable
-import js.core.jso
+import js.objects.jso
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
@@ -38,12 +38,12 @@ enum class CrudState {
     VIEW,
     EDIT,
     ADD,
-    INIT
+    INIT,
 }
 
 private val coroutineScope = SimpleCoroutineScope()
 
-private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentProps<I>) {
+private fun <I : IEditable> ChildrenBuilder.crudComponent(props: CrudComponentProps<I>) {
     val stateInstance = useState<CrudComponentState<I>> {
         jso {
             currentState = CrudState.INIT
@@ -55,10 +55,10 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
     suspend fun loadItem(itemId: Uuid): I {
         val result = window
             .fetch(
-                backendEndpoint + props.apiUri + "/$itemId",
+                BACKEND_ENDPOINT + props.apiUri + "/$itemId",
                 RequestInit(
-                    credentials = RequestCredentials.INCLUDE
-                )
+                    credentials = RequestCredentials.INCLUDE,
+                ),
             )
             .await()
             .text()
@@ -72,13 +72,13 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
         headers.append("Content-Type", "application/json")
         val fetchResult =
             window.fetch(
-                backendEndpoint + props.apiUri,
+                BACKEND_ENDPOINT + props.apiUri,
                 RequestInit(
                     method = "PATCH",
                     headers = headers,
                     body = body,
-                    credentials = RequestCredentials.INCLUDE
-                )
+                    credentials = RequestCredentials.INCLUDE,
+                ),
             )
         val response = fetchResult.await()
         response.text().await()
@@ -90,13 +90,13 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
         headers.append("Content-Type", "application/json")
         val fetchResult =
             window.fetch(
-                backendEndpoint + props.apiUri,
+                BACKEND_ENDPOINT + props.apiUri,
                 RequestInit(
                     method = "POST",
                     headers = headers,
                     body = body,
-                    credentials = RequestCredentials.INCLUDE
-                )
+                    credentials = RequestCredentials.INCLUDE,
+                ),
             )
         val response = fetchResult.await()
         response.text().await()
@@ -118,10 +118,10 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
     suspend fun switchToListViewStateFunc() {
         coroutineScope.launch {
             val result = window.fetch(
-                backendEndpoint + props.apiUri,
+                BACKEND_ENDPOINT + props.apiUri,
                 RequestInit(
-                    credentials = RequestCredentials.INCLUDE
-                )
+                    credentials = RequestCredentials.INCLUDE,
+                ),
             ).await().text().await()
             val templatesList = props.decodeItems(result)
             updateState {
@@ -149,11 +149,11 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
             val headers = Headers()
             headers.append("Content-Type", "application/json")
             window.fetch(
-                backendEndpoint + props.apiUri + "/${t.id}",
+                BACKEND_ENDPOINT + props.apiUri + "/${t.id}",
                 RequestInit(
                     method = "DELETE",
-                    credentials = RequestCredentials.INCLUDE
-                )
+                    credentials = RequestCredentials.INCLUDE,
+                ),
             ).await()
             switchToListViewStateFunc()
         }
@@ -197,70 +197,62 @@ private fun <I : IEditable> ChildrenBuilder.CrudComponent(props: CrudComponentPr
 
         CrudState.LIST -> {
             console.log("Loading ItemList")
-            child(
-                ItemList(
-                    jso<ItemListProps<I>> {
-                        switchToEditState = ::switchToEditStateFuncVar
-                        switchToViewState = ::switchToViewStateFunc
-                        switchToInsertState = ::switchToInsertStateFunc
-                        deleteItem = ::deleteItem
-                        items = componentState.itemsList
-                    }
-                ).render()
-            )
+            +ItemList(
+                jso<ItemListProps<I>> {
+                    switchToEditState = ::switchToEditStateFuncVar
+                    switchToViewState = ::switchToViewStateFunc
+                    switchToInsertState = ::switchToInsertStateFunc
+                    deleteItem = ::deleteItem
+                    items = componentState.itemsList
+                },
+            ).render()
         }
 
         CrudState.EDIT -> {
             console.log("Loading TemplateEdit")
-            child(
-                TemplateEdit(
-                    jso {
-                        switchToListState = ::switchToListViewStateFunc
-                        submitForm = ::submitEditItemForm
-                    },
-                    jso<TemplateEditState<I>> {
-                        item = componentState.currentItem!!
-                    }
-                ).render()
-            )
+            +TemplateEdit(
+                jso {
+                    switchToListState = ::switchToListViewStateFunc
+                    submitForm = ::submitEditItemForm
+                },
+                jso<TemplateEditState<I>> {
+                    item = componentState.currentItem!!
+                },
+            ).render()
         }
 
         CrudState.VIEW -> {
             console.log("Loading TemplateView")
-            child(
-                TemplateView(
-                    jso<TemplateViewProps<I>> {
-                        switchToListState = ::switchToListViewStateFunc
-                    },
-                    jso {
-                        item = componentState.currentItem!!
-                    }
-                ).render()
-            )
+            +TemplateView(
+                jso<TemplateViewProps<I>> {
+                    switchToListState = ::switchToListViewStateFunc
+                },
+                jso {
+                    item = componentState.currentItem!!
+                },
+            ).render()
         }
 
         CrudState.ADD -> {
             console.log("Loading TemplateInsert")
-            child(
-                TemplateInsert(
-                    jso<TemplateInsertProps<I>> {
-                        this.item = props.factory()
-                        this.submitForm = ::submitInsertItemForm
-                        this.switchToListState = ::switchToListViewStateFunc
-                    },
-                    jso {
-                        this.currentItem = props.factory()
-                    }
-                ).render()
-            )
+            +TemplateInsert(
+                jso<TemplateInsertProps<I>> {
+                    this.item = props.factory()
+                    this.submitForm = ::submitInsertItemForm
+                    this.switchToListState = ::switchToListViewStateFunc
+                },
+                jso {
+                    this.currentItem = props.factory()
+                },
+            ).render()
         }
     }
 }
 
 private val CrudComponent = FC<CrudComponentProps<IEditable>> {
-    CrudComponent(it)
+    crudComponent(it)
 }
 
-fun <T : IEditable> ChildrenBuilder.CrudComponent(block: CrudComponentProps<T>.() -> Unit) {
+fun <T : IEditable> ChildrenBuilder.crudComponent(block: CrudComponentProps<T>.() -> Unit) {
     child(type = CrudComponent, props = jso(block))
 }

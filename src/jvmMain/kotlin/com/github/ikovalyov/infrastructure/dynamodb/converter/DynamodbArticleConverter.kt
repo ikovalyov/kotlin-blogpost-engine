@@ -48,7 +48,7 @@ class DynamodbArticleConverter : DynamodbConverterInterface<Article> {
             meta = map["meta"]?.ss(),
             template,
             userList = users,
-            templateList = templates
+            templateList = templates,
         )
     }
 
@@ -57,7 +57,7 @@ class DynamodbArticleConverter : DynamodbConverterInterface<Article> {
             "id" to AttributeValue.builder().s(item.id.toString()).build(),
             "name" to AttributeValue.builder().s(item.name).build(),
             "abstract" to AttributeValue.builder().s(item.abstract).build(),
-            "body" to AttributeValue.builder().s(item.body).build()
+            "body" to AttributeValue.builder().s(item.body).build(),
         )
         if (item.meta !== null && item.meta.isNotEmpty()) {
             mutableMap["meta"] = AttributeValue.builder().ss(item.meta).build()

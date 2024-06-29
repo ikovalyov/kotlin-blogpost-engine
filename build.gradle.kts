@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.allopen") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("com.diffplug.spotless") version "6.17.0"
+    id("com.diffplug.spotless") version "6.25.0"
     id("idea")
 }
 
@@ -49,7 +49,7 @@ kotlin {
             }
         }
     }
-    js {
+    js(IR) {
         browser {
             commonWebpackConfig {
                 cssSupport {
@@ -65,7 +65,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
                 implementation("io.github.microutils:kotlin-logging:3.0.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
                 implementation("com.benasher44:uuid:0.8.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
             }
@@ -81,8 +81,8 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.761"
-                    )
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.763",
+                    ),
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
@@ -131,8 +131,8 @@ kotlin {
                 configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
-                    )
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
+                    ),
                 )
                 if (System.getProperty("os.name").lowercase(Locale.getDefault()).contains("mac")) {
                     implementation("io.micronaut:micronaut-runtime-osx")
@@ -146,8 +146,8 @@ kotlin {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6")
-                    )
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
+                    ),
                 )
 
                 implementation(kotlin("test-junit5"))
@@ -156,7 +156,7 @@ kotlin {
 
                 implementation("org.testcontainers:junit-jupiter")
                 implementation("org.testcontainers:localstack")
-                implementation("com.amazonaws:aws-java-sdk-core:1.12.748") // testcontainers need it
+                implementation("com.amazonaws:aws-java-sdk-core:1.12.750") // testcontainers need it
             }
         }
     }
@@ -208,23 +208,21 @@ spotless {
         val files = project.fileTree(rootDir)
         files.include("**/*.kt")
         target(files)
-        ktlint("0.47.1")
-            .setUseExperimental(true)
+        ktlint("1.3.0")
             .editorConfigOverride(
                 mapOf(
                     "max_line_length" to "256",
-                    "insert_final_newline" to "true"
-                )
+                    "insert_final_newline" to "true",
+                ),
             )
     }
     kotlinGradle {
-        ktlint("0.47.1")
-            .setUseExperimental(true)
+        ktlint("1.3.0")
             .editorConfigOverride(
                 mapOf(
                     "max_line_length" to "256",
-                    "insert_final_newline" to "true"
-                )
+                    "insert_final_newline" to "true",
+                ),
             )
     }
 }

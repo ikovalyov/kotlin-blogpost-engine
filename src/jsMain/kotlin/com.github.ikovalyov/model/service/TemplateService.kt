@@ -16,10 +16,10 @@ class TemplateService {
     suspend fun getAllTemplates(): List<Template> {
         val result = kotlin.runCatching {
             val result = window.fetch(
-                Api.backendEndpoint + Api.templateApiUrl,
+                Api.BACKEND_ENDPOINT + Api.TEMPLATE_API_URL,
                 RequestInit(
-                    credentials = RequestCredentials.INCLUDE
-                )
+                    credentials = RequestCredentials.INCLUDE,
+                ),
             ).await().text().await()
             Json.decodeFromString(ListSerializer(Template.serializer()), result)
         }

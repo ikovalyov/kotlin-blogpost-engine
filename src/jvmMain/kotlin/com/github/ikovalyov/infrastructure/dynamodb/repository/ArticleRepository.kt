@@ -9,40 +9,30 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @Singleton
-@OptIn(ExperimentalSerializationApi::class)
-class ArticleRepository(dynamoDbClient: DynamoDbAsyncClient) :
-    CrudRepository<Article>(dynamoDbClient) {
+class ArticleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Article>(dynamoDbClient) {
 
     @Inject private lateinit var articleConverter: DynamodbArticleConverter
 
     companion object {
-        const val tableName = "article"
+        const val TABLE_NAME = "article"
     }
 
-    override val tableName = ArticleRepository.tableName
+    override val tableName = TABLE_NAME
 
     @OptIn(ExperimentalSerializationApi::class)
-    suspend fun list(): List<Article> {
-        return list {
-            articleConverter.fromDynamoDB(it)
-        }
+    suspend fun list(): List<Article> = list {
+        articleConverter.fromDynamoDB(it)
     }
 
-    suspend fun insert(item: Article): Boolean {
-        return insert(item) {
-            articleConverter.toDynamoDB(it)
-        }
+    suspend fun insert(item: Article): Boolean = insert(item) {
+        articleConverter.toDynamoDB(it)
     }
 
-    suspend fun update(item: Article): Boolean {
-        return update(item) {
-            articleConverter.toDynamoDB(it)
-        }
+    suspend fun update(item: Article): Boolean = update(item) {
+        articleConverter.toDynamoDB(it)
     }
 
-    suspend fun get(id: Uuid): Article? {
-        return get(id) {
-            articleConverter.fromDynamoDB(it)
-        }
+    suspend fun get(id: Uuid): Article? = get(id) {
+        articleConverter.fromDynamoDB(it)
     }
 }

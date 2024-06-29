@@ -1,6 +1,6 @@
 package com.github.ikovalyov.styles
 
-import csstype.Color
+import web.cssom.Color
 
 object Colors {
     object Text {

@@ -1,11 +1,11 @@
 package com.github.ikovalyov.react.components.bootstrap.nav
 
-import csstype.ClassName
 import react.ChildrenBuilder
-import react.dom.html.ButtonType
 import react.dom.html.HTMLAttributes
 import react.dom.html.ReactHTML
 import react.dom.html.ReactHTML.span
+import web.cssom.ClassName
+import web.html.ButtonType
 
 var HTMLAttributes<*>.dataBsToggle: String?
     get() = asDynamic()["data-bs-toggle"]
@@ -34,7 +34,7 @@ var HTMLAttributes<*>.ariaLabel: String?
         asDynamic()["aria-label"] = value
     }
 
-fun ChildrenBuilder.CollapseButton(target: String) = ReactHTML.button {
+fun ChildrenBuilder.collapseButton(target: String) = ReactHTML.button {
     type = ButtonType.button
     className = ClassName("navbar-toggler")
     dataBsToggle = "collapse"

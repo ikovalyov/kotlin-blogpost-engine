@@ -15,7 +15,7 @@ import jakarta.inject.Inject
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
-@Controller(Api.userUrl)
+@Controller(Api.USER_URL)
 @Secured(SecurityRule.IS_ANONYMOUS)
 @OptIn(ExperimentalSerializationApi::class)
 class UsersController {

@@ -15,15 +15,11 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class UserRole(
-    override val id: Uuid,
-    val lastModified: Instant,
-    val name: String
-) : IEditable {
+data class UserRole(override val id: Uuid, val lastModified: Instant, val name: String) : IEditable {
     companion object {
-        const val id = "id"
-        const val name = "name"
-        const val lastModified = "lastModified"
+        const val ID = "id"
+        const val NAME = "name"
+        const val LAST_MODIFIED = "lastModified"
     }
 
     override fun getMetadata(): List<IEditable.EditableMetadata<*, UserRole>> = listOf(
@@ -42,8 +38,8 @@ data class UserRole(
             update = {
                 copy(id = it)
             },
-            fieldName = "Id",
-            predefinedList = null
+            fieldName = ID,
+            predefinedList = null,
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Name,
@@ -56,8 +52,8 @@ data class UserRole(
             update = {
                 copy(name = it)
             },
-            fieldName = "Name",
-            predefinedList = null
+            fieldName = NAME,
+            predefinedList = null,
         ),
 
         IEditable.EditableMetadata(
@@ -79,12 +75,10 @@ data class UserRole(
             update = {
                 copy(lastModified = it)
             },
-            fieldName = "Last Modified",
-            predefinedList = null
-        )
+            fieldName = LAST_MODIFIED,
+            predefinedList = null,
+        ),
     )
 
-    override fun serialize(): String {
-        return Json.encodeToString(this)
-    }
+    override fun serialize(): String = Json.encodeToString(this)
 }

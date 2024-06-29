@@ -5,7 +5,5 @@ import com.github.ikovalyov.model.security.ShortString
 class EmailValidator : ValidatorInterface<ShortString> {
     private val emailAddressRegex = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)".toRegex()
 
-    override fun validate(input: ShortString): Boolean {
-        return input.toString().matches(emailAddressRegex)
-    }
+    override fun validate(input: ShortString): Boolean = input.toString().matches(emailAddressRegex)
 }

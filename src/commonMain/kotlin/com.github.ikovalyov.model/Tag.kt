@@ -6,52 +6,45 @@ import com.github.ikovalyov.model.markers.IEditable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-data class Tag(
-    override val id: Uuid,
-    val name: String
-) : IEditable {
-    override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> {
-        return listOf(
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Id,
-                readOnly = true,
-                serialize = {
-                    it.toString()
-                },
-                deserialize = {
-                    uuidFrom(it)
-                },
-                update = {
-                    copy(id = it)
-                },
-                get = {
-                    id
-                },
-                fieldName = "Id",
-                predefinedList = null
-            ),
-            IEditable.EditableMetadata(
-                fieldType = IEditable.FieldType.Name,
-                readOnly = false,
-                serialize = {
-                    it
-                },
-                deserialize = {
-                    it
-                },
-                update = {
-                    copy(name = it)
-                },
-                get = {
-                    name
-                },
-                fieldName = "Name",
-                predefinedList = null
-            )
-        )
-    }
+data class Tag(override val id: Uuid, val name: String) : IEditable {
+    override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> = listOf(
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Id,
+            readOnly = true,
+            serialize = {
+                it.toString()
+            },
+            deserialize = {
+                uuidFrom(it)
+            },
+            update = {
+                copy(id = it)
+            },
+            get = {
+                id
+            },
+            fieldName = "Id",
+            predefinedList = null,
+        ),
+        IEditable.EditableMetadata(
+            fieldType = IEditable.FieldType.Name,
+            readOnly = false,
+            serialize = {
+                it
+            },
+            deserialize = {
+                it
+            },
+            update = {
+                copy(name = it)
+            },
+            get = {
+                name
+            },
+            fieldName = "Name",
+            predefinedList = null,
+        ),
+    )
 
-    override fun serialize(): String {
-        return Json.encodeToString(this)
-    }
+    override fun serialize(): String = Json.encodeToString(this)
 }

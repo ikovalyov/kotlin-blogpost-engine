@@ -10,10 +10,7 @@ import java.io.Reader
 import java.io.StringReader
 
 @Singleton
-class DynamoDbTemplateLoader(
-    private val configurationRepository: ConfigurationRepository,
-    private val templateRepository: TemplateRepository
-) : TemplateLoader {
+class DynamoDbTemplateLoader(private val configurationRepository: ConfigurationRepository, private val templateRepository: TemplateRepository) : TemplateLoader {
     override fun findTemplateSource(name: String): Template? = runBlocking {
         val templateName = configurationRepository.getActiveTemplateId()
         templateName?.let { templateRepository.get(it) }

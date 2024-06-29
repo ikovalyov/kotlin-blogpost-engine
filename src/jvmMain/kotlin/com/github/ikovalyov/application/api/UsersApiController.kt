@@ -19,15 +19,13 @@ import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 @ExperimentalSerializationApi
-@Controller(Api.userApiUrl)
+@Controller(Api.USER_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class UsersApiController(private val userRepository: UserRepository) {
     private val logger = KotlinLogging.logger {}
 
     @Get
-    suspend fun list(): String {
-        return Json.encodeToString(ListSerializer(User.serializer()), userRepository.list())
-    }
+    suspend fun list(): String = Json.encodeToString(ListSerializer(User.serializer()), userRepository.list())
 
     @Get("/{itemId}")
     suspend fun get(itemId: Uuid): String? {

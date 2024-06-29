@@ -1,9 +1,6 @@
 package com.github.ikovalyov.model.markers
 
 import com.benasher44.uuid.Uuid
-import com.github.ikovalyov.model.Template
-import com.github.ikovalyov.model.security.Email
-import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.User
 import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -17,7 +14,7 @@ interface IEditable {
         val update: I.(F) -> I,
         val get: () -> F?,
         val fieldName: String,
-        val predefinedList: List<F>?
+        val predefinedList: List<F>?,
     )
 
     sealed class FieldType<T : Any> {
