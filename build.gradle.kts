@@ -81,7 +81,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(
                     project.dependencies.enforcedPlatform(
-                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.763",
+                        "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.765",
                     ),
                 )
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -130,7 +130,7 @@ kotlin {
                 implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
                     ),
                 )
@@ -145,7 +145,7 @@ kotlin {
             dependencies {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
-                        project.dependencies.create("io.micronaut:micronaut-inject-java:3.10.4"),
+                        project.dependencies.create("io.micronaut:micronaut-inject-java:4.5.3"),
                         project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
                     ),
                 )
