@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalSerializationApi::class)
 @file:UseSerializers(UuidSerializer::class)
 
 package com.github.ikovalyov.model
@@ -8,14 +7,12 @@ import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.serializer.UuidSerializer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-@OptIn(ExperimentalSerializationApi::class)
 data class Article(
     override val id: Uuid,
     val name: String,

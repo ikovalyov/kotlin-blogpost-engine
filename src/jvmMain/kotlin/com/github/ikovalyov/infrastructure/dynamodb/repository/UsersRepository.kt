@@ -16,7 +16,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 @ExperimentalSerializationApi
 @Singleton
-class UserRepository(dynamoDbClient: DynamoDbAsyncClient, private val userRoleRepository: UserRoleRepository) : CrudRepository<User>(dynamoDbClient) {
+class UsersRepository(dynamoDbClient: DynamoDbAsyncClient, private val userRolesRepository: UserRolesRepository) : CrudRepository<User>(dynamoDbClient) {
     companion object {
         const val TABLE_NAME = "user"
     }
@@ -25,11 +25,11 @@ class UserRepository(dynamoDbClient: DynamoDbAsyncClient, private val userRoleRe
 
     override suspend fun init(): Boolean {
         super.init()
-        while (!userRoleRepository.initialized) {
+        while (!userRolesRepository.initialized) {
             delay(100)
         }
-        userRoleRepository.createDefaultUserRoles()
-        val adminRole = userRoleRepository.getByName(UserRoleRepository.ADMIN_ROLE_NAME)!!
+        userRolesRepository.createDefaultUserRoles()
+        val adminRole = userRolesRepository.getByName(UserRolesRepository.ADMIN_ROLE_NAME)!!
         val admin = User(
             id = uuid4(),
             email = Email(ShortString("test@example.com")),

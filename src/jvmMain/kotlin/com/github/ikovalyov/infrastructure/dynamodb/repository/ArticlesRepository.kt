@@ -5,11 +5,10 @@ import com.github.ikovalyov.infrastructure.dynamodb.converter.DynamodbArticleCon
 import com.github.ikovalyov.model.Article
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @Singleton
-class ArticleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Article>(dynamoDbClient) {
+class ArticlesRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Article>(dynamoDbClient) {
 
     @Inject private lateinit var articleConverter: DynamodbArticleConverter
 
@@ -19,7 +18,6 @@ class ArticleRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Ar
 
     override val tableName = TABLE_NAME
 
-    @OptIn(ExperimentalSerializationApi::class)
     suspend fun list(): List<Article> = list {
         articleConverter.fromDynamoDB(it)
     }

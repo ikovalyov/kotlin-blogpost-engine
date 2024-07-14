@@ -2,7 +2,7 @@ package com.github.ikovalyov.application.auth
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.UserRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.UsersRepository
 import com.github.ikovalyov.model.security.Email
 import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
@@ -21,7 +21,7 @@ import java.net.URI
 @Controller("/auth")
 @OptIn(ExperimentalSerializationApi::class)
 class AuthController {
-    @Inject private lateinit var userRepository: UserRepository
+    @Inject private lateinit var usersRepository: UsersRepository
 
     @OptIn(ExperimentalSerializationApi::class)
     @Secured(SecurityRule.IS_AUTHENTICATED)
@@ -35,9 +35,9 @@ class AuthController {
         val existingPrincipal = request.getUserPrincipal(Authentication::class.java)
         val userEmailString = existingPrincipal.get().attributes["email"].toString()
         val userEmail = Email(ShortString(userEmailString))
-        val user = userRepository.getUserByEmail(userEmail)
+        val user = usersRepository.getUserByEmail(userEmail)
         if (user == null) {
-            userRepository.insert(
+            usersRepository.insert(
                 User(
                     id = Uuid.randomUUID(),
                     email = userEmail,

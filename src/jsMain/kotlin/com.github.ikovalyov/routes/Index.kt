@@ -3,6 +3,7 @@ package com.github.ikovalyov.routes
 import com.benasher44.uuid.uuid4
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.model.Article
+import com.github.ikovalyov.model.Tag
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.security.Email
 import com.github.ikovalyov.model.security.Password
@@ -70,7 +71,7 @@ val Index = FC<IndexProps> { props ->
                     factory = {
                         Template(id = uuid4(), "", "")
                     }
-                    header = "Template"
+                    header = "Templates"
                 }
                 crudComponent {
                     decodeItem = {
@@ -83,7 +84,7 @@ val Index = FC<IndexProps> { props ->
                     factory = {
                         UserRole(uuid4(), Clock.System.now(), "")
                     }
-                    header = "User Role"
+                    header = "User Roles"
                 }
                 crudComponent {
                     decodeItem = {
@@ -103,7 +104,7 @@ val Index = FC<IndexProps> { props ->
                             Password(ShortString("")),
                         )
                     }
-                    header = "User"
+                    header = "Users"
                 }
                 crudComponent {
                     decodeItem = {
@@ -127,7 +128,23 @@ val Index = FC<IndexProps> { props ->
                             templateList = props.templateList,
                         )
                     }
-                    header = "Article"
+                    header = "Articles"
+                }
+                crudComponent {
+                    decodeItem = {
+                        Json.decodeFromString(Tag.serializer(), it)
+                    }
+                    decodeItems = {
+                        Json.decodeFromString(ListSerializer(Tag.serializer()), it)
+                    }
+                    apiUri = Api.TAG_API_URL
+                    factory = {
+                        Tag(
+                            id = uuid4(),
+                            name = "",
+                        )
+                    }
+                    header = "Tags"
                 }
             }
         }

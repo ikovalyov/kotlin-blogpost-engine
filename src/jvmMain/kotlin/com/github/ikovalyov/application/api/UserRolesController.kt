@@ -2,7 +2,7 @@ package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.UserRoleRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.UserRolesRepository
 import com.github.ikovalyov.model.security.UserRole
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
@@ -19,7 +19,7 @@ import mu.KotlinLogging
 
 @Controller(Api.USER_ROLE_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
-class UserRolesController(private val userRolesRepository: UserRoleRepository) {
+class UserRolesController(private val userRolesRepository: UserRolesRepository) {
     private val logger = KotlinLogging.logger {}
 
     @Get

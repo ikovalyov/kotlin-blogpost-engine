@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse
 
 @Singleton
-class ConfigurationRepository(dynamoDbClient: DynamoDbAsyncClient, @Property(name = "blog.template.default-template") private val defaultTemplate: String) : AbstractKeyValueRepository(dynamoDbClient) {
+class ConfigurationsRepository(dynamoDbClient: DynamoDbAsyncClient, @Property(name = "blog.template.default-template") private val defaultTemplate: String) : AbstractKeyValueRepository(dynamoDbClient) {
     companion object {
         const val TABLE_NAME = "configuration"
         const val ACTIVE_TEMPLATE_KEY_ID = "active-template"

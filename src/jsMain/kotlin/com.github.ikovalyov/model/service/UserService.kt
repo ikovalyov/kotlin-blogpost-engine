@@ -5,7 +5,6 @@ import com.github.ikovalyov.Api
 import com.github.ikovalyov.model.security.User
 import kotlinx.browser.window
 import kotlinx.coroutines.await
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
@@ -13,7 +12,6 @@ import org.w3c.fetch.INCLUDE
 import org.w3c.fetch.RequestCredentials
 import org.w3c.fetch.RequestInit
 
-@OptIn(ExperimentalSerializationApi::class)
 class UserService {
     private val logger = KotlinLogging.logger {}
 
