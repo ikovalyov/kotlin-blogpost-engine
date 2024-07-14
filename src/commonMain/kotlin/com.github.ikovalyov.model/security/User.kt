@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalSerializationApi::class)
 @file:UseSerializers(UuidSerializer::class)
 
 package com.github.ikovalyov.model.security
@@ -7,14 +6,12 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
 import com.github.ikovalyov.model.serializer.UuidSerializer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-@ExperimentalSerializationApi
 @Serializable
 data class User(override val id: Uuid, var email: Email, val loggedIn: Boolean, val nickname: String, val roles: List<Uuid>, val password: Password) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, User>> = listOf(

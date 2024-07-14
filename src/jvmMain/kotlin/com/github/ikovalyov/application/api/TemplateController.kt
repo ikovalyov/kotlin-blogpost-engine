@@ -2,7 +2,7 @@ package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplatesRepository
 import com.github.ikovalyov.model.Template
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
@@ -19,21 +19,21 @@ import mu.KotlinLogging
 
 @Controller(Api.TEMPLATE_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
-class TemplateController(private val templateRepository: TemplateRepository) {
+class TemplateController(private val templatesRepository: TemplatesRepository) {
     private val logger = KotlinLogging.logger {}
 
     @Get
-    suspend fun list(): String = Json.encodeToString(ListSerializer(Template.serializer()), templateRepository.list())
+    suspend fun list(): String = Json.encodeToString(ListSerializer(Template.serializer()), templatesRepository.list())
 
     @Get("/{itemId}")
     suspend fun get(itemId: Uuid): String? {
-        val template = templateRepository.get(itemId) ?: return null
+        val template = templatesRepository.get(itemId) ?: return null
         return Json.encodeToString(Template.serializer(), template)
     }
 
     @Delete("/{itemId}")
     suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
-        val result = templateRepository.delete(itemId)
+        val result = templatesRepository.delete(itemId)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -43,7 +43,7 @@ class TemplateController(private val templateRepository: TemplateRepository) {
 
     @Post
     suspend fun insert(@Body item: Template): HttpResponse<Nothing> {
-        val result = templateRepository.insert(item)
+        val result = templatesRepository.insert(item)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -53,7 +53,7 @@ class TemplateController(private val templateRepository: TemplateRepository) {
 
     @Patch
     suspend fun update(@Body item: Template): HttpResponse<Nothing> {
-        val result = templateRepository.update(item)
+        val result = templatesRepository.update(item)
         return if (result) {
             HttpResponse.accepted()
         } else {

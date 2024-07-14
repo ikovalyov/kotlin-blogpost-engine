@@ -1,7 +1,7 @@
 package com.github.ikovalyov.application.api
 
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplatesRepository
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.TemplateListItem
 import io.micronaut.http.HttpResponse
@@ -14,13 +14,13 @@ import io.micronaut.security.rules.SecurityRule
 
 @Controller(Api.VIEWS_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
-class ViewsController(private val templateRepository: TemplateRepository) {
+class ViewsController(private val templatesRepository: TemplatesRepository) {
     @Get("/list-views")
-    suspend fun listViews(): List<TemplateListItem> = templateRepository.list().map(TemplateListItem::fromTemplate)
+    suspend fun listViews(): List<TemplateListItem> = templatesRepository.list().map(TemplateListItem::fromTemplate)
 
     @Post("/add")
     suspend fun insertView(@Body template: Template): HttpResponse<*> {
-        templateRepository.insert(template)
+        templatesRepository.insert(template)
         return HttpResponse.accepted<Template>()
     }
 }

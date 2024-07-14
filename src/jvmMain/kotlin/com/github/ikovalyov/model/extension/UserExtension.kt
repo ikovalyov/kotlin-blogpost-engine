@@ -6,12 +6,10 @@ import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.serializer.UuidSerializer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-@ExperimentalSerializationApi
 object UserExtension {
     fun User.toDynamoDbMap(): Map<String, AttributeValue> = mapOf(
         "id" to AttributeValue.builder().s(id.toString()).build(),

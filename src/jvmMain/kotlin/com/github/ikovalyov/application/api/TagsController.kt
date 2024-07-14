@@ -2,8 +2,8 @@ package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.ArticlesRepository
-import com.github.ikovalyov.model.Article
+import com.github.ikovalyov.infrastructure.dynamodb.repository.TagsRepository
+import com.github.ikovalyov.model.Tag
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
@@ -18,23 +18,22 @@ import io.micronaut.security.rules.SecurityRule
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
-@Controller(Api.ARTICLE_API_URL)
+@Controller(Api.TAG_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
-class ArticlesController(private val articlesRepository: ArticlesRepository) {
+class TagsController(private val tagsRepository: TagsRepository) {
     @Get
-    suspend fun list(): String = Json.encodeToString(ListSerializer(Article.serializer()), articlesRepository.list())
+    suspend fun list(): String = Json.encodeToString(ListSerializer(Tag.serializer()), tagsRepository.list())
 
     @Get("{id}")
     suspend fun get(id: Uuid): String? {
-        val article = articlesRepository.get(id) ?: return null
-        return Json.encodeToString(Article.serializer(), article)
+        val article = tagsRepository.get(id) ?: return null
+        return Json.encodeToString(Tag.serializer(), article)
     }
 
     @Post("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun insert(@Body item: String): HttpResponse<Nothing> {
-        val article = Json.decodeFromString(Article.serializer(), item)
-        val result = articlesRepository.insert(article)
+    suspend fun insert(@Body tag: Tag): HttpResponse<Nothing> {
+        val result = tagsRepository.insert(tag)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -44,7 +43,7 @@ class ArticlesController(private val articlesRepository: ArticlesRepository) {
 
     @Delete("/{itemId}")
     suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
-        val result = articlesRepository.delete(itemId)
+        val result = tagsRepository.delete(itemId)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -53,9 +52,8 @@ class ArticlesController(private val articlesRepository: ArticlesRepository) {
     }
 
     @Patch
-    suspend fun update(@Body item: String): HttpResponse<Nothing> {
-        val article = Json.decodeFromString(Article.serializer(), item)
-        val result = articlesRepository.update(article)
+    suspend fun update(@Body tag: Tag): HttpResponse<Nothing> {
+        val result = tagsRepository.update(tag)
         return if (result) {
             HttpResponse.accepted()
         } else {

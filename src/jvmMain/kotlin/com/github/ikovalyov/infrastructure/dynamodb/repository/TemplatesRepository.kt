@@ -3,15 +3,15 @@ package com.github.ikovalyov.infrastructure.dynamodb.repository
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.github.ikovalyov.model.Template
-import com.github.ikovalyov.model.extension.fromDynamoDbMap
-import com.github.ikovalyov.model.extension.toDynamoDbMap
+import com.github.ikovalyov.model.extension.TemplateExtension.fromDynamoDbMap
+import com.github.ikovalyov.model.extension.TemplateExtension.toDynamoDbMap
 import jakarta.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @Singleton
-class TemplateRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Template>(dynamoDbClient) {
+class TemplatesRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Template>(dynamoDbClient) {
     companion object {
         const val TABLE_NAME = "template"
     }

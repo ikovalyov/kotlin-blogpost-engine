@@ -2,7 +2,7 @@ package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.UserRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.UsersRepository
 import com.github.ikovalyov.model.security.User
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
@@ -21,21 +21,21 @@ import mu.KotlinLogging
 @ExperimentalSerializationApi
 @Controller(Api.USER_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
-class UsersApiController(private val userRepository: UserRepository) {
+class UsersApiController(private val usersRepository: UsersRepository) {
     private val logger = KotlinLogging.logger {}
 
     @Get
-    suspend fun list(): String = Json.encodeToString(ListSerializer(User.serializer()), userRepository.list())
+    suspend fun list(): String = Json.encodeToString(ListSerializer(User.serializer()), usersRepository.list())
 
     @Get("/{itemId}")
     suspend fun get(itemId: Uuid): String? {
-        val template = userRepository.get(itemId) ?: return null
+        val template = usersRepository.get(itemId) ?: return null
         return Json.encodeToString(User.serializer(), template)
     }
 
     @Delete("/{itemId}")
     suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
-        val result = userRepository.delete(itemId)
+        val result = usersRepository.delete(itemId)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -46,7 +46,7 @@ class UsersApiController(private val userRepository: UserRepository) {
     @Post
     suspend fun insert(@Body item: String): HttpResponse<Nothing> {
         val user = Json.decodeFromString(User.serializer(), item)
-        val result = userRepository.insert(user)
+        val result = usersRepository.insert(user)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -57,7 +57,7 @@ class UsersApiController(private val userRepository: UserRepository) {
     @Patch
     suspend fun update(@Body item: String): HttpResponse<Nothing> {
         val user = Json.decodeFromString(User.serializer(), item)
-        val result = userRepository.update(user)
+        val result = usersRepository.update(user)
         return if (result) {
             HttpResponse.accepted()
         } else {

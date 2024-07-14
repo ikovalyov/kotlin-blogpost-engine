@@ -12,9 +12,10 @@ import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.testcontainers.containers.localstack.LocalStackContainer
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
+
 @MicronautTest
 @TestInstance(Lifecycle.PER_CLASS)
-internal class UserRolesRepositoryTest : TestPropertyProvider {
+internal class TagsRepositoryTest : TestPropertyProvider {
     var localstack: LocalStackContainer = LocalStackContainer(LocalstackTestImages.LOCALSTACK_2_3_IMAGE)
         .withServices(
             LocalStackContainer.Service.DYNAMODB
@@ -22,7 +23,7 @@ internal class UserRolesRepositoryTest : TestPropertyProvider {
 
     @Inject lateinit var client: DynamoDbAsyncClient
 
-    @Inject lateinit var userRolesRepository: UserRolesRepository
+    @Inject lateinit var tagsRepository: TagsRepository
 
     init {
         localstack.start()
@@ -30,13 +31,15 @@ internal class UserRolesRepositoryTest : TestPropertyProvider {
 
     @Test
     fun testTableWasCreated() = runBlocking {
-        userRolesRepository.init()
-        val response = client.describeTable { it.tableName(userRolesRepository.tableName) }.await()
+        tagsRepository.init()
+        val response = client.describeTable { it.tableName(tagsRepository.tableName) }.await()
         assert(response.sdkHttpResponse().statusCode() == 200)
-        assert(response.table().tableName() == userRolesRepository.tableName)
+        assert(response.table().tableName() == tagsRepository.tableName)
     }
 
+
     override fun getProperties(): MutableMap<String, String> {
-        return mutableMapOf("blog.aws.endpoint" to localstack.endpoint.toString())
+        val endpointUri = localstack.endpoint
+        return mutableMapOf("blog.aws.endpoint" to endpointUri.toString())
     }
 }

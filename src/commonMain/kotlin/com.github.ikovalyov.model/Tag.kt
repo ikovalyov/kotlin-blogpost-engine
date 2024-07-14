@@ -1,12 +1,25 @@
+@file:UseSerializers(UuidSerializer::class)
+
 package com.github.ikovalyov.model
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
+import com.github.ikovalyov.model.serializer.UuidSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+@Serializable
 data class Tag(override val id: Uuid, val name: String) : IEditable {
+    companion object {
+        const val ID = "id"
+        const val NAME = "name"
+
+        fun create(id: Uuid, name: String) = Tag(id, name)
+    }
+
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> = listOf(
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Id,
@@ -23,7 +36,7 @@ data class Tag(override val id: Uuid, val name: String) : IEditable {
             get = {
                 id
             },
-            fieldName = "Id",
+            fieldName = ID,
             predefinedList = null,
         ),
         IEditable.EditableMetadata(
@@ -41,7 +54,7 @@ data class Tag(override val id: Uuid, val name: String) : IEditable {
             get = {
                 name
             },
-            fieldName = "Name",
+            fieldName = NAME,
             predefinedList = null,
         ),
     )

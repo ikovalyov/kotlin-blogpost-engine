@@ -1,7 +1,7 @@
 package com.github.ikovalyov.template
 
-import com.github.ikovalyov.infrastructure.dynamodb.repository.ConfigurationRepository
-import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplateRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.ConfigurationsRepository
+import com.github.ikovalyov.infrastructure.dynamodb.repository.TemplatesRepository
 import com.github.ikovalyov.model.Template
 import freemarker.cache.TemplateLoader
 import jakarta.inject.Singleton
@@ -10,10 +10,10 @@ import java.io.Reader
 import java.io.StringReader
 
 @Singleton
-class DynamoDbTemplateLoader(private val configurationRepository: ConfigurationRepository, private val templateRepository: TemplateRepository) : TemplateLoader {
+class DynamoDbTemplateLoader(private val configurationsRepository: ConfigurationsRepository, private val templatesRepository: TemplatesRepository) : TemplateLoader {
     override fun findTemplateSource(name: String): Template? = runBlocking {
-        val templateName = configurationRepository.getActiveTemplateId()
-        templateName?.let { templateRepository.get(it) }
+        val templateName = configurationsRepository.getActiveTemplateId()
+        templateName?.let { templatesRepository.get(it) }
     }
 
     override fun getLastModified(templateSource: Any?): Long {

@@ -14,7 +14,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @MicronautTest
 @TestInstance(Lifecycle.PER_CLASS)
-internal class UserRolesRepositoryTest : TestPropertyProvider {
+internal class ConfigurationsRepositoryTest : TestPropertyProvider {
     var localstack: LocalStackContainer = LocalStackContainer(LocalstackTestImages.LOCALSTACK_2_3_IMAGE)
         .withServices(
             LocalStackContainer.Service.DYNAMODB
@@ -22,7 +22,7 @@ internal class UserRolesRepositoryTest : TestPropertyProvider {
 
     @Inject lateinit var client: DynamoDbAsyncClient
 
-    @Inject lateinit var userRolesRepository: UserRolesRepository
+    @Inject lateinit var configurationsRepository: ConfigurationsRepository
 
     init {
         localstack.start()
@@ -30,10 +30,10 @@ internal class UserRolesRepositoryTest : TestPropertyProvider {
 
     @Test
     fun testTableWasCreated() = runBlocking {
-        userRolesRepository.init()
-        val response = client.describeTable { it.tableName(userRolesRepository.tableName) }.await()
+        configurationsRepository.init()
+        val response = client.describeTable { it.tableName(configurationsRepository.tableName) }.await()
         assert(response.sdkHttpResponse().statusCode() == 200)
-        assert(response.table().tableName() == userRolesRepository.tableName)
+        assert(response.table().tableName() == configurationsRepository.tableName)
     }
 
     override fun getProperties(): MutableMap<String, String> {

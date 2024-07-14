@@ -1,6 +1,7 @@
 package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.uuid4
+import com.github.ikovalyov.DockerImages
 import com.github.ikovalyov.command.DynamoDbInitCommand
 import com.github.ikovalyov.model.security.UserRole
 import io.micronaut.http.HttpStatus
@@ -36,7 +37,7 @@ internal class UserRolesControllerTest : TestPropertyProvider {
     @Inject lateinit var userRolesController: UserRolesController
 
     @Inject lateinit var dynamoDbInitCommand: DynamoDbInitCommand
-    private val localstackImage = DockerImageName.parse("localstack/localstack:0.11.3")
+    private val localstackImage = DockerImageName.parse(DockerImages.LOCALSTACK_IMAGE_NAME)
 
     private val localstack: LocalStackContainer =
         LocalStackContainer(localstackImage).withServices(LocalStackContainer.Service.DYNAMODB).also {
