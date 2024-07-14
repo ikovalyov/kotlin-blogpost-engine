@@ -37,7 +37,6 @@ internal class TemplatesRepositoryTest : TestPropertyProvider {
     }
 
     override fun getProperties(): MutableMap<String, String> {
-        val endpointUrl = String.format("http://localhost:%d", localstack.endpoint.toString())
-        return mutableMapOf("blog.aws.endpoint" to endpointUrl)
+        return mutableMapOf("blog.aws.endpoint" to localstack.endpoint.toString())
     }
 }
