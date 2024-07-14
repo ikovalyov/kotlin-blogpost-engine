@@ -12,13 +12,12 @@ import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.testcontainers.containers.localstack.LocalStackContainer
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
-
 @MicronautTest
 @TestInstance(Lifecycle.PER_CLASS)
 internal class TagsRepositoryTest : TestPropertyProvider {
     var localstack: LocalStackContainer = LocalStackContainer(LocalstackTestImages.LOCALSTACK_2_3_IMAGE)
         .withServices(
-            LocalStackContainer.Service.DYNAMODB
+            LocalStackContainer.Service.DYNAMODB,
         )
 
     @Inject lateinit var client: DynamoDbAsyncClient
@@ -36,7 +35,6 @@ internal class TagsRepositoryTest : TestPropertyProvider {
         assert(response.sdkHttpResponse().statusCode() == 200)
         assert(response.table().tableName() == tagsRepository.tableName)
     }
-
 
     override fun getProperties(): MutableMap<String, String> {
         val endpointUri = localstack.endpoint

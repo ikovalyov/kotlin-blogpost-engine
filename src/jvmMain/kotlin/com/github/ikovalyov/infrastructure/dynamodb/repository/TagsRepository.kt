@@ -6,10 +6,10 @@ import com.github.ikovalyov.model.Tag
 import com.github.ikovalyov.model.extension.TagExtension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.TagExtension.toDynamoDbMap
 import jakarta.inject.Singleton
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @Singleton
 class TagsRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Tag>(dynamoDbClient) {
@@ -19,20 +19,19 @@ class TagsRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Tag>(
 
     override val tableName = TABLE_NAME
 
-
     override suspend fun init(): Boolean {
         super.init()
         val articleTag = Tag(
             id = uuid4(),
-            name = "article"
+            name = "article",
         )
         val noteTag = Tag(
             id = uuid4(),
-            name = "note"
+            name = "note",
         )
         val quoteTag = Tag(
             id = uuid4(),
-            name = "quote"
+            name = "quote",
         )
         return coroutineScope {
             val jobs = listOf(
@@ -44,7 +43,7 @@ class TagsRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Tag>(
                 },
                 async {
                     insert(quoteTag)
-                }
+                },
             )
             return@coroutineScope jobs.awaitAll().all { it }
         }

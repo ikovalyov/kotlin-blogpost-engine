@@ -59,7 +59,7 @@ class TagControllerTest : TestPropertyProvider {
     @Test
     @Order(2)
     fun testGet() = runBlocking {
-    val tagResponseString = controller.get(uuid)
+        val tagResponseString = controller.get(uuid)
         require(tagResponseString != null) { "$uuid tag not found" }
         val templateResponse = Json.decodeFromString(Tag.serializer(), tagResponseString)
         assert(templateResponse.id == uuid)
@@ -68,7 +68,7 @@ class TagControllerTest : TestPropertyProvider {
     @Test
     @Order(3)
     fun testInsert() = runBlocking {
-    val tagString = controller.get(uuid)
+        val tagString = controller.get(uuid)
         require(tagString != null) { "$uuid tag not found" }
         val template = Json.decodeFromString(Tag.serializer(), tagString)
         val newTag = template.copy(id = uuid2, name = "new name")
@@ -82,7 +82,7 @@ class TagControllerTest : TestPropertyProvider {
     @Test
     @Order(4)
     fun testUpdate() = runBlocking {
-    val tagString = controller.get(uuid)
+        val tagString = controller.get(uuid)
         require(tagString != null) { "$uuid tag not found" }
         val tag = Json.decodeFromString(Tag.serializer(), tagString)
         val newTag = tag.copy(name = tag.name + "TEST")
@@ -96,7 +96,7 @@ class TagControllerTest : TestPropertyProvider {
     @Test
     @Order(5)
     fun testDelete() = runBlocking {
-    val resultString = controller.list()
+        val resultString = controller.list()
         val result = Json.decodeFromString(ListSerializer(Tag.serializer()), resultString)
         assert(result.count() == 4)
         controller.delete(result[0].id)

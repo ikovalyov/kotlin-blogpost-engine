@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 internal class TemplatesRepositoryTest : TestPropertyProvider {
     var localstack: LocalStackContainer = LocalStackContainer(LocalstackTestImages.LOCALSTACK_2_3_IMAGE)
         .withServices(
-            LocalStackContainer.Service.DYNAMODB
+            LocalStackContainer.Service.DYNAMODB,
         )
 
     @Inject lateinit var client: DynamoDbAsyncClient

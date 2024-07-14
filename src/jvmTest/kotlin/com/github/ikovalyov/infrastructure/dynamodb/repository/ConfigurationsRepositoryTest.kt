@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 internal class ConfigurationsRepositoryTest : TestPropertyProvider {
     var localstack: LocalStackContainer = LocalStackContainer(LocalstackTestImages.LOCALSTACK_2_3_IMAGE)
         .withServices(
-            LocalStackContainer.Service.DYNAMODB
+            LocalStackContainer.Service.DYNAMODB,
         )
 
     @Inject lateinit var client: DynamoDbAsyncClient
@@ -36,7 +36,5 @@ internal class ConfigurationsRepositoryTest : TestPropertyProvider {
         assert(response.table().tableName() == configurationsRepository.tableName)
     }
 
-    override fun getProperties(): MutableMap<String, String> {
-        return mutableMapOf("blog.aws.endpoint" to localstack.endpoint.toString())
-    }
+    override fun getProperties(): MutableMap<String, String> = mutableMapOf("blog.aws.endpoint" to localstack.endpoint.toString())
 }

@@ -2,8 +2,6 @@ package com.github.ikovalyov
 
 import org.testcontainers.utility.DockerImageName
 
-
-
 object DockerImages {
     const val LOCALSTACK_IMAGE_NAME = "localstack/localstack:3"
 }

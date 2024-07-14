@@ -141,7 +141,7 @@ val Index = FC<IndexProps> { props ->
                     factory = {
                         Tag(
                             id = uuid4(),
-                            name = ""
+                            name = "",
                         )
                     }
                     header = "Tags"

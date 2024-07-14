@@ -25,7 +25,8 @@ class TemplateControllerTest : TestPropertyProvider {
 
     @Inject lateinit var dynamoDbInitCommand: DynamoDbInitCommand
     private val localstackImage = DockerImageName.parse(
-        DockerImages.LOCALSTACK_IMAGE_NAME)
+        DockerImages.LOCALSTACK_IMAGE_NAME,
+    )
 
     private val localstack: LocalStackContainer =
         LocalStackContainer(localstackImage).withServices(LocalStackContainer.Service.DYNAMODB).also {
