@@ -36,7 +36,5 @@ internal class TemplatesRepositoryTest : TestPropertyProvider {
         assert(response.table().tableName() == templatesRepository.tableName)
     }
 
-    override fun getProperties(): MutableMap<String, String> {
-        return mutableMapOf("blog.aws.endpoint" to localstack.endpoint.toString())
-    }
+    override fun getProperties(): MutableMap<String, String> = mutableMapOf("blog.aws.endpoint" to localstack.endpoint.toString())
 }
