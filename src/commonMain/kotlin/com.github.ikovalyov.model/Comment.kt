@@ -5,7 +5,6 @@ package com.github.ikovalyov.model
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
-import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -13,7 +12,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class Comment(override val id: Uuid, val body: String, val author: User, val article: Article, val userList: List<User>, val articleList: List<Article>) : IEditable {
+data class Comment(override val id: Uuid, val body: String, val author: Uuid, val article: Uuid) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> = listOf(
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Id,
@@ -35,7 +34,7 @@ data class Comment(override val id: Uuid, val body: String, val author: User, va
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Body,
-            readOnly = true,
+            readOnly = false,
             serialize = {
                 it
             },
@@ -55,12 +54,10 @@ data class Comment(override val id: Uuid, val body: String, val author: User, va
             fieldType = IEditable.FieldType.Author,
             readOnly = false,
             serialize = {
-                it.id.toString()
+                it.toString()
             },
             deserialize = { uuid ->
-                userList.first {
-                    it.id.toString() == uuid
-                }
+                uuidFrom(uuid)
             },
             update = {
                 copy(author = it)
@@ -69,18 +66,16 @@ data class Comment(override val id: Uuid, val body: String, val author: User, va
                 author
             },
             fieldName = "Author",
-            predefinedList = userList,
+            predefinedList = null,
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Article,
             readOnly = false,
             serialize = {
-                it.id.toString()
+                it.toString()
             },
             deserialize = { uuid ->
-                articleList.first {
-                    it.id.toString() == uuid
-                }
+                uuidFrom(uuid)
             },
             update = {
                 copy(article = it)
@@ -88,8 +83,8 @@ data class Comment(override val id: Uuid, val body: String, val author: User, va
             get = {
                 article
             },
-            fieldName = "Author",
-            predefinedList = articleList,
+            fieldName = "Article",
+            predefinedList = null,
         ),
     )
 

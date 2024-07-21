@@ -18,7 +18,7 @@ import io.micronaut.security.rules.SecurityRule
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
-@Controller(Api.TAG_API_URL)
+@Controller(Api.TAGS_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class TagsController(private val tagsRepository: TagsRepository) {
     @Get

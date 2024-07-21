@@ -1,6 +1,7 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import com.benasher44.uuid.Uuid
+import com.github.ikovalyov.infrastructure.dynamodb.InitDynamoDbDatabaseInterface
 import io.micronaut.context.annotation.Property
 import jakarta.inject.Singleton
 import kotlinx.coroutines.future.await
@@ -9,7 +10,9 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse
 
 @Singleton
-class ConfigurationsRepository(dynamoDbClient: DynamoDbAsyncClient, @Property(name = "blog.template.default-template") private val defaultTemplate: String) : AbstractKeyValueRepository(dynamoDbClient) {
+class ConfigurationsRepository(dynamoDbClient: DynamoDbAsyncClient, @Property(name = "blog.template.default-template") private val defaultTemplate: String) :
+    AbstractKeyValueRepository(dynamoDbClient),
+    InitDynamoDbDatabaseInterface {
     companion object {
         const val TABLE_NAME = "configuration"
         const val ACTIVE_TEMPLATE_KEY_ID = "active-template"

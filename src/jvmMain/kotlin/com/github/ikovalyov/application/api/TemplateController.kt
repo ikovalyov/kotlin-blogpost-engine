@@ -17,7 +17,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
-@Controller(Api.TEMPLATE_API_URL)
+@Controller(Api.TEMPLATES_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class TemplateController(private val templatesRepository: TemplatesRepository) {
     private val logger = KotlinLogging.logger {}

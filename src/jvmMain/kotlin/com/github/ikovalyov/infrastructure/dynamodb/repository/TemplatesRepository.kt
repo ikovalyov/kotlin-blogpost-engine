@@ -2,6 +2,7 @@ package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import com.github.ikovalyov.infrastructure.dynamodb.InitDynamoDbDatabaseInterface
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.extension.TemplateExtension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.TemplateExtension.toDynamoDbMap
@@ -11,7 +12,9 @@ import kotlinx.coroutines.withContext
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @Singleton
-class TemplatesRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<Template>(dynamoDbClient) {
+class TemplatesRepository(dynamoDbClient: DynamoDbAsyncClient) :
+    CrudRepository<Template>(dynamoDbClient),
+    InitDynamoDbDatabaseInterface {
     companion object {
         const val TABLE_NAME = "template"
     }

@@ -16,7 +16,7 @@ class TemplateService {
     suspend fun getAllTemplates(): List<Template> {
         val result = kotlin.runCatching {
             val result = window.fetch(
-                Api.BACKEND_ENDPOINT + Api.TEMPLATE_API_URL,
+                Api.BACKEND_ENDPOINT + Api.TEMPLATES_API_URL,
                 RequestInit(
                     credentials = RequestCredentials.INCLUDE,
                 ),

@@ -2,21 +2,26 @@ package com.github.ikovalyov.infrastructure.dynamodb.repository
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import com.github.ikovalyov.infrastructure.dynamodb.InitDynamoDbDatabaseInterface
+import com.github.ikovalyov.infrastructure.dynamodb.repository.users.UserRolesRepository
 import com.github.ikovalyov.model.extension.UserExtension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.UserExtension.toDynamoDbMap
 import com.github.ikovalyov.model.security.Email
 import com.github.ikovalyov.model.security.Password
 import com.github.ikovalyov.model.security.ShortString
 import com.github.ikovalyov.model.security.User
+import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import kotlinx.coroutines.delay
-import kotlinx.serialization.ExperimentalSerializationApi
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-@ExperimentalSerializationApi
 @Singleton
-class UsersRepository(dynamoDbClient: DynamoDbAsyncClient, private val userRolesRepository: UserRolesRepository) : CrudRepository<User>(dynamoDbClient) {
+class UsersRepository(dynamoDbClient: DynamoDbAsyncClient) :
+    CrudRepository<User>(dynamoDbClient),
+    InitDynamoDbDatabaseInterface {
+    @Inject
+    private lateinit var userRolesRepository: UserRolesRepository
+
     companion object {
         const val TABLE_NAME = "user"
     }
@@ -25,10 +30,9 @@ class UsersRepository(dynamoDbClient: DynamoDbAsyncClient, private val userRoles
 
     override suspend fun init(): Boolean {
         super.init()
-        while (!userRolesRepository.initialized) {
-            delay(100)
-        }
-        userRolesRepository.createDefaultUserRoles()
+
+        userRolesRepository.init()
+
         val adminRole = userRolesRepository.getByName(UserRolesRepository.ADMIN_ROLE_NAME)!!
         val admin = User(
             id = uuid4(),

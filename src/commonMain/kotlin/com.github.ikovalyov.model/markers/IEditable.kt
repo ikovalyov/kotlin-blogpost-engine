@@ -1,7 +1,6 @@
 package com.github.ikovalyov.model.markers
 
 import com.benasher44.uuid.Uuid
-import com.github.ikovalyov.model.security.User
 import kotlinx.datetime.Instant
 
 interface IEditable {
@@ -18,7 +17,7 @@ interface IEditable {
 
     sealed class FieldType<T : Any> {
         object Id : FieldType<Uuid>()
-        object Author : FieldType<User>()
+        object Author : FieldType<Uuid>()
         object LastModified : FieldType<Instant>()
         object Body : FieldType<String>()
         object Name : FieldType<String>()
@@ -30,8 +29,8 @@ interface IEditable {
         object StringListFiledType : FieldType<List<String>>()
         object Tags : FieldType<List<String>>()
         object Metadata : FieldType<List<String>>()
-        object Template : FieldType<com.github.ikovalyov.model.Template>()
-        object Article : FieldType<com.github.ikovalyov.model.Article>()
+        object Template : FieldType<Uuid>()
+        object Article : FieldType<Uuid>()
     }
 
     val id: Uuid

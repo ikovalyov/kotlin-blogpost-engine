@@ -3,6 +3,7 @@ package com.github.ikovalyov.routes
 import com.benasher44.uuid.uuid4
 import com.github.ikovalyov.Api
 import com.github.ikovalyov.model.Article
+import com.github.ikovalyov.model.Comment
 import com.github.ikovalyov.model.Tag
 import com.github.ikovalyov.model.Template
 import com.github.ikovalyov.model.security.Email
@@ -67,7 +68,7 @@ val Index = FC<IndexProps> { props ->
                     decodeItems = {
                         Json.decodeFromString(ListSerializer(Template.serializer()), it)
                     }
-                    apiUri = Api.TEMPLATE_API_URL
+                    apiUri = Api.TEMPLATES_API_URL
                     factory = {
                         Template(id = uuid4(), "", "")
                     }
@@ -80,7 +81,7 @@ val Index = FC<IndexProps> { props ->
                     decodeItems = {
                         Json.decodeFromString(ListSerializer(UserRole.serializer()), it)
                     }
-                    apiUri = Api.USER_ROLE_API_URL
+                    apiUri = Api.USER_ROLES_API_URL
                     factory = {
                         UserRole(uuid4(), Clock.System.now(), "")
                     }
@@ -93,7 +94,7 @@ val Index = FC<IndexProps> { props ->
                     decodeItems = {
                         Json.decodeFromString(ListSerializer(User.serializer()), it)
                     }
-                    apiUri = Api.USER_API_URL
+                    apiUri = Api.USERS_API_URL
                     factory = {
                         User(
                             uuid4(),
@@ -113,19 +114,17 @@ val Index = FC<IndexProps> { props ->
                     decodeItems = {
                         Json.decodeFromString(ListSerializer(Article.serializer()), it)
                     }
-                    apiUri = Api.ARTICLE_API_URL
+                    apiUri = Api.ARTICLES_API_URL
                     factory = {
                         Article(
                             id = uuid4(),
                             name = "",
                             abstract = "",
                             body = "",
-                            author = currentUser,
+                            author = currentUser.id,
                             tags = emptyList(),
                             meta = emptyList(),
                             template = null,
-                            userList = props.userList,
-                            templateList = props.templateList,
                         )
                     }
                     header = "Articles"
@@ -137,7 +136,7 @@ val Index = FC<IndexProps> { props ->
                     decodeItems = {
                         Json.decodeFromString(ListSerializer(Tag.serializer()), it)
                     }
-                    apiUri = Api.TAG_API_URL
+                    apiUri = Api.TAGS_API_URL
                     factory = {
                         Tag(
                             id = uuid4(),
@@ -145,6 +144,24 @@ val Index = FC<IndexProps> { props ->
                         )
                     }
                     header = "Tags"
+                }
+                crudComponent {
+                    decodeItem = {
+                        Json.decodeFromString(Comment.serializer(), it)
+                    }
+                    decodeItems = {
+                        Json.decodeFromString(ListSerializer(Comment.serializer()), it)
+                    }
+                    apiUri = Api.COMMENTS_API_URL
+                    factory = {
+                        Comment(
+                            id = uuid4(),
+                            body = "",
+                            author = currentUser.id,
+                            article = uuid4(),
+                        )
+                    }
+                    header = "Comments"
                 }
             }
         }

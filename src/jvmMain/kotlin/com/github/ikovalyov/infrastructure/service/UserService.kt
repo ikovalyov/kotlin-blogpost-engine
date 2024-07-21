@@ -4,9 +4,7 @@ import com.github.ikovalyov.infrastructure.dynamodb.repository.UsersRepository
 import com.github.ikovalyov.model.security.User
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@OptIn(ExperimentalSerializationApi::class)
 @Singleton
 class UserService {
     @Inject private lateinit var usersRepository: UsersRepository

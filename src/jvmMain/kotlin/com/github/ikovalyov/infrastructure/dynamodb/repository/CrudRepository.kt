@@ -4,11 +4,13 @@ import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.model.markers.IEditable
 import io.micronaut.http.HttpStatus
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.GetItemResponse
 
 abstract class CrudRepository<T : IEditable>(dynamoDbClient: DynamoDbAsyncClient) : AbstractKeyValueRepository(dynamoDbClient) {
 
@@ -20,9 +22,7 @@ abstract class CrudRepository<T : IEditable>(dynamoDbClient: DynamoDbAsyncClient
             async {
                 convert(it)
             }
-        }.map {
-            it.await()
-        }
+        }.awaitAll()
     }
 
     protected suspend fun insert(item: T, convert: suspend (T) -> Map<String, AttributeValue>): Boolean {
@@ -43,13 +43,17 @@ abstract class CrudRepository<T : IEditable>(dynamoDbClient: DynamoDbAsyncClient
     }
 
     protected suspend fun get(id: Uuid, convert: suspend (Map<String, AttributeValue>) -> T): T? {
+        val response = getItemResponse(id)
+        if (!response.hasItem()) return null
+        return convert(response.item())
+    }
+
+    private suspend fun getItemResponse(id: Uuid): GetItemResponse {
         val response = dynamoDbClient.getItem {
             it.tableName(tableName)
             it.key(mapOf(PRIMARY_KEY to AttributeValue.builder().s(id.toString()).build()))
-        }
-            .await()
-        if (!response.hasItem()) return null
-        return convert(response.item())
+        }.await()
+        return response
     }
 
     suspend fun delete(id: Uuid): Boolean {

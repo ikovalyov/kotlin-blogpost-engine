@@ -5,7 +5,6 @@ package com.github.ikovalyov.model
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.github.ikovalyov.model.markers.IEditable
-import com.github.ikovalyov.model.security.User
 import com.github.ikovalyov.model.serializer.UuidSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -13,18 +12,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class Article(
-    override val id: Uuid,
-    val name: String,
-    val abstract: String,
-    val body: String,
-    val author: User,
-    val tags: List<String>?,
-    val meta: List<String>?,
-    val template: Template?, // Template uuid
-    val userList: List<User>,
-    val templateList: List<Template>,
-) : IEditable {
+data class Article(override val id: Uuid, val name: String, val abstract: String, val body: String, val author: Uuid, val tags: List<String>?, val meta: List<String>?, val template: Uuid?) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, Article>> = listOf(
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Id,
@@ -102,12 +90,10 @@ data class Article(
             fieldType = IEditable.FieldType.Author,
             readOnly = false,
             serialize = {
-                it.id.toString()
+                it.toString()
             },
             deserialize = { uuid ->
-                userList.first {
-                    it.id.toString() == uuid
-                }
+                uuidFrom(uuid)
             },
             update = {
                 copy(author = it)
@@ -116,7 +102,7 @@ data class Article(
                 author
             },
             fieldName = "Author",
-            predefinedList = userList,
+            predefinedList = null,
         ),
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Tags,
@@ -158,12 +144,10 @@ data class Article(
             fieldType = IEditable.FieldType.Template,
             readOnly = false,
             serialize = {
-                it.id.toString()
+                it.toString()
             },
             deserialize = { uuid ->
-                templateList.first {
-                    it.id.toString() == uuid
-                }
+                uuidFrom(uuid)
             },
             update = {
                 copy(template = it)
@@ -172,7 +156,7 @@ data class Article(
                 template
             },
             fieldName = "Template",
-            predefinedList = templateList,
+            predefinedList = null,
         ),
     )
 
