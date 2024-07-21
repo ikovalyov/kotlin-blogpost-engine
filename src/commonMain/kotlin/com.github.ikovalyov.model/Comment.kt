@@ -1,4 +1,5 @@
 @file:UseSerializers(UuidSerializer::class)
+
 package com.github.ikovalyov.model
 
 import com.benasher44.uuid.Uuid
@@ -12,14 +13,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class Comment(
-    override val id: Uuid,
-    val body: String,
-    val author: User,
-    val article: Article,
-    val userList: List<User>,
-    val articleList: List<Article>,
-): IEditable {
+data class Comment(override val id: Uuid, val body: String, val author: User, val article: Article, val userList: List<User>, val articleList: List<Article>) : IEditable {
     override fun getMetadata(): List<IEditable.EditableMetadata<*, out IEditable>> = listOf(
         IEditable.EditableMetadata(
             fieldType = IEditable.FieldType.Id,
