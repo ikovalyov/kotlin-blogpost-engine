@@ -96,7 +96,7 @@ class TemplateInsert<I : IEditable>(props: TemplateInsertProps<I>, initialState:
                                         }
                                     }
                                 } else {
-                                    value = state.currentItem.getFieldValueAsString(it)
+                                    value = getFieldValueAsString(it)
                                 }
                             }
                         } else {
@@ -106,7 +106,7 @@ class TemplateInsert<I : IEditable>(props: TemplateInsertProps<I>, initialState:
                                 if (!it.readOnly) {
                                     val storedObject = it.get()
                                     if (storedObject != null) {
-                                        defaultValue = state.currentItem.getFieldValueAsString(it)
+                                        defaultValue = getFieldValueAsString(it)
                                     }
                                     onChange =
                                         { event ->
@@ -119,7 +119,7 @@ class TemplateInsert<I : IEditable>(props: TemplateInsertProps<I>, initialState:
                                                     )
                                             }
                                         }
-                                    val optionsList = state.currentItem.getPredefinedValuesAsStrings(it)
+                                    val optionsList = getPredefinedValuesAsStrings(it)
                                     optionsList.forEach {
                                         ReactHTML.option {
                                             value = it.key

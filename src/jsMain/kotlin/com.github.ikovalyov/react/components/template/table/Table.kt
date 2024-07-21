@@ -67,7 +67,7 @@ private fun <T : IEditable> buildTableColumns(componentProps: TableProps<T>, ite
 
             accessorFn = { row, _ ->
                 val itemMetadata = row.getMetadata().filterIsInstance<IEditable.EditableMetadata<*, T>>()[counter]
-                val str = row.getFieldValueAsString(itemMetadata) ?: ""
+                val str = getFieldValueAsString(itemMetadata) ?: ""
                 if (str.length > 128) {
                     str.substring(0, 128)
                 } else {

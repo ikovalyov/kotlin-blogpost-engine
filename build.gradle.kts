@@ -221,13 +221,4 @@ spotless {
                 ),
             )
     }
-    kotlinGradle {
-        ktlint("1.3.0")
-            .editorConfigOverride(
-                mapOf(
-                    "max_line_length" to "256",
-                    "insert_final_newline" to "true",
-                ),
-            )
-    }
 }

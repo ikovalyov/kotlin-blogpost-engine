@@ -88,7 +88,7 @@ class TemplateEdit<I : IEditable>(props: ItemEditProps<I>, private val initialSt
                                     name = it.hashCode().toString()
                                     readOnly = it.readOnly
                                     if (!it.readOnly) {
-                                        defaultValue = state.item.getFieldValueAsString(it)
+                                        defaultValue = getFieldValueAsString(it)
                                         onChange =
                                             { event ->
                                                 launch {
@@ -101,7 +101,7 @@ class TemplateEdit<I : IEditable>(props: ItemEditProps<I>, private val initialSt
                                                 }
                                             }
                                     } else {
-                                        value = state.item.getFieldValueAsString(it)
+                                        value = getFieldValueAsString(it)
                                     }
                                 }
                             } else {
@@ -111,7 +111,7 @@ class TemplateEdit<I : IEditable>(props: ItemEditProps<I>, private val initialSt
                                     if (!it.readOnly) {
                                         val storedObject = it.get()
                                         if (storedObject != null) {
-                                            defaultValue = state.item.getFieldValueAsString(it)
+                                            defaultValue = getFieldValueAsString(it)
                                         }
                                         onChange =
                                             { event ->
@@ -119,7 +119,7 @@ class TemplateEdit<I : IEditable>(props: ItemEditProps<I>, private val initialSt
                                                 state.item =
                                                     state.item.updateField(field = it, serializedData = stringValue)
                                             }
-                                        val optionsList = state.item.getPredefinedValuesAsStrings(it)
+                                        val optionsList = getPredefinedValuesAsStrings(it)
                                         optionsList.forEach {
                                             option {
                                                 value = it.key

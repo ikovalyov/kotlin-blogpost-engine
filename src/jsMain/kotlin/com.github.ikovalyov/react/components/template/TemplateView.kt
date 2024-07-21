@@ -44,7 +44,7 @@ class TemplateView<I : IEditable>(props: TemplateViewProps<I>, state: TemplateVi
             fields.forEach {
                 section {
                     h1 { +it.fieldType::class.simpleName!! }
-                    p { +(state.item.getFieldValueAsString(it) ?: "") }
+                    p { +(getFieldValueAsString(it) ?: "") }
                 }
             }
             buttonChild<I> {
