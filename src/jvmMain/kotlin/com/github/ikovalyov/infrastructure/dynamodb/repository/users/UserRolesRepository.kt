@@ -1,7 +1,8 @@
-package com.github.ikovalyov.infrastructure.dynamodb.repository
+package com.github.ikovalyov.infrastructure.dynamodb.repository.users
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import com.github.ikovalyov.infrastructure.dynamodb.repository.CrudRepository
 import com.github.ikovalyov.model.extension.UserRoleExtension.fromDynamoDbMap
 import com.github.ikovalyov.model.extension.UserRoleExtension.toDynamoDbMap
 import com.github.ikovalyov.model.security.UserRole
@@ -24,7 +25,9 @@ class UserRolesRepository(dynamoDbClient: DynamoDbAsyncClient) : CrudRepository<
 
     override val tableName = TABLE_NAME
 
-    suspend fun createDefaultUserRoles(): Boolean {
+    override suspend fun init(): Boolean {
+        super.init()
+
         val adminRoleFromDb = getByName(ADMIN_ROLE_NAME)
         val userRole = UserRole(uuid4(), Clock.System.now(), USER_ROLE_NAME)
         val guestRole = UserRole(uuid4(), Clock.System.now(), GUEST_USER_ROLE_NAME)

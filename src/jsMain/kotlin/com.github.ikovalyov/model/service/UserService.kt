@@ -18,7 +18,7 @@ class UserService {
     suspend fun getAllUsers(): List<User> {
         val result = kotlin.runCatching {
             val result = window.fetch(
-                Api.BACKEND_ENDPOINT + Api.USER_API_URL,
+                Api.BACKEND_ENDPOINT + Api.USERS_API_URL,
                 RequestInit(
                     credentials = RequestCredentials.INCLUDE,
                 ),
@@ -36,7 +36,7 @@ class UserService {
 
     suspend fun getUser(userId: Uuid): User {
         val result = window.fetch(
-            Api.BACKEND_ENDPOINT + Api.USER_API_URL + "/$userId",
+            Api.BACKEND_ENDPOINT + Api.USERS_API_URL + "/$userId",
             RequestInit(
                 credentials = RequestCredentials.INCLUDE,
             ),

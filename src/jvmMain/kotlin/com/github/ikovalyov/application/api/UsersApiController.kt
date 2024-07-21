@@ -19,7 +19,7 @@ import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 @ExperimentalSerializationApi
-@Controller(Api.USER_API_URL)
+@Controller(Api.USERS_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class UsersApiController(private val usersRepository: UsersRepository) {
     private val logger = KotlinLogging.logger {}

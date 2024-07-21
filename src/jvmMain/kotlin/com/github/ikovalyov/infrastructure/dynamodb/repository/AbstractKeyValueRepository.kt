@@ -1,6 +1,5 @@
 package com.github.ikovalyov.infrastructure.dynamodb.repository
 
-import com.github.ikovalyov.infrastructure.dynamodb.InitDynamoDbDatabaseInterface
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
@@ -12,7 +11,7 @@ import software.amazon.awssdk.services.dynamodb.model.ResourceInUseException
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType
 import software.amazon.awssdk.services.dynamodb.model.Tag
 
-abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDbAsyncClient) : InitDynamoDbDatabaseInterface {
+abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDbAsyncClient) {
     companion object {
         const val PRIMARY_KEY = "id"
     }
@@ -39,7 +38,7 @@ abstract class AbstractKeyValueRepository(protected val dynamoDbClient: DynamoDb
         }
     }
 
-    override suspend fun init(): Boolean? {
+    open suspend fun init(): Boolean? {
         logger.info { "creating $tableName table" }
         return try {
             dynamoDbClient.createTable(tableBuilder.build()).await().sdkHttpResponse().isSuccessful.also {

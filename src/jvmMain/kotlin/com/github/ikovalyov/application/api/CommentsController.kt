@@ -2,8 +2,8 @@ package com.github.ikovalyov.application.api
 
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.Api
-import com.github.ikovalyov.infrastructure.dynamodb.repository.ArticlesRepository
-import com.github.ikovalyov.model.Article
+import com.github.ikovalyov.infrastructure.dynamodb.repository.articles.CommentsRepository
+import com.github.ikovalyov.model.Comment
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
@@ -18,22 +18,22 @@ import io.micronaut.security.rules.SecurityRule
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
-@Controller(Api.ARTICLES_API_URL)
+@Controller(Api.COMMENTS_API_URL)
 @Secured(SecurityRule.IS_AUTHENTICATED)
-class ArticlesController(private val articlesRepository: ArticlesRepository) {
+class CommentsController(private val commentsRepository: CommentsRepository) {
     @Get
-    suspend fun list(): String = Json.encodeToString(ListSerializer(Article.serializer()), articlesRepository.list())
+    suspend fun list(): String = Json.encodeToString(ListSerializer(Comment.serializer()), commentsRepository.list())
 
     @Get("{id}")
     suspend fun get(id: Uuid): String? {
-        val article = articlesRepository.get(id) ?: return null
-        return Json.encodeToString(Article.serializer(), article)
+        val comment = commentsRepository.get(id) ?: return null
+        return Json.encodeToString(Comment.serializer(), comment)
     }
 
     @Post("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun insert(@Body item: Article): HttpResponse<Nothing> {
-        val result = articlesRepository.insert(item)
+    suspend fun insert(@Body comment: Comment): HttpResponse<Nothing> {
+        val result = commentsRepository.insert(comment)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -43,7 +43,7 @@ class ArticlesController(private val articlesRepository: ArticlesRepository) {
 
     @Delete("/{itemId}")
     suspend fun delete(itemId: Uuid): HttpResponse<Nothing> {
-        val result = articlesRepository.delete(itemId)
+        val result = commentsRepository.delete(itemId)
         return if (result) {
             HttpResponse.accepted()
         } else {
@@ -52,8 +52,8 @@ class ArticlesController(private val articlesRepository: ArticlesRepository) {
     }
 
     @Patch
-    suspend fun update(@Body item: Article): HttpResponse<Nothing> {
-        val result = articlesRepository.update(item)
+    suspend fun update(@Body comment: Comment): HttpResponse<Nothing> {
+        val result = commentsRepository.update(comment)
         return if (result) {
             HttpResponse.accepted()
         } else {
