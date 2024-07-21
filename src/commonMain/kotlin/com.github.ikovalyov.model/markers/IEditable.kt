@@ -3,7 +3,6 @@ package com.github.ikovalyov.model.markers
 import com.benasher44.uuid.Uuid
 import com.github.ikovalyov.model.security.User
 import kotlinx.datetime.Instant
-import kotlinx.serialization.ExperimentalSerializationApi
 
 interface IEditable {
     data class EditableMetadata<F : Any, I : IEditable>(
@@ -19,8 +18,6 @@ interface IEditable {
 
     sealed class FieldType<T : Any> {
         object Id : FieldType<Uuid>()
-
-        @OptIn(ExperimentalSerializationApi::class)
         object Author : FieldType<User>()
         object LastModified : FieldType<Instant>()
         object Body : FieldType<String>()
@@ -33,9 +30,8 @@ interface IEditable {
         object StringListFiledType : FieldType<List<String>>()
         object Tags : FieldType<List<String>>()
         object Metadata : FieldType<List<String>>()
-
-        @OptIn(ExperimentalSerializationApi::class)
         object Template : FieldType<com.github.ikovalyov.model.Template>()
+        object Article : FieldType<com.github.ikovalyov.model.Article>()
     }
 
     val id: Uuid
@@ -48,14 +44,14 @@ fun <T : IEditable, F : Any> T.updateField(field: IEditable.EditableMetadata<F, 
     return field.update(this, data)
 }
 
-fun <T : IEditable, F : Any> T.getFieldValueAsString(field: IEditable.EditableMetadata<F, T>): String? {
+fun <T : IEditable, F : Any> getFieldValueAsString(field: IEditable.EditableMetadata<F, T>): String? {
     val fieldValue = field.get()
     return fieldValue?.let {
         field.serialize(it)
     }
 }
 
-fun <T : IEditable, F : Any> T.getPredefinedValuesAsStrings(field: IEditable.EditableMetadata<F, T>): Map<String, String> {
+fun <T : IEditable, F : Any> getPredefinedValuesAsStrings(field: IEditable.EditableMetadata<F, T>): Map<String, String> {
     val fieldValues = field.predefinedList
     return fieldValues?.associate {
         it.hashCode().toString() to field.serialize(it)
