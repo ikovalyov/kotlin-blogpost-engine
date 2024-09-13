@@ -67,7 +67,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
                 implementation("com.benasher44:uuid:0.8.4")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
             }
         }
         val commonTest by getting {
@@ -93,7 +93,7 @@ kotlin {
                 implementation(npm("react-dom", "18.2.0"))
                 implementation(npm("react-is", "18.2.0"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
             }
         }
         val jsTest by getting {
@@ -105,7 +105,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(kotlin("reflect"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1")
                 implementation(project.dependencies.platform("io.micronaut:micronaut-core-bom:$micronautCoreVersion"))
                 implementation("io.micronaut:micronaut-http-client")
