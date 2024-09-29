@@ -129,8 +129,8 @@ kotlin {
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
                 implementation("org.freemarker:freemarker:2.3.33")
 
-                implementation("org.apache.logging.log4j:log4j-core:2.23.1")
-                implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
+                implementation("org.apache.logging.log4j:log4j-core:2.24.1")
+                implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.24.1")
                 implementation("org.freemarker:freemarker:2.3.33")
                 configurations["kapt"].dependencies.addAll(
                     listOf(
