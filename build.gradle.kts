@@ -6,10 +6,10 @@ val micronautCoreVersion by properties
 val micronautParentVersion by properties
 
 plugins {
-    kotlin("multiplatform") version "2.0.0"
-    kotlin("kapt") version "2.0.0"
-    kotlin("plugin.allopen") version "2.0.0"
-    kotlin("plugin.serialization") version "2.0.0"
+    kotlin("multiplatform") version "2.0.21"
+    kotlin("kapt") version "2.0.21"
+    kotlin("plugin.allopen") version "2.0.21"
+    kotlin("plugin.serialization") version "2.0.21"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.diffplug.spotless") version "6.25.0"
     id("idea")
