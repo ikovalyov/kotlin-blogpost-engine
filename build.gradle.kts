@@ -135,7 +135,7 @@ kotlin {
                 configurations["kapt"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:$micronautCoreVersion"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.7"),
                     ),
                 )
 
@@ -151,7 +151,7 @@ kotlin {
                 configurations["kaptTest"].dependencies.addAll(
                     listOf(
                         project.dependencies.create("io.micronaut:micronaut-inject-java:$micronautCoreVersion"),
-                        project.dependencies.create("info.picocli:picocli-codegen:4.7.6"),
+                        project.dependencies.create("info.picocli:picocli-codegen:4.7.7"),
                     ),
                 )
 
